@@ -1,49 +1,662 @@
-<!DOCTYPE HTML>
-<!--
-	Aerial by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>nemotea bio</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
-		<div id="wrapper">
-			<div id="bg"></div>
-			<div id="overlay"></div>
-			<div id="main">
-				<!-- Header -->
-					<header id="header">
-						<h1>Hi there.</h1>
-						<p>Programmer &nbsp;&bull;&nbsp; Japanese Tea Instructor</p>
-						<p>Organize miscellaneous things by using tech. Defy the law of increasing entropy.</p>
-						<nav>
-							<ul>
-								<li><a href="https://github.com/nemototea" class="icon brands fa-github"><span class="label">Github</span></a></li>
-								<li><a href="https://twitter.com/nemototea" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-								<li><a href="https://www.instagram.com/" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-								<li><a href="https://zenn.dev/nemototea" class="fas fa-pizza-slice"><span class="label">Zenn</span></a></li>
-								<li><a href="https://play.google.com/store/apps/developer?id=nemotea" class="icon brands fa-google-play"><span class="label">GooglePlay</span></a></li>
-							</ul>
-						</nav>
-					</header>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="nemototea - Creative Tech Hub. 音楽制作、アプリ開発、日本茶への情熱を通じて、デジタルとアナログの境界を探求。">
+    <meta name="keywords" content="音楽制作, アプリ開発, 日本茶, エフェクター, ポッドキャスト, PHP, Kotlin, React">
+    <meta name="author" content="nemototea">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nemototea.github.io/">
+    <meta property="og:title" content="nemototea - Creative Tech Hub">
+    <meta property="og:description" content="技術とクリエイティビティが交差する場所">
+    <meta property="og:image" content="https://nemototea.github.io/assets/images/og-image.jpg">
 
-				<!-- Footer -->
-					<footer id="footer">
-						<span class="copyright">&copy; Aerial by <a href="http://html5up.net">HTML5 UP</a>.</span>
-					</footer>
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://nemototea.github.io/">
+    <meta property="twitter:title" content="nemototea - Creative Tech Hub">
+    <meta property="twitter:description" content="技術とクリエイティビティが交差する場所">
+    <meta property="twitter:image" content="https://nemototea.github.io/assets/images/og-image.jpg">
 
-			</div>
-		</div>
-		<script>
-			window.onload = function() { document.body.classList.remove('is-preload'); }
-			window.ontouchmove = function() { return false; }
-			window.onorientationchange = function() { document.body.scrollTop = 0; }
-		</script>
-	</body>
+    <title>nemototea - Creative Tech Hub</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="assets/js/main.js" as="script">
+    
+    <style>
+        /* ページ固有のスタイル */
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: var(--space-xl) 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            line-height: 0.9;
+            margin-bottom: var(--space-md);
+            background: linear-gradient(45deg, #ffffff, var(--cyber-green), var(--cyber-blue));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 4s ease-in-out infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xl);
+            line-height: 1.4;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            margin-bottom: var(--space-2xl);
+        }
+        
+        .cta-primary {
+            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
+            color: #000;
+            padding: var(--space-md) var(--space-xl);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all var(--transition-normal);
+            box-shadow: 0 0 30px rgba(0, 255, 157, 0.3);
+        }
+        
+        .cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 255, 157, 0.4);
+        }
+        
+        .cta-secondary {
+            @extend .glass-button;
+            padding: var(--space-md) var(--space-xl);
+            font-size: 1.1rem;
+            border-radius: 50px;
+        }
+        
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-2xl) 0;
+        }
+        
+        .activity-card {
+            @extend .glass-card;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all var(--transition-normal);
+        }
+        
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .activity-icon {
+            font-size: 4rem;
+            margin-bottom: var(--space-md);
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 157, 0.5));
+        }
+        
+        .activity-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+            color: var(--cyber-green);
+        }
+        
+        .activity-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: var(--space-md);
+        }
+        
+        .activity-link {
+            @extend .glass-button;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+        
+        .latest-section {
+            margin: var(--space-2xl) 0;
+        }
+        
+        .latest-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-xl);
+        }
+        
+        .latest-main {
+            @extend .glass-card;
+            padding: var(--space-xl);
+        }
+        
+        .latest-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+        
+        .latest-item {
+            @extend .glass-card;
+            padding: var(--space-md);
+            transition: all var(--transition-normal);
+        }
+        
+        .latest-item:hover {
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+        }
+        
+        .latest-date {
+            font-size: 0.85rem;
+            color: var(--cyber-green);
+            margin-bottom: var(--space-xs);
+        }
+        
+        .latest-title {
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+        
+        .latest-excerpt {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .stats-section {
+            margin: var(--space-2xl) 0;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+        
+        .stat-item {
+            @extend .glass-card;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--cyber-green);
+            display: block;
+            margin-bottom: var(--space-xs);
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .latest-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-primary,
+            .cta-secondary {
+                text-align: center;
+                min-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダーナビゲーション -->
+        <header class="glass-header mt-md">
+            <nav class="nav">
+                <a href="/" class="nav-logo">nemototea.dev</a>
+                <ul class="nav-items">
+                    <li><a href="#about" class="nav-item">Profile</a></li>
+                    <li><a href="works/" class="nav-item">Works</a></li>
+                    <li><a href="podcast/" class="nav-item">Podcast</a></li>
+                    <li><a href="contact/" class="nav-item">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- ヒーローセクション -->
+        <section class="hero-section">
+            <div class="hero-content fade-in">
+                <h1 class="hero-title">
+                    Creative<br>
+                    Tech Hub
+                </h1>
+                <p class="hero-subtitle">
+                    技術とクリエイティビティが交差する場所。<br>
+                    音楽制作、アプリ開発、日本茶への情熱を通じて、<br>
+                    デジタルとアナログの境界を探求しています。
+                </p>
+                
+                <div class="hero-cta">
+                    <a href="works/" class="cta-primary">作品を見る</a>
+                    <a href="#about" class="cta-secondary">プロフィール</a>
+                </div>
+                
+                <!-- 音楽ビジュアライザー -->
+                <div class="wave-visualizer fade-in" id="hero-visualizer">
+                    <div class="wave-bar" style="height: 25px; animation-delay: 0s;"></div>
+                    <div class="wave-bar" style="height: 45px; animation-delay: 0.1s;"></div>
+                    <div class="wave-bar" style="height: 35px; animation-delay: 0.2s;"></div>
+                    <div class="wave-bar" style="height: 60px; animation-delay: 0.3s;"></div>
+                    <div class="wave-bar" style="height: 40px; animation-delay: 0.4s;"></div>
+                    <div class="wave-bar" style="height: 55px; animation-delay: 0.5s;"></div>
+                    <div class="wave-bar" style="height: 30px; animation-delay: 0.6s;"></div>
+                    <div class="wave-bar" style="height: 50px; animation-delay: 0.7s;"></div>
+                    <div class="wave-bar" style="height: 35px; animation-delay: 0.8s;"></div>
+                    <div class="wave-bar" style="height: 45px; animation-delay: 0.9s;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 活動紹介セクション -->
+        <section id="about" class="activities-section">
+            <h2 class="text-title text-center mb-xl fade-in">🎯 活動領域</h2>
+            
+            <div class="activities-grid">
+                <div class="activity-card fade-in">
+                    <span class="activity-icon">🎵</span>
+                    <h3 class="activity-title">音楽制作</h3>
+                    <p class="activity-description">
+                        SoundCloudで楽曲を発表。エフェクターと組み合わせた実験的なサウンドを探求。
+                    </p>
+                    <a href="works/music/" class="activity-link">音楽作品を見る</a>
+                </div>
+                
+                <div class="activity-card fade-in">
+                    <span class="activity-icon">📱</span>
+                    <h3 class="activity-title">アプリ開発</h3>
+                    <p class="activity-description">
+                        Kotlin/SwiftでモバイルアプリやKMP/CMPでマルチプラットフォーム開発。
+                    </p>
+                    <a href="works/apps/" class="activity-link">アプリを見る</a>
+                </div>
+                
+                <div class="activity-card fade-in">
+                    <span class="activity-icon">🍃</span>
+                    <h3 class="activity-title">日本茶プラットフォーム</h3>
+                    <p class="activity-description">
+                        PHPで日本茶ECプラットフォームを開発中。伝統と技術の融合プロジェクト。
+                    </p>
+                    <a href="works/tea-platform/" class="activity-link">詳細を見る</a>
+                </div>
+                
+                <div class="activity-card fade-in">
+                    <span class="activity-icon">⚡</span>
+                    <h3 class="activity-title">エフェクター制作</h3>
+                    <p class="activity-description">
+                        ギターエフェクターの回路設計・制作。アナログとデジタルの音響探求。
+                    </p>
+                    <a href="works/effects/" class="activity-link">エフェクターを見る</a>
+                </div>
+                
+                <div class="activity-card fade-in">
+                    <span class="activity-icon">🎙️</span>
+                    <h3 class="activity-title">ポッドキャスト</h3>
+                    <p class="activity-description">
+                        技術と創作について語るポッドキャスト。定期的にエピソードを配信中。
+                    </p>
+                    <a href="podcast/" class="activity-link">聴いてみる</a>
+                </div>
+                
+                <div class="activity-card fade-in cyber-glow">
+                    <span class="activity-icon">🌟</span>
+                    <h3 class="activity-title">特別機能</h3>
+                    <p class="activity-description">
+                        日本茶AI診断、3Dポートフォリオ、音楽ビジュアライザーなどのインタラクティブ体験。
+                    </p>
+                    <a href="special-features/" class="activity-link">体験してみる</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 最新情報セクション -->
+        <section class="latest-section">
+            <h2 class="text-title text-center mb-xl fade-in">📈 最新の活動</h2>
+            
+            <div class="latest-grid">
+                <div class="latest-main slide-in-left">
+                    <h3 class="text-subtitle mb-md">🎵 最新トラック公開</h3>
+                    <div class="latest-date">2025.06.20</div>
+                    <h4 class="latest-title">Cyber Dreams - Ambient Electronic</h4>
+                    <p class="latest-excerpt">
+                        自作エフェクターを活用した新しいアンビエント作品。グラニュラーシンセシスとリバーブエフェクトを組み合わせた実験的な楽曲をSoundCloudで公開しました。
+                    </p>
+                    
+                    <!-- SoundCloud埋め込み風のダミープレーヤー -->
+                    <div class="glass mt-lg p-md" style="border-radius: 12px;">
+                        <div class="flex-between">
+                            <div class="flex" style="align-items: center; gap: 12px;">
+                                <div style="width: 40px; height: 40px; background: var(--cyber-green); border-radius: 8px;"></div>
+                                <div>
+                                    <div style="font-weight: 600; font-size: 0.9rem;">Cyber Dreams</div>
+                                    <div style="color: var(--text-muted); font-size: 0.8rem;">nemototea</div>
+                                </div>
+                            </div>
+                            <button class="glass-button">▶</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="latest-sidebar">
+                    <div class="latest-item slide-in-right">
+                        <div class="latest-date">2025.06.18</div>
+                        <h4 class="latest-title">ポッドキャスト Episode 15</h4>
+                        <p class="latest-excerpt">KMP開発の現実と理想について語りました。</p>
+                    </div>
+                    
+                    <div class="latest-item slide-in-right">
+                        <div class="latest-date">2025.06.15</div>
+                        <h4 class="latest-title">日本茶AI診断リリース</h4>
+                        <p class="latest-excerpt">質問に答えて最適な茶葉を見つけるAI機能を追加。</p>
+                    </div>
+                    
+                    <div class="latest-item slide-in-right">
+                        <div class="latest-date">2025.06.10</div>
+                        <h4 class="latest-title">新しいディストーション完成</h4>
+                        <p class="latest-excerpt">オペアンプを使ったクリッピング回路の実験作品。</p>
+                    </div>
+                    
+                    <div class="latest-item slide-in-right">
+                        <div class="latest-date">2025.06.05</div>
+                        <h4 class="latest-title">KMPアプリ更新</h4>
+                        <p class="latest-excerpt">iOS/Android同時対応の新機能を追加しました。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 統計セクション -->
+        <section class="stats-section">
+            <h2 class="text-title text-center fade-in">📊 これまでの軌跡</h2>
+            <p class="text-body text-center mt-md mb-xl fade-in">
+                継続的な創作活動の成果をご紹介します
+            </p>
+            
+            <div class="stats-grid">
+                <div class="stat-item fade-in">
+                    <span class="stat-number counter" data-target="24" data-duration="2000">0</span>
+                    <div class="stat-label">楽曲制作</div>
+                </div>
+                
+                <div class="stat-item fade-in">
+                    <span class="stat-number counter" data-target="8" data-duration="2000">0</span>
+                    <div class="stat-label">アプリリリース</div>
+                </div>
+                
+                <div class="stat-item fade-in">
+                    <span class="stat-number counter" data-target="15" data-duration="2000">0</span>
+                    <div class="stat-label">ポッドキャストエピソード</div>
+                </div>
+                
+                <div class="stat-item fade-in">
+                    <span class="stat-number counter" data-target="6" data-duration="2000">0</span>
+                    <div class="stat-label">エフェクター制作</div>
+                </div>
+                
+                <div class="stat-item fade-in">
+                    <span class="stat-number counter" data-target="150" data-duration="2500">0</span>
+                    <div class="stat-label">日本茶の種類研究</div>
+                </div>
+                
+                <div class="stat-item fade-in">
+                    <span class="stat-number counter" data-target="3" data-duration="1500">0</span>
+                    <div class="stat-label">年間活動年数</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 特別機能プレビューセクション -->
+        <section class="special-preview-section mt-2xl">
+            <h2 class="text-title text-center mb-xl fade-in">✨ インタラクティブ体験</h2>
+            
+            <div class="activities-grid">
+                <div class="activity-card cyber-glow fade-in">
+                    <span class="activity-icon">🍵</span>
+                    <h3 class="activity-title">日本茶フレーバーホイール</h3>
+                    <p class="activity-description">
+                        インタラクティブな円形チャートで茶葉の味わいと香りを美しく視覚化。
+                    </p>
+                    <a href="special-features/tea-wheel/" class="activity-link">体験する</a>
+                </div>
+                
+                <div class="activity-card cyber-glow fade-in">
+                    <span class="activity-icon">🎨</span>
+                    <h3 class="activity-title">3D音楽ギャラリー</h3>
+                    <p class="activity-description">
+                        Three.jsを使った3D空間で作品を展示。音楽に反応するビジュアルエフェクト。
+                    </p>
+                    <a href="special-features/3d-portfolio/" class="activity-link">探索する</a>
+                </div>
+                
+                <div class="activity-card cyber-glow fade-in">
+                    <span class="activity-icon">⚡</span>
+                    <h3 class="activity-title">エフェクター回路ラボ</h3>
+                    <p class="activity-description">
+                        回路図を描いて音を試聴。エフェクトのメカニズムを体験的に学習。
+                    </p>
+                    <a href="special-features/circuit-lab/" class="activity-link">実験する</a>
+                </div>
+                
+                <div class="activity-card cyber-glow fade-in">
+                    <span class="activity-icon">🤖</span>
+                    <h3 class="activity-title">日本茶AI診断</h3>
+                    <p class="activity-description">
+                        質問に答えて最適な茶葉を推奨。AIがあなたの好みを分析します。
+                    </p>
+                    <a href="special-features/tea-ai-diagnosis/" class="activity-link">診断する</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA セクション -->
+        <section class="cta-section mt-2xl mb-2xl">
+            <div class="glass-card text-center fade-in" style="padding: var(--space-2xl);">
+                <h2 class="text-title mb-md">🚀 一緒に創造しませんか？</h2>
+                <p class="text-body mb-xl" style="max-width: 600px; margin: 0 auto;">
+                    技術とクリエイティビティの交差点で、新しいプロジェクトやコラボレーションを探求しています。
+                    音楽制作、アプリ開発、日本茶プラットフォーム、どの分野でもお気軽にご連絡ください。
+                </p>
+                
+                <div class="flex" style="justify-content: center; gap: var(--space-md); flex-wrap: wrap;">
+                    <a href="contact/" class="cta-primary">お問い合わせ</a>
+                    <a href="https://soundcloud.com/nemototea" class="glass-button" target="_blank" rel="noopener">SoundCloud</a>
+                    <a href="https://github.com/nemototea" class="glass-button" target="_blank" rel="noopener">GitHub</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- フッター -->
+    <footer class="glass mt-2xl" style="padding: var(--space-xl) 0; border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
+        <div class="container">
+            <div class="flex-between" style="flex-wrap: wrap; gap: var(--space-md);">
+                <div>
+                    <div class="nav-logo mb-sm">nemototea.dev</div>
+                    <p class="text-small">Creative Tech Hub - Technology meets Creativity</p>
+                </div>
+                
+                <div class="flex" style="gap: var(--space-md); flex-wrap: wrap;">
+                    <a href="works/" class="text-small" style="color: var(--text-secondary); text-decoration: none;">Works</a>
+                    <a href="podcast/" class="text-small" style="color: var(--text-secondary); text-decoration: none;">Podcast</a>
+                    <a href="contact/" class="text-small" style="color: var(--text-secondary); text-decoration: none;">Contact</a>
+                    <a href="/sitemap.xml" class="text-small" style="color: var(--text-secondary); text-decoration: none;">Sitemap</a>
+                </div>
+            </div>
+            
+            <div class="text-center mt-lg">
+                <p class="text-small" style="color: var(--text-muted);">
+                    © 2025 nemototea. Built with passion for technology and creativity.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/main.js"></script>
+    
+    <script>
+        // ページ固有のJavaScript
+        document.addEventListener('DOMContentLoaded', () => {
+            // ヒーローセクションの特別なエフェクト
+            const heroTitle = document.querySelector('.hero-title');
+            if (heroTitle) {
+                let mouseX = 0;
+                let mouseY = 0;
+                
+                document.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX / window.innerWidth;
+                    mouseY = e.clientY / window.innerHeight;
+                    
+                    const xRotation = (mouseY - 0.5) * 10;
+                    const yRotation = (mouseX - 0.5) * 10;
+                    
+                    heroTitle.style.transform = `perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
+                });
+            }
+            
+            // 統計数字のランダムアニメーション
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                counter.addEventListener('mouseenter', () => {
+                    const current = parseInt(counter.textContent);
+                    const target = parseInt(counter.getAttribute('data-target'));
+                    
+                    // 一時的に数字を変動させる
+                    const interval = setInterval(() => {
+                        const variation = Math.floor(Math.random() * 3) - 1;
+                        counter.textContent = Math.max(0, current + variation);
+                    }, 100);
+                    
+                    setTimeout(() => {
+                        clearInterval(interval);
+                        counter.textContent = target;
+                    }, 500);
+                });
+            });
+            
+            // 音楽プレーヤーのインタラクション
+            const playButton = document.querySelector('.glass-button');
+            if (playButton && playButton.textContent === '▶') {
+                playButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    if (playButton.textContent === '▶') {
+                        playButton.textContent = '⏸';
+                        playButton.style.color = 'var(--cyber-green)';
+                        
+                        // ビジュアライザーをアクティブ化
+                        const visualizer = document.getElementById('hero-visualizer');
+                        if (visualizer) {
+                            visualizer.classList.add('active');
+                        }
+                    } else {
+                        playButton.textContent = '▶';
+                        playButton.style.color = '';
+                        
+                        const visualizer = document.getElementById('hero-visualizer');
+                        if (visualizer) {
+                            visualizer.classList.remove('active');
+                        }
+                    }
+                });
+            }
+            
+            // スクロール時のパララックス効果
+            window.addEventListener('scroll', Utils.throttle(() => {
+                const scrolled = window.pageYOffset;
+                const heroContent = document.querySelector('.hero-content');
+                
+                if (heroContent) {
+                    heroContent.style.transform = `translateY(${scrolled * 0.1}px)`;
+                }
+            }, 16));
+        });
+        
+        // アプリ読み込み完了時の処理
+        document.addEventListener('app:loaded', () => {
+            console.log('🎉 nemototea.dev ホームページが正常に読み込まれました！');
+            
+            // Google Analytics等の外部スクリプトをここで読み込み
+            // 例: loadGoogleAnalytics();
+        });
+    </script>
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "nemototea",
+        "url": "https://nemototea.github.io/",
+        "description": "Creative Tech Hub - 音楽制作、アプリ開発、日本茶への情熱を通じて、デジタルとアナログの境界を探求",
+        "sameAs": [
+            "https://soundcloud.com/nemototea",
+            "https://github.com/nemototea"
+        ],
+        "knowsAbout": [
+            "音楽制作",
+            "アプリ開発", 
+            "PHP",
+            "Kotlin",
+            "Swift",
+            "React",
+            "日本茶",
+            "エフェクター制作"
+        ]
+    }
+    </script>
+</body>
 </html>
