@@ -75,6 +75,7 @@ body {
     line-height: 1.1;
     background: linear-gradient(45deg, var(--text-primary), var(--cyber-green));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -108,6 +109,7 @@ body {
 .text-gradient-cyber {
     background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -390,6 +392,20 @@ body {
     box-shadow: var(--glow-cyber);
     transform: translateY(-1px);
     color: var(--text-primary);
+}
+
+.nav-item.active {
+    background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
+    color: #000;
+    font-weight: 600;
+    box-shadow: var(--glow-cyber);
+}
+
+.nav-item.active:hover {
+    background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 255, 157, 0.4);
 }
 
 /* ===== FOOTER STYLES ===== */
