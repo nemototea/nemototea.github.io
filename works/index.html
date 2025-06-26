@@ -1,49 +1,662 @@
-<!DOCTYPE HTML>
-<!--
-	Aerial by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>nemotea bio</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
-		<div id="wrapper">
-			<div id="bg"></div>
-			<div id="overlay"></div>
-			<div id="main">
-				<!-- Header -->
-					<header id="header">
-						<h1>Hi there.</h1>
-						<p>Programmer &nbsp;&bull;&nbsp; Japanese Tea Instructor</p>
-						<p>Organize miscellaneous things by using tech. Defy the law of increasing entropy.</p>
-						<nav>
-							<ul>
-								<li><a href="https://github.com/nemototea" class="icon brands fa-github"><span class="label">Github</span></a></li>
-								<li><a href="https://twitter.com/nemototea" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-								<li><a href="https://www.instagram.com/" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-								<li><a href="https://zenn.dev/nemototea" class="fas fa-pizza-slice"><span class="label">Zenn</span></a></li>
-								<li><a href="https://play.google.com/store/apps/developer?id=nemotea" class="icon brands fa-google-play"><span class="label">GooglePlay</span></a></li>
-							</ul>
-						</nav>
-					</header>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="nemototea 作品集 - 音楽制作、アプリ開発、エフェクター制作、日本茶プラットフォームなどの創作活動">
+    <meta name="keywords" content="ポートフォリオ, 音楽制作, アプリ開発, エフェクター, 日本茶, 作品集">
+    
+    <title>Works - nemototea</title>
+    
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+    
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
 
-				<!-- Footer -->
-					<footer id="footer">
-						<span class="copyright">&copy; Aerial by <a href="http://html5up.net">HTML5 UP</a>.</span>
-					</footer>
+        .works-hero {
+            padding: var(--space-2xl) 0;
+            text-align: center;
+            position: relative;
+        }
 
-			</div>
-		</div>
-		<script>
-			window.onload = function() { document.body.classList.remove('is-preload'); }
-			window.ontouchmove = function() { return false; }
-			window.onorientationchange = function() { document.body.scrollTop = 0; }
-		</script>
-	</body>
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            margin: var(--space-xl) 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            @extend .glass-button;
+            padding: var(--space-sm) var(--space-lg);
+            transition: all var(--transition-normal);
+            cursor: pointer;
+            border: none;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
+            color: #000;
+            box-shadow: var(--glow-cyber);
+        }
+
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--space-xl);
+            margin: var(--space-2xl) 0;
+        }
+
+        .work-card {
+            @extend .glass-card;
+            overflow: hidden;
+            transition: all var(--transition-normal);
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .work-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .work-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--cyber-green), var(--cyber-blue));
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            margin-bottom: var(--space-md);
+            border-radius: 12px;
+        }
+
+        .work-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .work-card:hover .work-image::before {
+            transform: translateX(100%);
+        }
+
+        .work-icon {
+            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
+            z-index: 2;
+            position: relative;
+        }
+
+        .work-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .work-category {
+            font-size: 0.8rem;
+            color: var(--cyber-green);
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .work-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+            color: var(--text-primary);
+        }
+
+        .work-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: var(--space-md);
+            flex: 1;
+        }
+
+        .work-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-md);
+        }
+
+        .tech-tag {
+            background: rgba(0, 255, 157, 0.1);
+            color: var(--cyber-green);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .work-links {
+            display: flex;
+            gap: var(--space-sm);
+            margin-top: auto;
+        }
+
+        .work-link {
+            @extend .glass-button;
+            padding: var(--space-xs) var(--space-md);
+            text-decoration: none;
+            font-size: 0.9rem;
+            flex: 1;
+            text-align: center;
+        }
+
+        .work-link.primary {
+            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
+            color: #000;
+        }
+
+        .featured-section {
+            margin: var(--space-2xl) 0;
+        }
+
+        .featured-work {
+            @extend .glass-card;
+            padding: var(--space-2xl);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-2xl);
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-work::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyber-green), var(--cyber-blue), var(--cyber-purple));
+        }
+
+        .featured-content h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .featured-visual {
+            position: relative;
+            height: 300px;
+            background: linear-gradient(135deg, var(--cyber-green), var(--cyber-blue));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+
+        .stat-card {
+            @extend .glass-card;
+            text-align: center;
+            padding: var(--space-lg);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--cyber-green);
+            display: block;
+            margin-bottom: var(--space-xs);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* カテゴリ別の色分け */
+        .work-card[data-category="music"] .work-image {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+        }
+
+        .work-card[data-category="apps"] .work-image {
+            background: linear-gradient(135deg, #48dbfb, #0abde3);
+        }
+
+        .work-card[data-category="tea"] .work-image {
+            background: linear-gradient(135deg, #2d5016, #4a7c59);
+        }
+
+        .work-card[data-category="effects"] .work-image {
+            background: linear-gradient(135deg, #9c88ff, #8c7ae6);
+        }
+
+        /* フィルタリングアニメーション */
+        .work-card.hidden {
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none;
+        }
+
+        .work-card.visible {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: all;
+        }
+
+        @media (max-width: 768px) {
+            .works-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-work {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .category-filter {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダーナビゲーション -->
+        <header class="glass-header mt-md">
+            <nav class="nav">
+                <a href="../" class="nav-logo">nemototea.dev</a>
+                <ul class="nav-items">
+                    <li><a href="../" class="nav-item">Home</a></li>
+                    <li><a href="../about/" class="nav-item">Profile</a></li>
+                    <li><a href="../podcast/" class="nav-item">Podcast</a></li>
+                    <li><a href="../contact/" class="nav-item">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 作品ヒーロー -->
+        <section class="works-hero">
+            <h1 class="text-hero fade-in">Creative Works</h1>
+            <p class="text-subtitle fade-in mb-lg">
+                技術とアートの境界を探求する創作の記録
+            </p>
+            <p class="text-body fade-in" style="max-width: 600px; margin: 0 auto;">
+                音楽制作からアプリ開発、エフェクター制作、日本茶プラットフォームまで、<br>
+                多分野にわたる創作活動をご紹介します。
+            </p>
+        </section>
+
+        <!-- 統計セクション -->
+        <section class="stats-grid fade-in">
+            <div class="stat-card">
+                <span class="stat-number counter" data-target="24">0</span>
+                <div class="stat-label">楽曲制作</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number counter" data-target="8">0</span>
+                <div class="stat-label">アプリリリース</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number counter" data-target="6">0</span>
+                <div class="stat-label">エフェクター</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number counter" data-target="1">0</span>
+                <div class="stat-label">プラットフォーム</div>
+            </div>
+        </section>
+
+        <!-- カテゴリフィルター -->
+        <section class="category-filter fade-in">
+            <button class="filter-btn active" data-filter="all">All Works</button>
+            <button class="filter-btn" data-filter="music">🎵 Music</button>
+            <button class="filter-btn" data-filter="apps">📱 Apps</button>
+            <button class="filter-btn" data-filter="tea">🍃 Tea Platform</button>
+            <button class="filter-btn" data-filter="effects">⚡ Effects</button>
+        </section>
+
+        <!-- 注目作品 -->
+        <section class="featured-section">
+            <h2 class="text-title text-center mb-xl fade-in">🌟 Featured Project</h2>
+            
+            <div class="featured-work fade-in">
+                <div class="featured-content">
+                    <h3>日本茶ECプラットフォーム</h3>
+                    <p class="text-body mb-md">
+                        伝統的な日本茶文化とモダンなeコマース技術を融合させた革新的なプラットフォーム。
+                        PHPをベースに、ユーザーの嗜好に合わせた茶葉推薦システムやインタラクティブな茶葉情報を提供。
+                    </p>
+                    <div class="work-tech mb-md">
+                        <span class="tech-tag">PHP</span>
+                        <span class="tech-tag">MySQL</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">AI推薦</span>
+                    </div>
+                    <div class="work-links">
+                        <a href="tea-platform/" class="work-link primary">詳細を見る</a>
+                        <a href="../special-features/tea-ai-diagnosis/" class="work-link">AI診断を試す</a>
+                    </div>
+                </div>
+                <div class="featured-visual">
+                    <span style="font-size: 8rem; filter: drop-shadow(0 0 20px rgba(0,0,0,0.3));">🍃</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 作品グリッド -->
+        <section class="works-grid">
+            <!-- 音楽作品 -->
+            <div class="work-card visible fade-in" data-category="music">
+                <div class="work-image">
+                    <span class="work-icon">🎵</span>
+                </div>
+                <div class="work-content">
+                    <div class="work-category">Music Production</div>
+                    <h3 class="work-title">Cyber Dreams</h3>
+                    <p class="work-description">
+                        自作エフェクターを活用したアンビエント・エレクトロニック作品。
+                        グラニュラーシンセシスとリバーブエフェクトを組み合わせた実験的な楽曲。
+                    </p>
+                    <div class="work-tech">
+                        <span class="tech-tag">Logic Pro</span>
+                        <span class="tech-tag">自作エフェクター</span>
+                        <span class="tech-tag">Ambient</span>
+                    </div>
+                    <div class="work-links">
+                        <a href="https://soundcloud.com/nemototea" class="work-link primary" target="_blank">SoundCloud</a>
+                        <a href="music/" class="work-link">詳細</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- アプリ開発 -->
+            <div class="work-card visible fade-in" data-category="apps">
+                <div class="work-image">
+                    <span class="work-icon">📱</span>
+                </div>
+                <div class="work-content">
+                    <div class="work-category">Mobile Development</div>
+                    <h3 class="work-title">TeaTime Tracker</h3>
+                    <p class="work-description">
+                        日本茶の飲用記録と体調管理を組み合わせたKMP製アプリ。
+                        iOS/Android同時開発で、茶葉の効能と健康データを可視化。
+                    </p>
+                    <div class="work-tech">
+                        <span class="tech-tag">Kotlin</span>
+                        <span class="tech-tag">KMP</span>
+                        <span class="tech-tag">iOS</span>
+                        <span class="tech-tag">Android</span>
+                    </div>
+                    <div class="work-links">
+                        <a href="apps/" class="work-link primary">詳細を見る</a>
+                        <a href="#" class="work-link">プロトタイプ</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- エフェクター -->
+            <div class="work-card visible fade-in" data-category="effects">
+                <div class="work-image">
+                    <span class="work-icon">⚡</span>
+                </div>
+                <div class="work-content">
+                    <div class="work-category">Circuit Design</div>
+                    <h3 class="work-title">Quantum Distortion</h3>
+                    <p class="work-description">
+                        オペアンプとダイオードクリッピングを組み合わせたディストーションペダル。
+                        音楽的な歪みとアナログ回路の美しさを追求した手作りエフェクター。
+                    </p>
+                    <div class="work-tech">
+                        <span class="tech-tag">Analog Circuit</span>
+                        <span class="tech-tag">OpAmp</span>
+                        <span class="tech-tag">PCB Design</span>
+                    </div>
+                    <div class="work-links">
+                        <a href="effects/" class="work-link primary">詳細を見る</a>
+                        <a href="../special-features/circuit-lab/" class="work-link">シミュレーター</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 音楽作品2 -->
+            <div class="work-card visible fade-in" data-category="music">
+                <div class="work-image">
+                    <span class="work-icon">🎹</span>
+                </div>
+                <div class="work-content">
+                    <div class="work-category">Music Production</div>
+                    <h3 class="work-title">Digital Zen</h3>
+                    <p class="work-description">
+                        日本茶を飲みながら制作したローファイ・チルアウト楽曲。
+                        自然音とエレクトロニックサウンドの融合による瞑想的な音響体験。
+                    </p>
+                    <div class="work-tech">
+                        <span class="tech-tag">Logic Pro</span>
+                        <span class="tech-tag">Field Recording</span>
+                        <span class="tech-tag">Lo-Fi</span>
+                    </div>
+                    <div class="work-links">
+                        <a href="https://soundcloud.com/nemototea" class="work-link primary" target="_blank">聴く</a>
+                        <a href="music/" class="work-link">詳細</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- アプリ開発2 -->
+            <div class="work-card visible fade-in" data-category="apps">
+                <div class="work-image">
+                    <span class="work-icon">🔊</span>
+                </div>
+                <div class="work-content">
+                    <div class="work-category">Mobile Development</div>
+                    <h3 class="work-title">Audio Visualizer</h3>
+                    <p class="work-description">
+                        リアルタイム音声解析による美しいビジュアライザーアプリ。
+                        Kotlinで実装したFFT解析とカスタムビュー描画によるパフォーマンス最適化。
+                    </p>
+                    <div class="work-tech">
+                        <span class="tech-tag">Kotlin</span>
+                        <span class="tech-tag">FFT</span>
+                        <span class="tech-tag">Custom View</span>
+                        <span class="tech-tag">Audio API</span>
+                    </div>
+                    <div class="work-links">
+                        <a href="apps/" class="work-link primary">詳細を見る</a>
+                        <a href="../special-features/music-visualizer/" class="work-link">Web版</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- エフェクター2 -->
+            <div class="work-card visible fade-in" data-category="effects">
+                <div class="work-image">
+                    <span class="work-icon">🌊</span>
+                </div>
+                <div class="work-content">
+                    <div class="work-category">Circuit Design</div>
+                    <h3 class="work-title">Analog Delay</h3>
+                    <p class="work-description">
+                        BBD（バケツリレー）チップを使用したアナログディレイエフェクター。
+                        温かみのあるアナログサウンドと美しい回路設計にこだわった作品。
+                    </p>
+                    <div class="work-tech">
+                        <span class="tech-tag">BBD Chip</span>
+                        <span class="tech-tag">Analog</span>
+                        <span class="tech-tag">Delay</span>
+                        <span class="tech-tag">Vintage</span>
+                    </div>
+                    <div class="work-links">
+                        <a href="effects/" class="work-link primary">詳細を見る</a>
+                        <a href="#" class="work-link">音源サンプル</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 次のプロジェクト -->
+        <section class="mt-2xl">
+            <div class="glass-card text-center fade-in" style="padding: var(--space-2xl);">
+                <h2 class="text-title mb-md">🚀 Next Projects</h2>
+                <p class="text-body mb-xl" style="max-width: 600px; margin: 0 auto;">
+                    現在企画中の新しいプロジェクトです。技術の進歩と創造性の探求は続きます。
+                </p>
+                
+                <div class="grid grid-auto" style="margin-top: var(--space-xl);">
+                    <div class="glass-card text-center">
+                        <span style="font-size: 3rem; margin-bottom: var(--space-md); display: block;">🤖</span>
+                        <h3 class="text-subtitle mb-sm">AI Music Assistant</h3>
+                        <p class="text-small">機械学習を活用した作曲支援ツール</p>
+                    </div>
+                    
+                    <div class="glass-card text-center">
+                        <span style="font-size: 3rem; margin-bottom: var(--space-md); display: block;">🌐</span>
+                        <h3 class="text-subtitle mb-sm">Web3 Tea Platform</h3>
+                        <p class="text-small">ブロックチェーン技術と日本茶文化の融合</p>
+                    </div>
+                    
+                    <div class="glass-card text-center">
+                        <span style="font-size: 3rem; margin-bottom: var(--space-md); display: block;">🎮</span>
+                        <h3 class="text-subtitle mb-sm">Interactive Music Game</h3>
+                        <p class="text-small">音楽制作とゲームプレイの新しい体験</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="../assets/js/main.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // フィルタリング機能
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const workCards = document.querySelectorAll('.work-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const filter = button.getAttribute('data-filter');
+                    
+                    // アクティブボタンの切り替え
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // カードのフィルタリング
+                    workCards.forEach(card => {
+                        const category = card.getAttribute('data-category');
+                        
+                        if (filter === 'all' || category === filter) {
+                            card.classList.remove('hidden');
+                            card.classList.add('visible');
+                        } else {
+                            card.classList.remove('visible');
+                            card.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            // ワークカードのホバーエフェクト
+            workCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    const icon = card.querySelector('.work-icon');
+                    icon.style.transform = 'scale(1.2) rotate(10deg)';
+                    icon.style.filter = 'drop-shadow(0 0 30px rgba(0, 255, 157, 0.8))';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    const icon = card.querySelector('.work-icon');
+                    icon.style.transform = 'scale(1) rotate(0deg)';
+                    icon.style.filter = 'drop-shadow(0 0 10px rgba(0, 0, 0, 0.3))';
+                });
+            });
+
+            // カウンターアニメーション
+            const counters = document.querySelectorAll('.counter');
+            const animateCounters = () => {
+                counters.forEach(counter => {
+                    const target = parseInt(counter.getAttribute('data-target'));
+                    const duration = 2000;
+                    Utils.animateValue(counter, 0, target, duration);
+                });
+            };
+
+            // スクロール時にカウンターアニメーション実行
+            const statsSection = document.querySelector('.stats-grid');
+            if (statsSection) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            animateCounters();
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                observer.observe(statsSection);
+            }
+
+            // ランダムなワークカードのグロー効果
+            setInterval(() => {
+                const visibleCards = document.querySelectorAll('.work-card.visible');
+                if (visibleCards.length > 0) {
+                    const randomCard = visibleCards[Math.floor(Math.random() * visibleCards.length)];
+                    randomCard.style.boxShadow = '0 0 40px rgba(0, 255, 157, 0.4)';
+                    
+                    setTimeout(() => {
+                        randomCard.style.boxShadow = '';
+                    }, 2000);
+                }
+            }, 8000);
+        });
+
+        // アプリ読み込み完了時の処理
+        document.addEventListener('app:loaded', () => {
+            console.log('🎨 作品ページが正常に読み込まれました！');
+        });
+    </script>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "CreativeWork",
+        "name": "nemototea Creative Works",
+        "creator": {
+            "@type": "Person",
+            "name": "nemototea"
+        },
+        "description": "音楽制作、アプリ開発、エフェクター制作、日本茶プラットフォームなどの創作活動",
+        "url": "https://nemototea.github.io/works/"
+    }
+    </script>
+</body>
 </html>

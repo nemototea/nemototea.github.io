@@ -1,49 +1,758 @@
-<!DOCTYPE HTML>
-<!--
-	Aerial by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>nemotea bio</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
-		<div id="wrapper">
-			<div id="bg"></div>
-			<div id="overlay"></div>
-			<div id="main">
-				<!-- Header -->
-					<header id="header">
-						<h1>Hi there.</h1>
-						<p>Programmer &nbsp;&bull;&nbsp; Japanese Tea Instructor</p>
-						<p>Organize miscellaneous things by using tech. Defy the law of increasing entropy.</p>
-						<nav>
-							<ul>
-								<li><a href="https://github.com/nemototea" class="icon brands fa-github"><span class="label">Github</span></a></li>
-								<li><a href="https://twitter.com/nemototea" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-								<li><a href="https://www.instagram.com/" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-								<li><a href="https://zenn.dev/nemototea" class="fas fa-pizza-slice"><span class="label">Zenn</span></a></li>
-								<li><a href="https://play.google.com/store/apps/developer?id=nemotea" class="icon brands fa-google-play"><span class="label">GooglePlay</span></a></li>
-							</ul>
-						</nav>
-					</header>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="nemototea プロフィール - 音楽制作、アプリ開発、日本茶への情熱を持つクリエイティブテクノロジスト">
+    <meta name="keywords" content="プロフィール, 音楽制作, アプリ開発, PHP, Kotlin, Swift, React, 日本茶, エフェクター">
+    
+    <title>Profile - nemototea</title>
+    
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+    
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .profile-hero {
+            padding: var(--space-2xl) 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .profile-image-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto var(--space-xl);
+        }
+        
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0, 255, 157, 0.3);
+        }
+        
+        .profile-image::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: rotate 4s linear infinite;
+        }
+        
+        .profile-emoji {
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
+        }
+        
+        .tech-stack-section {
+            margin: var(--space-2xl) 0;
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-xl);
+        }
+        
+        .tech-item {
+            @extend .glass-card;
+            text-align: center;
+            padding: var(--space-lg);
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tech-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--glass-border-hover);
+        }
+        
+        .tech-item.expert {
+            border-color: var(--cyber-green);
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+        }
+        
+        .tech-item.intermediate {
+            border-color: var(--cyber-blue);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+        
+        .tech-item.learning {
+            border-color: var(--cyber-purple);
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.2);
+        }
+        
+        .tech-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-sm);
+            display: block;
+        }
+        
+        .tech-name {
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+        
+        .tech-level {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .tech-level.expert {
+            background: rgba(0, 255, 157, 0.2);
+            color: var(--cyber-green);
+        }
+        
+        .tech-level.intermediate {
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--cyber-blue);
+        }
+        
+        .tech-level.learning {
+            background: rgba(157, 78, 221, 0.2);
+            color: var(--cyber-purple);
+        }
+        
+        .journey-section {
+            margin: var(--space-2xl) 0;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--space-xl) 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--cyber-green), var(--cyber-blue), var(--cyber-purple));
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: var(--space-xl);
+            width: 45%;
+        }
+        
+        .timeline-item.left {
+            left: 0;
+        }
+        
+        .timeline-item.right {
+            left: 55%;
+        }
+        
+        .timeline-content {
+            @extend .glass-card;
+            position: relative;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--cyber-green);
+            border-radius: 50%;
+            top: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.5);
+        }
+        
+        .timeline-item.left::before {
+            right: -35px;
+        }
+        
+        .timeline-item.right::before {
+            left: -35px;
+        }
+        
+        .timeline-year {
+            color: var(--cyber-green);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: var(--space-xs);
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+        }
+        
+        .timeline-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .philosophy-section {
+            margin: var(--space-2xl) 0;
+        }
+        
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+        
+        .philosophy-card {
+            @extend .glass-card;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .philosophy-icon {
+            font-size: 4rem;
+            margin-bottom: var(--space-md);
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 157, 0.5));
+        }
+        
+        .philosophy-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+            color: var(--cyber-green);
+        }
+        
+        .philosophy-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .contact-section {
+            margin: var(--space-2xl) 0;
+            text-align: center;
+        }
+        
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            margin-top: var(--space-xl);
+        }
+        
+        .contact-link {
+            @extend .glass-button;
+            padding: var(--space-md) var(--space-lg);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+        
+        .skills-visualization {
+            margin: var(--space-xl) 0;
+            position: relative;
+        }
+        
+        .skill-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--space-md);
+            gap: var(--space-md);
+        }
+        
+        .skill-name {
+            min-width: 120px;
+            font-weight: 500;
+        }
+        
+        .skill-progress {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cyber-green), var(--cyber-blue));
+            border-radius: 4px;
+            transition: width 1s ease;
+            position: relative;
+        }
+        
+        .skill-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .skill-percentage {
+            min-width: 40px;
+            text-align: right;
+            font-weight: 600;
+            color: var(--cyber-green);
+        }
+        
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                width: calc(100% - 40px);
+                left: 40px !important;
+            }
+            
+            .timeline-item::before {
+                left: -35px !important;
+            }
+            
+            .profile-image-container {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダーナビゲーション -->
+        <header class="glass-header mt-md">
+            <nav class="nav">
+                <a href="../" class="nav-logo">nemototea.dev</a>
+                <ul class="nav-items">
+                    <li><a href="../" class="nav-item">Home</a></li>
+                    <li><a href="../works/" class="nav-item">Works</a></li>
+                    <li><a href="../podcast/" class="nav-item">Podcast</a></li>
+                    <li><a href="../contact/" class="nav-item">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
 
-				<!-- Footer -->
-					<footer id="footer">
-						<span class="copyright">&copy; Aerial by <a href="http://html5up.net">HTML5 UP</a>.</span>
-					</footer>
+        <!-- プロフィールヒーロー -->
+        <section class="profile-hero">
+            <div class="profile-image-container fade-in">
+                <div class="profile-image">
+                    <span class="profile-emoji">🎯</span>
+                </div>
+            </div>
+            
+            <h1 class="text-hero fade-in">nemototea</h1>
+            <p class="text-subtitle fade-in mb-lg">
+                Creative Technologist & Music Producer
+            </p>
+            <p class="text-body fade-in" style="max-width: 600px; margin: 0 auto;">
+                技術とクリエイティビティの境界を探求する、マルチディシプリナリーなクリエイター。<br>
+                音楽制作、アプリ開発、日本茶への深い愛情を通じて、デジタルとアナログの調和を追求しています。
+            </p>
+        </section>
 
-			</div>
-		</div>
-		<script>
-			window.onload = function() { document.body.classList.remove('is-preload'); }
-			window.ontouchmove = function() { return false; }
-			window.onorientationchange = function() { document.body.scrollTop = 0; }
-		</script>
-	</body>
+        <!-- 技術スタック -->
+        <section class="tech-stack-section">
+            <h2 class="text-title text-center mb-md fade-in">🛠️ Technology Stack</h2>
+            <p class="text-body text-center mb-xl fade-in">
+                継続的な学習と実践によって培った技術領域
+            </p>
+            
+            <div class="tech-grid">
+                <!-- バックエンド -->
+                <div class="tech-item expert fade-in">
+                    <span class="tech-icon">🐘</span>
+                    <div class="tech-name">PHP</div>
+                    <span class="tech-level expert">Expert</span>
+                </div>
+                
+                <!-- モバイル開発 -->
+                <div class="tech-item expert fade-in">
+                    <span class="tech-icon">🤖</span>
+                    <div class="tech-name">Kotlin</div>
+                    <span class="tech-level expert">Expert</span>
+                </div>
+                
+                <div class="tech-item intermediate fade-in">
+                    <span class="tech-icon">🍎</span>
+                    <div class="tech-name">Swift</div>
+                    <span class="tech-level intermediate">Intermediate</span>
+                </div>
+                
+                <div class="tech-item expert fade-in">
+                    <span class="tech-icon">🔄</span>
+                    <div class="tech-name">KMP/CMP</div>
+                    <span class="tech-level expert">Expert</span>
+                </div>
+                
+                <!-- フロントエンド -->
+                <div class="tech-item intermediate fade-in">
+                    <span class="tech-icon">⚛️</span>
+                    <div class="tech-name">React</div>
+                    <span class="tech-level intermediate">Intermediate</span>
+                </div>
+                
+                <div class="tech-item expert fade-in">
+                    <span class="tech-icon">🌐</span>
+                    <div class="tech-name">HTML/CSS</div>
+                    <span class="tech-level expert">Expert</span>
+                </div>
+                
+                <div class="tech-item intermediate fade-in">
+                    <span class="tech-icon">⚡</span>
+                    <div class="tech-name">JavaScript</div>
+                    <span class="tech-level intermediate">Intermediate</span>
+                </div>
+                
+                <!-- 音楽制作 -->
+                <div class="tech-item expert fade-in">
+                    <span class="tech-icon">🎵</span>
+                    <div class="tech-name">Logic Pro</div>
+                    <span class="tech-level expert">Expert</span>
+                </div>
+                
+                <div class="tech-item intermediate fade-in">
+                    <span class="tech-icon">🔊</span>
+                    <div class="tech-name">Audio Engineering</div>
+                    <span class="tech-level intermediate">Intermediate</span>
+                </div>
+                
+                <!-- その他 -->
+                <div class="tech-item intermediate fade-in">
+                    <span class="tech-icon">🗄️</span>
+                    <div class="tech-name">MySQL</div>
+                    <span class="tech-level intermediate">Intermediate</span>
+                </div>
+                
+                <div class="tech-item learning fade-in">
+                    <span class="tech-icon">🦀</span>
+                    <div class="tech-name">Rust</div>
+                    <span class="tech-level learning">Learning</span>
+                </div>
+                
+                <div class="tech-item learning fade-in">
+                    <span class="tech-icon">🧠</span>
+                    <div class="tech-name">Machine Learning</div>
+                    <span class="tech-level learning">Learning</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- スキル視覚化 -->
+        <section class="skills-visualization glass-card">
+            <h3 class="text-subtitle mb-lg fade-in">📊 Skills Overview</h3>
+            
+            <div class="skill-bar fade-in">
+                <div class="skill-name">PHP Development</div>
+                <div class="skill-progress">
+                    <div class="skill-fill" data-width="95%"></div>
+                </div>
+                <div class="skill-percentage">95%</div>
+            </div>
+            
+            <div class="skill-bar fade-in">
+                <div class="skill-name">Kotlin/KMP</div>
+                <div class="skill-progress">
+                    <div class="skill-fill" data-width="90%"></div>
+                </div>
+                <div class="skill-percentage">90%</div>
+            </div>
+            
+            <div class="skill-bar fade-in">
+                <div class="skill-name">Music Production</div>
+                <div class="skill-progress">
+                    <div class="skill-fill" data-width="85%"></div>
+                </div>
+                <div class="skill-percentage">85%</div>
+            </div>
+            
+            <div class="skill-bar fade-in">
+                <div class="skill-name">Swift/iOS</div>
+                <div class="skill-progress">
+                    <div class="skill-fill" data-width="75%"></div>
+                </div>
+                <div class="skill-percentage">75%</div>
+            </div>
+            
+            <div class="skill-bar fade-in">
+                <div class="skill-name">React</div>
+                <div class="skill-progress">
+                    <div class="skill-fill" data-width="70%"></div>
+                </div>
+                <div class="skill-percentage">70%</div>
+            </div>
+            
+            <div class="skill-bar fade-in">
+                <div class="skill-name">Circuit Design</div>
+                <div class="skill-progress">
+                    <div class="skill-fill" data-width="65%"></div>
+                </div>
+                <div class="skill-percentage">65%</div>
+            </div>
+        </section>
+
+        <!-- 創作の旅 -->
+        <section class="journey-section">
+            <h2 class="text-title text-center mb-xl fade-in">🚀 Creative Journey</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item left slide-in-left">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2022</div>
+                        <h3 class="timeline-title">プログラミングへの目覚め</h3>
+                        <p class="timeline-description">
+                            PHPでのWeb開発からスタート。最初の個人プロジェクトで日本茶に関するWebサイトを制作し、技術と情熱の融合を体験。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right slide-in-right">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2023</div>
+                        <h3 class="timeline-title">モバイル開発への挑戦</h3>
+                        <p class="timeline-description">
+                            KotlinでAndroidアプリ開発を学習。その後SwiftでiOS開発も習得し、KMP/CMPによるマルチプラットフォーム開発に魅力を感じる。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left slide-in-left">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2023</div>
+                        <h3 class="timeline-title">音楽制作の開始</h3>
+                        <p class="timeline-description">
+                            Logic Proを使った楽曲制作をスタート。エフェクター制作と並行して、アナログとデジタルの音響技術を深く探求。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right slide-in-right">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2024</div>
+                        <h3 class="timeline-title">日本茶プラットフォーム企画</h3>
+                        <p class="timeline-description">
+                            日本茶への愛を技術で表現するECプラットフォームの企画を開始。伝統文化とモダンテクノロジーの架け橋を目指す。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left slide-in-left">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2024</div>
+                        <h3 class="timeline-title">ポッドキャスト配信開始</h3>
+                        <p class="timeline-description">
+                            技術と創作活動について語るポッドキャストを開始。知識の共有とコミュニティ形成への貢献を重視。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right slide-in-right">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2025</div>
+                        <h3 class="timeline-title">Creative Tech Hub構想</h3>
+                        <p class="timeline-description">
+                            すべての活動を統合するクリエイティブ・テック・ハブとして、このWebサイトを立ち上げ。未来への新しいステップ。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 創作哲学 -->
+        <section class="philosophy-section">
+            <h2 class="text-title text-center mb-xl fade-in">💭 Creative Philosophy</h2>
+            
+            <div class="philosophy-grid">
+                <div class="philosophy-card fade-in">
+                    <span class="philosophy-icon">🌊</span>
+                    <h3 class="philosophy-title">技術と感性の調和</h3>
+                    <p class="philosophy-description">
+                        論理的なコードと感情的な音楽、デジタルな技術とアナログな日本茶。
+                        相反するものの中に美しい調和を見出し、新しい価値を創造したい。
+                    </p>
+                </div>
+                
+                <div class="philosophy-card fade-in">
+                    <span class="philosophy-icon">🔄</span>
+                    <h3 class="philosophy-title">継続的な学習</h3>
+                    <p class="philosophy-description">
+                        技術は日々進歩し、創作の可能性は無限に広がっています。
+                        常に学び続け、新しい表現方法を探求することが成長の源泉。
+                    </p>
+                </div>
+                
+                <div class="philosophy-card fade-in">
+                    <span class="philosophy-icon">🤝</span>
+                    <h3 class="philosophy-title">オープンな共有</h3>
+                    <p class="philosophy-description">
+                        知識や経験は共有することで価値が増大します。
+                        ポッドキャストやオープンソースを通じて、コミュニティに貢献したい。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- コンタクト -->
+        <section class="contact-section">
+            <div class="glass-card fade-in" style="padding: var(--space-2xl);">
+                <h2 class="text-title mb-md">🌟 Let's Create Together</h2>
+                <p class="text-body mb-xl" style="max-width: 600px; margin: 0 auto;">
+                    新しいプロジェクトや技術的な議論、音楽コラボレーション、日本茶についての語らい。
+                    どんなトピックでもお気軽にご連絡ください。
+                </p>
+                
+                <div class="contact-links">
+                    <a href="../contact/" class="contact-link">
+                        📧 お問い合わせ
+                    </a>
+                    <a href="https://soundcloud.com/nemototea" class="contact-link" target="_blank" rel="noopener">
+                        🎵 SoundCloud
+                    </a>
+                    <a href="https://github.com/nemototea" class="contact-link" target="_blank" rel="noopener">
+                        💻 GitHub
+                    </a>
+                    <a href="../podcast/" class="contact-link">
+                        🎙️ Podcast
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="../assets/js/main.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // スキルバーのアニメーション
+            const animateSkillBars = () => {
+                const skillFills = document.querySelectorAll('.skill-fill');
+                skillFills.forEach(fill => {
+                    const targetWidth = fill.getAttribute('data-width');
+                    fill.style.width = '0%';
+                    
+                    setTimeout(() => {
+                        fill.style.width = targetWidth;
+                    }, 500);
+                });
+            };
+
+            // スクロール時にスキルバーをアニメーション
+            const skillsSection = document.querySelector('.skills-visualization');
+            if (skillsSection) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            animateSkillBars();
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                observer.observe(skillsSection);
+            }
+
+            // プロフィール画像のインタラクション
+            const profileImage = document.querySelector('.profile-image');
+            if (profileImage) {
+                profileImage.addEventListener('mouseenter', () => {
+                    profileImage.style.transform = 'scale(1.1) rotate(5deg)';
+                });
+                
+                profileImage.addEventListener('mouseleave', () => {
+                    profileImage.style.transform = 'scale(1) rotate(0deg)';
+                });
+            }
+
+            // 技術スタックアイテムのランダムアニメーション
+            const techItems = document.querySelectorAll('.tech-item');
+            techItems.forEach((item, index) => {
+                item.addEventListener('mouseenter', () => {
+                    const icon = item.querySelector('.tech-icon');
+                    icon.style.transform = 'scale(1.2) rotate(10deg)';
+                    icon.style.filter = 'drop-shadow(0 0 20px var(--cyber-green))';
+                });
+                
+                item.addEventListener('mouseleave', () => {
+                    const icon = item.querySelector('.tech-icon');
+                    icon.style.transform = 'scale(1) rotate(0deg)';
+                    icon.style.filter = 'none';
+                });
+
+                // ランダムなタイミングで軽いグロー効果
+                setTimeout(() => {
+                    setInterval(() => {
+                        if (Math.random() < 0.1) {
+                            item.style.boxShadow = '0 0 30px rgba(0, 255, 157, 0.3)';
+                            setTimeout(() => {
+                                item.style.boxShadow = '';
+                            }, 1000);
+                        }
+                    }, 3000);
+                }, index * 200);
+            });
+        });
+
+        // アプリ読み込み完了時の処理
+        document.addEventListener('app:loaded', () => {
+            console.log('📝 プロフィールページが正常に読み込まれました！');
+        });
+    </script>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "nemototea",
+        "jobTitle": "Creative Technologist & Music Producer",
+        "description": "音楽制作、アプリ開発、日本茶への情熱を持つクリエイティブテクノロジスト",
+        "url": "https://nemototea.github.io/about/",
+        "knowsAbout": [
+            "PHP", "Kotlin", "Swift", "React", "KMP", "CMP",
+            "音楽制作", "Logic Pro", "エフェクター制作", "日本茶"
+        ],
+        "hasOccupation": {
+            "@type": "Occupation",
+            "name": "Software Developer & Music Producer"
+        }
+    }
+    </script>
+</body>
 </html>
