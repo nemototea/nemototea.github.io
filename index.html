@@ -233,6 +233,49 @@
             font-size: 1.1rem;
         }
         
+        /* CTAセクションのスタイル調整 */
+        .cta-section {
+            margin: var(--space-2xl) 0;
+        }
+        
+        .cta-section .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: var(--space-2xl);
+            box-shadow: var(--shadow-glass);
+            text-align: center;
+            transition: all var(--transition-normal);
+        }
+        
+        .cta-section .glass-card:hover {
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .cta-section .text-title {
+            text-align: center;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .cta-section .text-body {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-section .flex {
+            justify-content: center;
+            gap: var(--space-lg);
+            flex-wrap: wrap;
+            margin-top: var(--space-xl);
+        }
+        
         /* レスポンシブ対応 */
         @media (max-width: 768px) {
             .hero-cta {
@@ -502,17 +545,17 @@
         </section>
 
         <!-- CTA セクション -->
-        <section class="cta-section mt-2xl mb-2xl">
-            <div class="glass-card text-center fade-in" style="padding: var(--space-2xl);">
-                <h2 class="text-title mb-md">🚀 一緒に創造しませんか？</h2>
-                <p class="text-body mb-xl" style="max-width: 600px; margin: 0 auto;">
+        <section class="cta-section">
+            <div class="glass-card fade-in">
+                <h2 class="text-title">🚀 一緒に創造しませんか？</h2>
+                <p class="text-body">
                     技術とクリエイティビティの交差点で、新しいプロジェクトやコラボレーションを探求しています。
                     音楽制作、アプリ開発、日本茶プラットフォーム、どの分野でもお気軽にご連絡ください。
                 </p>
                 
-                <div class="flex" style="justify-content: center; gap: var(--space-md); flex-wrap: wrap;">
+                <div class="flex">
                     <a href="contact/" class="cta-primary">お問い合わせ</a>
-                    <a href="https://soundcloud.com/nemototea" class="glass-button" target="_blank" rel="noopener">SoundCloud</a>
+                    <a href="https://soundcloud.com/spcmsc" class="glass-button" target="_blank" rel="noopener">SoundCloud</a>
                     <a href="https://github.com/nemototea" class="glass-button" target="_blank" rel="noopener">GitHub</a>
                 </div>
             </div>
@@ -529,10 +572,10 @@
                 </div>
                 
                 <div class="flex" style="gap: var(--space-md); flex-wrap: wrap;">
-                    <a href="works/" class="text-small" style="color: var(--text-secondary); text-decoration: none;">Works</a>
-                    <a href="podcast/" class="text-small" style="color: var(--text-secondary); text-decoration: none;">Podcast</a>
-                    <a href="contact/" class="text-small" style="color: var(--text-secondary); text-decoration: none;">Contact</a>
-                    <a href="/sitemap.xml" class="text-small" style="color: var(--text-secondary); text-decoration: none;">Sitemap</a>
+                    <a href="works/" class="footer-link">Works</a>
+                    <a href="podcast/" class="footer-link">Podcast</a>
+                    <a href="contact/" class="footer-link">Contact</a>
+                    <a href="/sitemap.xml" class="footer-link">Sitemap</a>
                 </div>
             </div>
             
@@ -643,7 +686,7 @@
         "url": "https://nemototea.github.io/",
         "description": "Creative Tech Hub - 音楽制作、アプリ開発、日本茶への情熱を通じて、デジタルとアナログの境界を探求",
         "sameAs": [
-            "https://soundcloud.com/nemototea",
+            "https://soundcloud.com/spcmsc",
             "https://github.com/nemototea"
         ],
         "knowsAbout": [
