@@ -66,9 +66,14 @@
         }
 
         .episode-loading {
-            @extend .glass-card;
-            text-align: center;
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            transition: all var(--transition-normal);
+            border-radius: 20px;
             padding: var(--space-2xl);
+            box-shadow: var(--shadow-glass);
+            text-align: center;
             min-height: 200px;
             display: flex;
             flex-direction: column;
@@ -99,8 +104,13 @@
         }
 
         .episode-card {
-            @extend .glass-card;
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
             transition: all var(--transition-normal);
+            border-radius: 20px;
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-glass);
             position: relative;
             overflow: hidden;
         }
@@ -143,6 +153,7 @@
             margin-bottom: var(--space-md);
             display: -webkit-box;
             -webkit-line-clamp: 3;
+            line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -224,9 +235,19 @@
         }
 
         .episode-link {
-            @extend .glass-button;
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            transition: all var(--transition-normal);
+            border-radius: 12px;
             padding: var(--space-xs) var(--space-md);
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
             text-decoration: none;
+            color: var(--text-primary);
             font-size: 0.85rem;
             flex: 1;
             text-align: center;
@@ -245,10 +266,14 @@
         }
 
         .platform-card {
-            @extend .glass-card;
-            text-align: center;
-            padding: var(--space-lg);
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
             transition: all var(--transition-normal);
+            border-radius: 20px;
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-glass);
+            text-align: center;
             text-decoration: none;
             color: var(--text-primary);
         }
@@ -294,9 +319,14 @@
         }
 
         .topic-card {
-            @extend .glass-card;
-            text-align: center;
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            transition: all var(--transition-normal);
+            border-radius: 20px;
             padding: var(--space-lg);
+            box-shadow: var(--shadow-glass);
+            text-align: center;
         }
 
         .topic-icon {
@@ -312,11 +342,14 @@
         }
 
         .error-message {
-            @extend .glass-card;
-            text-align: center;
-            padding: var(--space-2xl);
             background: rgba(255, 0, 0, 0.1);
-            border-color: rgba(255, 0, 0, 0.3);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            transition: all var(--transition-normal);
+            border-radius: 20px;
+            padding: var(--space-2xl);
+            box-shadow: var(--shadow-glass);
+            text-align: center;
         }
 
         @media (max-width: 768px) {
@@ -614,4 +647,155 @@
                         enclosure: { url: "#" }
                     },
                     {
-                        title: "Epi
+                        title: "Episode 14: Logic Proと創作フロー",
+                        description: "音楽制作ソフトLogic Proを使った楽曲制作プロセスについて。MIDIコントローラー、プラグイン選び、ミックス・マスタリングのコツまで実践的なテクニックを紹介。",
+                        pubDate: "2025-06-11T10:00:00Z",
+                        duration: "52:15",
+                        enclosure: { url: "#" }
+                    },
+                    {
+                        title: "Episode 13: 日本茶の深い世界",
+                        description: "煎茶、玉露、ほうじ茶など日本茶の種類と特徴について。産地による味の違い、正しい淹れ方、茶葉の保存方法まで、日本茶の奥深い魅力を探ります。",
+                        pubDate: "2025-06-04T10:00:00Z",
+                        duration: "41:20",
+                        enclosure: { url: "#" }
+                    }
+                ];
+            }
+
+            renderEpisodes() {
+                const container = document.getElementById('episodes-container');
+                
+                if (this.episodes.length === 0) {
+                    container.innerHTML = `
+                        <div class="error-message fade-in">
+                            <span style="font-size: 3rem; margin-bottom: var(--space-md); display: block;">📻</span>
+                            <h3 class="text-subtitle mb-md">エピソードが見つかりません</h3>
+                            <p class="text-body">
+                                現在配信準備中です。しばらくお待ちください。
+                            </p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const episodesHTML = this.episodes.map((episode, index) => {
+                    const date = new Date(episode.pubDate);
+                    const formattedDate = date.toLocaleDateString('ja-JP', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+
+                    return `
+                        <article class="episode-card fade-in" data-episode="${index}">
+                            <div class="episode-number">#${this.episodes.length - index}</div>
+                            
+                            <div class="episode-date">${formattedDate}</div>
+                            <h3 class="episode-title">${episode.title}</h3>
+                            <p class="episode-description">${episode.description}</p>
+                            <div class="episode-duration">再生時間: ${episode.duration}</div>
+                            
+                            <div class="episode-player">
+                                <div class="player-controls">
+                                    <button class="play-button" data-episode="${index}">
+                                        <span class="play-icon">▶️</span>
+                                    </button>
+                                    <div class="progress-container">
+                                        <div class="progress-bar" data-episode="${index}">
+                                            <div class="progress-fill"></div>
+                                        </div>
+                                        <div class="time-display">
+                                            <span class="current-time">0:00</span>
+                                            <span class="total-time">${episode.duration}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="episode-links">
+                                <a href="#" class="episode-link">🎵 Spotify</a>
+                                <a href="#" class="episode-link">🍎 Apple</a>
+                                <a href="#" class="episode-link">📱 Google</a>
+                                <a href="#" class="episode-link">📡 RSS</a>
+                            </div>
+                        </article>
+                    `;
+                }).join('');
+
+                container.innerHTML = `<div class="episodes-grid">${episodesHTML}</div>`;
+                
+                // アニメーション観察者を再設定
+                if (window.observeElements) {
+                    window.observeElements();
+                }
+            }
+
+            renderError() {
+                const container = document.getElementById('episodes-container');
+                container.innerHTML = `
+                    <div class="error-message fade-in">
+                        <span style="font-size: 3rem; margin-bottom: var(--space-md); display: block;">⚠️</span>
+                        <h3 class="text-subtitle mb-md">エピソードの読み込みに失敗しました</h3>
+                        <p class="text-body mb-lg">
+                            RSSフィードの取得中にエラーが発生しました。<br>
+                            しばらく時間をおいてから再度お試しください。
+                        </p>
+                        <button class="glass-button" onclick="location.reload()">
+                            🔄 再読み込み
+                        </button>
+                    </div>
+                `;
+            }
+
+            setupEventListeners() {
+                // プレイボタンのイベントリスナー
+                document.addEventListener('click', (e) => {
+                    if (e.target.closest('.play-button')) {
+                        const button = e.target.closest('.play-button');
+                        const episodeIndex = button.dataset.episode;
+                        this.togglePlay(episodeIndex, button);
+                    }
+                });
+            }
+
+            togglePlay(episodeIndex, button) {
+                const episode = this.episodes[episodeIndex];
+                
+                if (this.currentAudio && !this.currentAudio.paused) {
+                    this.currentAudio.pause();
+                    if (this.currentPlayButton) {
+                        this.currentPlayButton.innerHTML = '<span class="play-icon">▶️</span>';
+                    }
+                }
+
+                if (this.currentAudio && this.currentPlayButton === button && this.currentAudio.paused) {
+                    this.currentAudio.play();
+                    button.innerHTML = '<span class="play-icon">⏸️</span>';
+                } else {
+                    // デモ用のダミー再生
+                    button.innerHTML = '<span class="play-icon">⏸️</span>';
+                    this.currentPlayButton = button;
+                    
+                    // 実際のオーディオファイルがある場合は以下を使用
+                    // this.currentAudio = new Audio(episode.enclosure.url);
+                    // this.currentAudio.play();
+                    
+                    console.log(`再生中: ${episode.title}`);
+                }
+            }
+        }
+
+        // ページ読み込み時の初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            // ポッドキャストマネージャーを初期化
+            new PodcastManager();
+            
+            // ページフェードイン
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

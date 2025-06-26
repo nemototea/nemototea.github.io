@@ -58,10 +58,10 @@
             font-size: clamp(3rem, 8vw, 6rem);
             font-weight: 800;
             line-height: 0.9;
-            margin-bottom: var(--space-md);
-            background: linear-gradient(45deg, #ffffff, var(--cyber-green), var(--cyber-blue));
+            margin-bottom: var(--space-md);            background: linear-gradient(45deg, #ffffff, var(--cyber-green), var(--cyber-blue));
             background-size: 300% 300%;
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: gradientShift 4s ease-in-out infinite;
         }
@@ -101,12 +101,21 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 40px rgba(0, 255, 157, 0.4);
         }
-        
-        .cta-secondary {
-            @extend .glass-button;
-            padding: var(--space-md) var(--space-xl);
-            font-size: 1.1rem;
+          .cta-secondary {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            transition: all var(--transition-normal);
             border-radius: 50px;
+            padding: var(--space-md) var(--space-xl);
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 1.1rem;
         }
         
         .activities-grid {
@@ -115,13 +124,17 @@
             gap: var(--space-lg);
             margin: var(--space-2xl) 0;
         }
-        
-        .activity-card {
-            @extend .glass-card;
+          .activity-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            transition: all var(--transition-normal);
+            border-radius: 20px;
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-glass);
             text-align: center;
             position: relative;
             overflow: hidden;
-            transition: all var(--transition-normal);
         }
         
         .activity-card:hover {
@@ -148,9 +161,20 @@
             line-height: 1.6;
             margin-bottom: var(--space-md);
         }
-        
-        .activity-link {
-            @extend .glass-button;
+          .activity-link {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            transition: all var(--transition-normal);
+            border-radius: 12px;
+            padding: var(--space-sm) var(--space-md);
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            text-decoration: none;
+            color: var(--text-primary);
             font-size: 0.9rem;
             margin-top: auto;
         }
@@ -164,10 +188,14 @@
             grid-template-columns: 2fr 1fr;
             gap: var(--space-xl);
         }
-        
-        .latest-main {
-            @extend .glass-card;
+          .latest-main {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            transition: all var(--transition-normal);
+            border-radius: 20px;
             padding: var(--space-xl);
+            box-shadow: var(--shadow-glass);
         }
         
         .latest-sidebar {
@@ -175,11 +203,14 @@
             flex-direction: column;
             gap: var(--space-md);
         }
-        
-        .latest-item {
-            @extend .glass-card;
-            padding: var(--space-md);
+          .latest-item {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
             transition: all var(--transition-normal);
+            border-radius: 20px;
+            padding: var(--space-md);
+            box-shadow: var(--shadow-glass);
         }
         
         .latest-item:hover {
@@ -214,9 +245,14 @@
             gap: var(--space-lg);
             margin-top: var(--space-xl);
         }
-        
-        .stat-item {
-            @extend .glass-card;
+          .stat-item {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            transition: all var(--transition-normal);
+            border-radius: 20px;
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-glass);
             text-align: center;
         }
         

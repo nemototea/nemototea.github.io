@@ -71,12 +71,15 @@
             gap: var(--space-md);
             margin-top: var(--space-xl);
         }
-        
-        .tech-item {
-            @extend .glass-card;
-            text-align: center;
-            padding: var(--space-lg);
+          .tech-item {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
             transition: all var(--transition-normal);
+            border-radius: 20px;
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-glass);
+            text-align: center;
             position: relative;
             overflow: hidden;
         }
@@ -170,9 +173,14 @@
         .timeline-item.right {
             left: 55%;
         }
-        
-        .timeline-content {
-            @extend .glass-card;
+          .timeline-content {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            transition: all var(--transition-normal);
+            border-radius: 20px;
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-glass);
             position: relative;
         }
         
@@ -222,9 +230,14 @@
             gap: var(--space-lg);
             margin-top: var(--space-xl);
         }
-        
-        .philosophy-card {
-            @extend .glass-card;
+          .philosophy-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            transition: all var(--transition-normal);
+            border-radius: 20px;
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-glass);
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -260,12 +273,29 @@
             gap: var(--space-md);
             flex-wrap: wrap;
             margin-top: var(--space-xl);
+        }        .contact-link {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            transition: all var(--transition-normal);
+            border-radius: 12px;
+            padding: var(--space-md) var(--space-lg);
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            text-decoration: none;
+            color: var(--text-primary);
         }
         
-        .contact-link {
-            @extend .glass-button;
-            padding: var(--space-md) var(--space-lg);
-            text-decoration: none;
+        .contact-link:hover {
+            background: rgba(0, 255, 157, 0.1);
+            border-color: var(--glass-border-hover);
+            transform: translateY(-2px);
+        }
+        
+        .skill-bar {
             font-weight: 600;
             display: flex;
             align-items: center;
