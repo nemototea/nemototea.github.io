@@ -1,2 +1,30 @@
+# OS関連
 .DS_Store
 **/.DS_Store
+Thumbs.db
+
+# IDE関連
+.vscode/
+.idea/
+
+# Node.js関連
+node_modules/
+
+# ログファイル
+*.log
+
+# 一時ファイル
+*.tmp
+*.swp
+
+# バックアップファイル
+*.bak
+
+# 静的サイト生成関連
+_site/
+.sass-cache/
+
+# その他
+*.env
+.env.local
+.env.*.local

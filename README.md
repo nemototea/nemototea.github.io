@@ -1,21 +1,21 @@
-# github.io
+# nemototea.github.io
 
-It is a port of Aerial by HTML5 UP  
-(https://html5up.net/aerial)  
-Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)  
-  
-Credits:
+このリポジトリは、[NEMOTOTEA](https://nemototea.github.io/) の公式ウェブサイトのソースコードです。
 
-	Background Image:
-		Ryan Schroeder via Unsplash (unsplash.com - CC0 licensed)
-			"Icefields" (flickr.com/photos/ryanschroeder/11876741703)
+## サイト概要
+- お茶や音楽、テクノロジーに関する情報発信サイト
+- 3Dポートフォリオや回路シミュレータ、AI診断などのスペシャルコンテンツを提供
+- Podcastや各種アプリ、エフェクト、音楽作品も掲載
 
-	Icons:
-		Font Awesome (fontawesome.io)
+## ディレクトリ構成
+- `index.html` : トップページ
+- `about/` : サイト・運営者情報
+- `contact/` : お問い合わせ
+- `podcast/` : ポッドキャスト
+- `special-features/` : スペシャルコンテンツ
+- `works/` : 制作物・アプリ・音楽など
+- `assets/` : CSS・JavaScript等のアセット
 
-	Other:
-		Responsive Tools (github.com/ajlkn/responsive-tools)
+---
 
-License:
-
-	This theme is released under the CC BY 3.0 license. For more information, read the [License](https://github.com/sethmacleod/aerial/blob/master/LICENSE.md).
+ご質問・ご要望は [contact](https://nemototea.github.io/contact/) よりご連絡ください。
