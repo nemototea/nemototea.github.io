@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="日本茶フレーバーホイール - インタラクティブな円形チャートで茶葉の味わいと香りを美しく視覚化">
+    <meta name="keywords" content="日本茶, フレーバーホイール, 茶葉, 味わい, 香り, インタラクティブ">
+    
+    <title>Tea Flavor Wheel - nemototea</title>
+    
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .tea-wheel-hero {
+            padding: var(--space-2xl) 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .wheel-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: var(--space-2xl);
+            margin: var(--space-2xl) 0;
+            min-height: 600px;
+        }
+
+        .wheel-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: var(--space-xl);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wheel-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #2d5016, #4a7c59, var(--cyber-green));
+        }
+
+        #tea-wheel-svg {
+            width: 100%;
+            height: 500px;
+            max-width: 500px;
+            cursor: pointer;
+            filter: drop-shadow(0 0 20px rgba(45, 80, 22, 0.3));
+        }
+
+        .wheel-controls {
+            display: flex;
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .wheel-control-btn {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: var(--space-sm) var(--space-md);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            color: var(--text-primary);
+        }
+
+        .wheel-control-btn:hover {
+            background: rgba(0, 255, 157, 0.1);
+            border-color: rgba(0, 255, 157, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+        }
+
+        .wheel-control-btn.active {
+            background: linear-gradient(45deg, #2d5016, #4a7c59);
+            color: white;
+            box-shadow: 0 0 20px rgba(45, 80, 22, 0.5);
+        }
+
+        .info-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
+            position: sticky;
+            top: var(--space-lg);
+        }
+
+        .tea-info-header {
+            text-align: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .tea-icon {
+            font-size: 4rem;
+            margin-bottom: var(--space-md);
+            display: block;
+            filter: drop-shadow(0 0 15px rgba(45, 80, 22, 0.5));
+        }
+
+        .tea-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #4a7c59;
+            margin-bottom: var(--space-xs);
+        }
+
+        .tea-type {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .flavor-details {
+            margin: var(--space-lg) 0;
+        }
+
+        .flavor-category {
+            margin-bottom: var(--space-md);
+        }
+
+        .flavor-label {
+            font-weight: 600;
+            color: #2d5016;
+            margin-bottom: var(--space-xs);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .flavor-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+        }
+
+        .flavor-tag {
+            background: rgba(45, 80, 22, 0.1);
+            color: #2d5016;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid rgba(45, 80, 22, 0.2);
+        }
+
+        .flavor-intensity {
+            margin: var(--space-lg) 0;
+        }
+
+        .intensity-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--space-sm);
+        }
+
+        .intensity-label {
+            min-width: 80px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .intensity-track {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin: 0 var(--space-sm);
+            overflow: hidden;
+        }
+
+        .intensity-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2d5016, #4a7c59);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .intensity-value {
+            min-width: 30px;
+            font-size: 0.8rem;
+            color: #4a7c59;
+            font-weight: 600;
+        }
+
+        .brewing-info {
+            margin-top: var(--space-lg);
+            padding-top: var(--space-lg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .brewing-param {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--space-sm);
+            font-size: 0.9rem;
+        }
+
+        .brewing-label {
+            color: var(--text-secondary);
+        }
+
+        .brewing-value {
+            color: #4a7c59;
+            font-weight: 600;
+        }
+
+        .legend-section {
+            margin: var(--space-2xl) 0;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+
+        .legend-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: var(--space-lg);
+            text-align: center;
+        }
+
+        .legend-color {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto var(--space-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .legend-color::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .legend-title {
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+            color: #2d5016;
+        }
+
+        .legend-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .comparison-section {
+            margin: var(--space-2xl) 0;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-xl);
+        }
+
+        .tea-comparison-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: var(--space-md);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            border: 2px solid transparent;
+        }
+
+        .tea-comparison-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(45, 80, 22, 0.3);
+            box-shadow: 0 8px 25px rgba(45, 80, 22, 0.2);
+        }
+
+        .tea-comparison-card.selected {
+            border-color: #4a7c59;
+            box-shadow: 0 0 20px rgba(74, 124, 89, 0.4);
+        }
+
+        .comparison-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-sm);
+            display: block;
+        }
+
+        .comparison-name {
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+            color: #2d5016;
+        }
+
+        .comparison-type {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: var(--space-sm);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            max-width: 200px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 968px) {
+            .wheel-container {
+                grid-template-columns: 1fr;
+                gap: var(--space-lg);
+            }
+
+            .info-panel {
+                position: static;
+            }
+
+            #tea-wheel-svg {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .wheel-controls {
+                justify-content: center;
+            }
+
+            .wheel-control-btn {
+                padding: var(--space-xs) var(--space-sm);
+                font-size: 0.8rem;
+            }
+
+            .legend-grid,
+            .comparison-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* 回転アニメーション */
+        .wheel-rotating {
+            animation: wheelRotate 0.5s ease-in-out;
+        }
+
+        @keyframes wheelRotate {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* パルス効果 */
+        .wheel-pulse {
+            animation: wheelPulse 0.3s ease-in-out;
+        }
+
+        @keyframes wheelPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダーナビゲーション -->
+        <header class="glass-header mt-md">
+            <nav class="nav">
+                <a href="../../" class="nav-logo">nemototea.dev</a>
+                <ul class="nav-items">
+                    <li><a href="../../" class="nav-item">Home</a></li>
+                    <li><a href="../../about/" class="nav-item">Profile</a></li>
+                    <li><a href="../../works/" class="nav-item">Works</a></li>
+                    <li><a href="../../podcast/" class="nav-item">Podcast</a></li>
+                    <li><a href="../../contact/" class="nav-item">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- フレーバーホイールヒーロー -->
+        <section class="tea-wheel-hero">
+            <h1 class="text-hero fade-in">🍵 Tea Flavor Wheel</h1>
+            <p class="text-subtitle fade-in mb-lg">
+                日本茶の豊かな味わいと香りを視覚的に探索
+            </p>
+            <p class="text-body fade-in" style="max-width: 600px; margin: 0 auto;">
+                インタラクティブなフレーバーホイールで、日本茶の多様な味覚特性を発見してください。<br>
+                各茶葉の独特な風味プロファイルと、それらの相互関係を美しく可視化します。
+            </p>
+        </section>
+
+        <!-- メインフレーバーホイールセクション -->
+        <section class="wheel-container">
+            <div class="wheel-section slide-in-left">
+                <svg id="tea-wheel-svg"></svg>
+                
+                <div class="wheel-controls">
+                    <button class="wheel-control-btn active" data-view="flavor">味わい</button>
+                    <button class="wheel-control-btn" data-view="aroma">香り</button>
+                    <button class="wheel-control-btn" data-view="intensity">強度</button>
+                    <button class="wheel-control-btn" data-view="season">季節</button>
+                    <button class="wheel-control-btn" data-action="random">🎲 ランダム</button>
+                </div>
+            </div>
+
+            <div class="info-panel slide-in-right">
+                <div class="tea-info-header">
+                    <span class="tea-icon" id="selectedTeaIcon">🍃</span>
+                    <div class="tea-name" id="tea-name">茶葉を選択してください</div>
+                    <div class="tea-type" id="tea-type">日本茶フレーバーホイール</div>
+                </div>
+
+                <div class="flavor-details" id="flavor-details">
+                    <div class="flavor-category">
+                        <div class="flavor-label">味わい</div>
+                        <div class="flavor-tags" id="flavor-tags">
+                            <span class="flavor-tag">クリックして茶葉を選択</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flavor-category">
+                        <div class="flavor-label">香り</div>
+                        <div class="flavor-tags" id="aroma-tags">
+                            <span class="flavor-tag">詳細情報を表示</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flavor-intensity" id="flavor-intensity">
+                    <div class="intensity-bar">
+                        <span class="intensity-label">渋味</span>
+                        <div class="intensity-track">
+                            <div class="intensity-fill" id="astringency-fill" style="width: 0%"></div>
+                        </div>
+                        <span class="intensity-value" id="astringency-value">-</span>
+                    </div>
+                    <div class="intensity-bar">
+                        <span class="intensity-label">甘味</span>
+                        <div class="intensity-track">
+                            <div class="intensity-fill" id="sweetness-fill" style="width: 0%"></div>
+                        </div>
+                        <span class="intensity-value" id="sweetness-value">-</span>
+                    </div>
+                    <div class="intensity-bar">
+                        <span class="intensity-label">苦味</span>
+                        <div class="intensity-track">
+                            <div class="intensity-fill" id="bitterness-fill" style="width: 0%"></div>
+                        </div>
+                        <span class="intensity-value" id="bitterness-value">-</span>
+                    </div>
+                    <div class="intensity-bar">
+                        <span class="intensity-label">旨味</span>
+                        <div class="intensity-track">
+                            <div class="intensity-fill" id="umami-fill" style="width: 0%"></div>
+                        </div>
+                        <span class="intensity-value" id="umami-value">-</span>
+                    </div>
+                </div>
+
+                <div class="brewing-info" id="brewing-info" style="display: none;">
+                    <h4 style="margin-bottom: var(--space-md); color: #2d5016;">淹れ方の目安</h4>
+                    <div class="brewing-param">
+                        <span class="brewing-label">水温</span>
+                        <span class="brewing-value" id="water-temp">-</span>
+                    </div>
+                    <div class="brewing-param">
+                        <span class="brewing-label">茶葉量</span>
+                        <span class="brewing-value" id="tea-amount">-</span>
+                    </div>
+                    <div class="brewing-param">
+                        <span class="brewing-label">抽出時間</span>
+                        <span class="brewing-value" id="steeping-time">-</span>
+                    </div>
+                    <div class="brewing-param">
+                        <span class="brewing-label">最適な時間</span>
+                        <span class="brewing-value" id="best-time">-</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 茶葉比較セクション -->
+        <section class="comparison-section">
+            <h2 class="text-title text-center mb-md fade-in">🔍 茶葉比較</h2>
+            <p class="text-body text-center mb-xl fade-in">
+                複数の茶葉を選択して味わいの違いを比較してみましょう
+            </p>
+            
+            <div class="comparison-grid" id="comparison-grid">
+                <!-- JavaScriptで動的生成 -->
+            </div>
+        </section>
+
+        <!-- 凡例セクション -->
+        <section class="legend-section">
+            <h2 class="text-title text-center mb-xl fade-in">🎨 フレーバーホイール解説</h2>
+            
+            <div class="legend-grid">
+                <div class="legend-card fade-in">
+                    <div class="legend-color" style="background: linear-gradient(45deg, #2d5016, #4a7c59);"></div>
+                    <h3 class="legend-title">緑茶系</h3>
+                    <p class="legend-description">
+                        煎茶、玉露、抹茶など。爽やかな青草の香りと、繊細な甘味・旨味が特徴。
+                    </p>
+                </div>
+                
+                <div class="legend-card fade-in">
+                    <div class="legend-color" style="background: linear-gradient(45deg, #8b4513, #cd853f);"></div>
+                    <h3 class="legend-title">焙煎系</h3>
+                    <p class="legend-description">
+                        ほうじ茶、玄米茶など。香ばしいロースト香と、まろやかな味わいが魅力。
+                    </p>
+                </div>
+                
+                <div class="legend-card fade-in">
+                    <div class="legend-color" style="background: linear-gradient(45deg, #006400, #228b22);"></div>
+                    <h3 class="legend-title">濃厚系</h3>
+                    <p class="legend-description">
+                        深蒸し茶、番茶など。しっかりとした味わいと、コクのある風味が特徴。
+                    </p>
+                </div>
+                
+                <div class="legend-card fade-in">
+                    <div class="legend-color" style="background: linear-gradient(45deg, #9acd32, #adff2f);"></div>
+                    <h3 class="legend-title">爽やか系</h3>
+                    <p class="legend-description">
+                        新茶、高級煎茶など。清涼感のある香りと、上品な甘味が楽しめる。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 使い方セクション -->
+        <section class="mt-2xl">
+            <div class="glass-card fade-in" style="padding: var(--space-2xl);">
+                <h2 class="text-title text-center mb-md">📖 使い方ガイド</h2>
+                <div class="grid grid-auto" style="margin-top: var(--space-xl);">
+                    <div class="text-center">
+                        <span style="font-size: 3rem; margin-bottom: var(--space-md); display: block;">🖱️</span>
+                        <h3 class="text-subtitle mb-sm">クリックして探索</h3>
+                        <p class="text-body">ホイール上の茶葉をクリックして詳細情報を表示</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <span style="font-size: 3rem; margin-bottom: var(--space-md); display: block;">🔄</span>
+                        <h3 class="text-subtitle mb-sm">視点を切り替え</h3>
+                        <p class="text-body">味わい、香り、強度、季節の4つの観点で分析</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <span style="font-size: 3rem; margin-bottom: var(--space-md); display: block;">⚖️</span>
+                        <h3 class="text-subtitle mb-sm">茶葉を比較</h3>
+                        <p class="text-body">複数の茶葉を選択して味わいの違いを発見</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ツールチップ -->
+    <div class="tooltip" id="tooltip"></div>
+
+    <script src="../../assets/js/main.js"></script>
+    

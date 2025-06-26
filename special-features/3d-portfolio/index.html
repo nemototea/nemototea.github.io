@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="3D音楽ポートフォリオ - Three.jsを使った3D空間で音楽作品を展示。音楽に反応するビジュアルエフェクト">
+    <meta name="keywords" content="3D, 音楽, ポートフォリオ, Three.js, ビジュアライザー, インタラクティブ">
+    
+    <title>3D Music Portfolio - nemototea</title>
+    
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        .portfolio-hero {
+            padding: var(--space-2xl) 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .portfolio-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            min-height: 600px;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+            overflow: hidden;
+            border-radius: 20px;
+            margin: var(--space-xl) 0;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        #three-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: grab;
+        }
+
+        #three-canvas:active {
+            cursor: grabbing;
+        }
+
+        .portfolio-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .ui-panel {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: var(--space-md);
+            pointer-events: all;
+            transition: all var(--transition-normal);
+        }
+
+        .ui-panel:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+
+        .control-panel {
+            top: var(--space-lg);
+            left: var(--space-lg);
+            min-width: 200px;
+        }
+
+        .info-panel {
+            top: var(--space-lg);
+            right: var(--space-lg);
+            max-width: 300px;
+        }
+
+        .player-panel {
+            bottom: var(--space-lg);
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 400px;
+            text-align: center;
+        }
+
+        .visualizer-panel {
+            bottom: var(--space-lg);
+            right: var(--space-lg);
+            width: 200px;
+            height: 100px;
+        }
+
+        .panel-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--cyber-green);
+            margin-bottom: var(--space-sm);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-button {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: var(--space-xs) var(--space-sm);
+            margin: 2px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            color: var(--text-primary);
+        }
+
+        .control-button:hover {
+            background: rgba(0, 255, 157, 0.1);
+            border-color: rgba(0, 255, 157, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+        }
+
+        .control-button.active {
+            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.5);
+        }
+
+        .track-info {
+            margin-bottom: var(--space-md);
+        }
+
+        .track-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .track-artist {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .track-description {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            justify-content: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .play-button {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
+            border: none;
+            border-radius: 50%;
+            color: #000;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(0, 255, 157, 0.6);
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .volume-slider {
+            width: 80px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+            -webkit-appearance: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            background: var(--cyber-green);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cyber-green), var(--cyber-blue));
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: var(--space-xs);
+        }
+
+        .visualizer-bars {
+            display: flex;
+            align-items: end;
+            gap: 2px;
+            height: 60px;
+            justify-content: center;
+        }
+
+        .visualizer-bar {
+            width: 6px;
+            background: linear-gradient(to top, var(--cyber-green), var(--cyber-blue));
+            border-radius: 3px;
+            transition: height 0.1s ease;
+            min-height: 4px;
+        }
+
+        .scene-stats {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: var(--space-sm);
+        }
+
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(0, 255, 157, 0.3);
+            border-top: 3px solid var(--cyber-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: var(--space-md);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: var(--space-sm);
+        }
+
+        .loading-progress {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .track-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin: var(--space-xl) 0;
+        }
+
+        .track-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: var(--space-lg);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .track-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(0, 255, 157, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 255, 157, 0.2);
+        }
+
+        .track-card.active {
+            border-color: var(--cyber-green);
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.4);
+        }
+
+        .track-cover {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
+            border-radius: 12px;
+            margin: 0 auto var(--space-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .track-cover::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .track-name {
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+            color: var(--text-primary);
+        }
+
+        .track-genre {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: var(--space-sm);
+        }
+
+        .track-duration {
+            font-size: 0.7rem;
+            color: var(--cyber-green);
+        }
+
+        .instructions {
+            margin: var(--space-2xl) 0;
+            text-align: center;
+        }
+
+        .instruction-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+
+        .instruction-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: var(--space-lg);
+            text-align: center;
+        }
+
+        .instruction-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-md);
+            display: block;
+        }
+
+        .instruction-title {
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+            color: var(--cyber-green);
+        }
+
+        @media (max-width: 768px) {
+            .portfolio-container {
+                height: 70vh;
+                min-height: 400px;
+            }
+
+            .ui-panel {
+                padding: var(--space-sm);
+            }
+
+            .control-panel {
+                top: var(--space-sm);
+                left: var(--space-sm);
+                min-width: 150px;
+            }
+
+            .info-panel {
+                top: var(--space-sm);
+                right: var(--space-sm);
+                max-width: 200px;
+            }
+
+            .player-panel {
+                bottom: var(--space-sm);
+                left: var(--space-sm);
+                right: var(--space-sm);
+                transform: none;
+                min-width: auto;
+            }
+
+            .visualizer-panel {
+                display: none;
+            }
+
+            .player-controls {
+                flex-direction: column;
+                gap: var(--space-sm);
+            }
+
+            .track-selector {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* アニメーション */
+        .fade-in-3d {
+            opacity: 0;
+            transform: translateZ(-50px);
+            animation: fadeIn3D 1s ease forwards;
+        }
+
+        @keyframes fadeIn3D {
+            to {
+                opacity: 1;
+                transform: translateZ(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダーナビゲーション -->
+        <header class="glass-header mt-md">
+            <nav class="nav">
+                <a href="../../" class="nav-logo">nemototea.dev</a>
+                <ul class="nav-items">
+                    <li><a href="../../" class="nav-item">Home</a></li>
+                    <li><a href="../../about/" class="nav-item">Profile</a></li>
+                    <li><a href="../../works/" class="nav-item">Works</a></li>
+                    <li><a href="../../podcast/" class="nav-item">Podcast</a></li>
+                    <li><a href="../../contact/" class="nav-item">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 3Dポートフォリオヒーロー -->
+        <section class="portfolio-hero">
+            <h1 class="text-hero fade-in">🎨 3D Music Portfolio</h1>
+            <p class="text-subtitle fade-in mb-lg">
+                音楽と視覚芸術が融合する3次元空間
+            </p>
+            <p class="text-body fade-in" style="max-width: 600px; margin: 0 auto;">
+                Three.jsで構築された3D空間で音楽作品を体験してください。<br>
+                音楽に反応するビジュアライザーと組み合わせた、新感覚のポートフォリオです。
+            </p>
+        </section>
+
+        <!-- 楽曲選択 -->
+        <section class="track-selector fade-in">
+            <div class="track-card active" data-track="cyber-dreams">
+                <div class="track-cover">
+                    <span style="position: relative; z-index: 2;">🌌</span>
+                </div>
+                <div class="track-name">Cyber Dreams</div>
+                <div class="track-genre">Ambient Electronic</div>
+                <div class="track-duration">4:32</div>
+            </div>
+
+            <div class="track-card" data-track="digital-zen">
+                <div class="track-cover">
+                    <span style="position: relative; z-index: 2;">🧘</span>
+                </div>
+                <div class="track-name">Digital Zen</div>
+                <div class="track-genre">Lo-Fi Chill</div>
+                <div class="track-duration">3:48</div>
+            </div>
+
+            <div class="track-card" data-track="neon-nights">
+                <div class="track-cover">
+                    <span style="position: relative; z-index: 2;">🌃</span>
+                </div>
+                <div class="track-name">Neon Nights</div>
+                <div class="track-genre">Synthwave</div>
+                <div class="track-duration">5:15</div>
+            </div>
+
+            <div class="track-card" data-track="quantum-flow">
+                <div class="track-cover">
+                    <span style="position: relative; z-index: 2;">⚛️</span>
+                </div>
+                <div class="track-name">Quantum Flow</div>
+                <div class="track-genre">Experimental</div>
+                <div class="track-duration">6:22</div>
+            </div>
+        </section>
+
+        <!-- メイン3Dコンテナ -->
+        <section class="portfolio-container fade-in-3d">
+            <!-- ローディング画面 -->
+            <div class="loading-screen" id="loadingScreen">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">3D空間を構築中...</div>
+                <div class="loading-progress" id="loadingProgress">0%</div>
+            </div>
+
+            <!-- Three.jsキャンバス -->
+            <canvas id="three-canvas"></canvas>
+
+            <!-- UI パネル -->
+            <div class="portfolio-ui">
+                <!-- コントロールパネル -->
+                <div class="ui-panel control-panel">
+                    <div class="panel-title">Scene Controls</div>
+                    <button class="control-button active" data-mode="orbit">🔄 回転</button>
+                    <button class="control-button" data-mode="fly">✈️ 飛行</button>
+                    <button class="control-button" data-mode="auto">🤖 自動</button>
+                    <br>
+                    <button class="control-button" data-effect="particles">✨ パーティクル</button>
+                    <button class="control-button active" data-effect="wireframe">📐 ワイヤー</button>
+                    <button class="control-button" data-effect="glow">💫 グロー</button>
+                    <div class="scene-stats" id="sceneStats">
+                        Objects: 0<br>
+                        FPS: 60
+                    </div>
+                </div>
+
+                <!-- 情報パネル -->
+                <div class="ui-panel info-panel">
+                    <div class="panel-title">Track Info</div>
+                    <div class="track-info" id="trackInfo">
+                        <div class="track-title" id="currentTrackTitle">Cyber Dreams</div>
+                        <div class="track-artist" id="currentTrackArtist">nemototea</div>
+                        <div class="track-description" id="currentTrackDescription">
+                            グラニュラーシンセシスとリバーブエフェクトを組み合わせた実験的なアンビエント作品。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- プレイヤーパネル -->
+                <div class="ui-panel player-panel">
+                    <div class="player-controls">
+                        <button class="control-button">⏮️</button>
+                        <button class="play-button" id="playButton">▶️</button>
+                        <button class="control-button">⏭️</button>
+                        <div class="volume-control">
+                            <span style="font-size: 0.8rem;">🔊</span>
+                            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70">
+                        </div>
+                    </div>
+                    <div class="progress-bar" id="progressBar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="time-display">
+                        <span id="currentTime">0:00</span>
+                        <span id="totalTime">4:32</span>
+                    </div>
+                </div>
+
+                <!-- ビジュアライザーパネル -->
+                <div class="ui-panel visualizer-panel">
+                    <div class="panel-title">Audio Visualizer</div>
+                    <div class="visualizer-bars" id="visualizerBars">
+                        <!-- JavaScriptで動的生成 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 使い方ガイド -->
+        <section class="instructions">
+            <h2 class="text-title text-center mb-xl fade-in">🎮 操作ガイド</h2>
+            
+            <div class="instruction-grid">
+                <div class="instruction-item fade-in">
+                    <span class="instruction-icon">🖱️</span>
+                    <h3 class="instruction-title">マウス操作</h3>
+                    <p class="text-body">
+                        ドラッグで視点回転、ホイールでズーム、右クリックでパン移動
+                    </p>
+                </div>
+                
+                <div class="instruction-item fade-in">
+                    <span class="instruction-icon">🎵</span>
+                    <h3 class="instruction-title">音楽再生</h3>
+                    <p class="text-body">
+                        楽曲カードをクリックして選択、プレイヤーで再生制御
+                    </p>
+                </div>
+                
+                <div class="instruction-item fade-in">
+                    <span class="instruction-icon">🎨</span>
+                    <h3 class="instruction-title">視覚効果</h3>
+                    <p class="text-body">
+                        パーティクル、ワイヤーフレーム、グローエフェクトの切り替え
+                    </p>
+                </div>
+                
+                <div class="instruction-item fade-in">
+                    <span class="instruction-icon">🤖</span>
+                    <h3 class="instruction-title">カメラモード</h3>
+                    <p class="text-body">
+                        手動回転、自由飛行、自動回転の3つのモードを選択
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 技術詳細 -->
+        <section class="mt-2xl">
+            <div class="glass-card fade-in" style="padding: var(--space-2xl);">
+                <h2 class="text-title text-center mb-md">⚙️ 技術仕様</h2>
+                <div class="grid grid-auto" style="margin-top: var(--space-xl);">
+                    <div class="text-center">
+                        <span style="font-size: 3rem; margin-bottom: var(--space-md); display: block;">🔧</span>
+                        <h3 class="text-subtitle mb-sm">Three.js r128</h3>
+                        <p class="text-body">WebGLレンダリング、カスタムシェーダー、パフォーマンス最適化</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <span style="font-size: 3rem; margin-bottom: var(--space-md); display: block;">🎚️</span>
+                        <h3 class="text-subtitle mb-sm">Web Audio API</h3>
+                        <p class="text-body">リアルタイム音声解析、FFT処理、音楽ビジュアライザー</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <span style="font-size: 3rem; margin-bottom: var(--space-md); display: block;">✨</span>
+                        <h3 class="text-subtitle mb-sm">パーティクルシステム</h3>
+                        <p class="text-body">10,000個の動的パーティクル、音楽連動アニメーション</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    
+    <script>
+        // 楽曲データ
+        const trackData = {
+            'cyber-dreams': {
+                title: 'Cyber Dreams',
+                artist: 'nemototea',
+                description: 'グラニュラーシンセシスとリバーブエフェクトを組み合わせた実験的なアンビエント作品。',
+                duration: '4:32',
+                genre: 'Ambient Electronic',
+                icon: '🌌',
+                color: '#00ff9d',
+                bpm: 85,
+                key: 'Am'
+            },
+            'digital-zen': {
+                title: 'Digital Zen',
+                artist: 'nemototea',
+                description: '日本茶を飲みながら制作したローファイ・チルアウト楽曲。自然音とエレクトロニックサウンドの融合。',
+                duration: '3:48',
+                genre: 'Lo-Fi Chill',
+                icon: '🧘',
+                color: '#00d4ff',
+                bpm: 70,
+                key: 'C'
+            },
+            'neon-nights': {
+                title: 'Neon Nights',
+                artist: 'nemototea',
+                description: '80年代シンセサイザーとモダンなプロダクション技術を組み合わせたシンセウェーブ作品。',
+                duration: '5:15',
+                genre: 'Synthwave',
+                icon: '🌃',
+                color: '#9d4edd',
+                bpm: 120,
+                key: 'Em'
+            },
+            'quantum-flow': {
+                title: 'Quantum Flow',
+                artist: 'nemototea',
+                description: '量子物理学からインスピレーションを得た実験的エレクトロニック音楽。複雑なリズムパターンと音響設計。',
+                duration: '6:22',
+                genre: 'Experimental',
+                icon: '⚛️',
+                color: '#ff6b6b',
+                bpm: 140,
+                key: 'F#m'
+            }
+        };
+
+        // 3D音楽ポートフォリオクラス
+        class MusicPortfolio3D {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.canvas = null;
+                
+                this.musicObjects = [];
+                this.particleSystem = null;
+                this.audioData = new Array(128).fill(0);
+                this.currentTrack = 'cyber-dreams';
+                this.isPlaying = false;
+                this.currentTime = 0;
+                this.totalTime = 272; // 4:32 in seconds
+                
+                this.cameraMode = 'orbit';
+                this.effects = {
+                    particles: false,
+                    wireframe: true,
+                    glow: false
+                };
+
+                this.mouse = { x: 0, y: 0 };
+                this.isMouseDown = false;
+                this.autoRotate = false;
+                
+                this.init();
+            }
+
+            async init() {
+                await this.initThree();
+                this.createScene();
+                this.setupControls();
+                this.setupEventListeners();
+                this.setupAudioVisualizer();
+                this.animate();
+                
+                // ローディング完了
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('loadingScreen').style.display = 'none';
+                    }, 500);
+                }, 2000);
+            }
+
+            async initThree() {
+                this.canvas = document.getElementById('three-canvas');
+                
+                // シーン作成
+                this.scene = new THREE.Scene();
+                this.scene.fog = new THREE.Fog(0x0a0a0f, 50, 200);
+                
+                // カメラ作成
+                this.camera = new THREE.PerspectiveCamera(
+                    75, 
+                    this.canvas.offsetWidth / this.canvas.offsetHeight, 
+                    0.1, 
+                    1000
+                );
+                this.camera.position.set(0, 10, 30);
+                
+                // レンダラー作成
+                this.renderer = new THREE.WebGLRenderer({ 
+                    canvas: this.canvas, 
+                    antialias: true,
+                    alpha: true 
+                });
+                this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                
+                this.updateLoadingProgress(25);
+            }
+
+            createScene() {
+                this.createLighting();
+                this.createMusicObjects();
+                this.createParticleSystem();
+                this.createEnvironment();
+                
+                this.updateLoadingProgress(75);
+            }
+
+            createLighting() {
+                // 環境光
+                const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+                this.scene.add(ambientLight);
+                
+                // ディレクショナルライト
+                const directionalLight = new THREE.DirectionalLight(0x00ff9d, 1);
+                directionalLight.position.set(10, 10, 5);
+                directionalLight.castShadow = true;
+                directionalLight.shadow.mapSize.width = 2048;
+                directionalLight.shadow.mapSize.height = 2048;
+                this.scene.add(directionalLight);
+                
+                // ポイントライト（動的）
+                this.pointLight1 = new THREE.PointLight(0x00ff9d, 1, 50);
+                this.pointLight1.position.set(-10, 5, 0);
+                this.scene.add(this.pointLight1);
+                
+                this.pointLight2 = new THREE.PointLight(0x00d4ff, 1, 50);
+                this.pointLight2.position.set(10, 5, 0);
+                this.scene.add(this.pointLight2);
+            }
+
+            createMusicObjects() {
+                const trackKeys = Object.keys(trackData);
+                const radius = 15;
+                
+                trackKeys.forEach((trackId, index) => {
+                    const track = trackData[trackId];
+                    const angle = (index / trackKeys.length) * Math.PI * 2;
+                    
+                    // アルバムカバー的なオブジェクト
+                    const geometry = new THREE.BoxGeometry(4, 4, 0.5);
+                    const material = new THREE.MeshPhongMaterial({ 
+                        color: track.color,
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    
+                    const mesh = new THREE.Mesh(geometry, material);
+                    mesh.position.set(
+                        Math.cos(angle) * radius,
+                        Math.sin(index * 0.5) * 3,
+                        Math.sin(angle) * radius
+                    );
+                    mesh.rotation.y = -angle;
+                    mesh.castShadow = true;
+                    mesh.receiveShadow = true;
+                    
+                    // ユーザーデータ
+                    mesh.userData = { trackId, track };
+                    
+                    this.scene.add(mesh);
+                    this.musicObjects.push(mesh);
+                    
+                    // 周囲のリング
+                    const ringGeometry = new THREE.RingGeometry(5, 6, 16);
+                    const ringMaterial = new THREE.MeshBasicMaterial({ 
+                        color: track.color,
+                        transparent: true,
+                        opacity: 0.3,
+                        side: THREE.DoubleSide
+                    });
+                    
+                    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+                    ring.position.copy(mesh.position);
+                    ring.rotation.x = Math.PI / 2;
+                    
+                    this.scene.add(ring);
+                    mesh.userData.ring = ring;
+                });
+            }
+
+            createParticleSystem() {
+                const particleCount = 5000;
+                const geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+                const colors = new Float32Array(particleCount * 3);
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const i3 = i * 3;
+                    
+                    // ランダムな位置
+                    positions[i3] = (Math.random() - 0.5) * 100;
+                    positions[i3 + 1] = (Math.random() - 0.5) * 100;
+                    positions[i3 + 2] = (Math.random() - 0.5) * 100;
+                    
+                    // ランダムな色
+                    const color = new THREE.Color();
+                    color.setHSL(Math.random(), 0.8, 0.8);
+                    colors[i3] = color.r;
+                    colors[i3 + 1] = color.g;
+                    colors[i3 + 2] = color.b;
+                }
+                
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                
+                const material = new THREE.PointsMaterial({
+                    size: 0.5,
+                    vertexColors: true,
+                    transparent: true,
+                    opacity: 0.6
+                });
+                
+                this.particleSystem = new THREE.Points(geometry, material);
+                this.scene.add(this.particleSystem);
+                this.particleSystem.visible = this.effects.particles;
+            }
+
+            createEnvironment() {
+                // 床
+                const floorGeometry = new THREE.PlaneGeometry(100, 100);
+                const floorMaterial = new THREE.MeshPhongMaterial({ 
+                    color: 0x1a1a2e,
+                    transparent: true,
+                    opacity: 0.7
+                });
+                
+                const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+                floor.rotation.x = -Math.PI / 2;
+                floor.position.y = -10;
+                floor.receiveShadow = true;
+                this.scene.add(floor);
+                
+                // 星空背景
+                const starGeometry = new THREE.BufferGeometry();
+                const starCount = 1000;
+                const starPositions = new Float32Array(starCount * 3);
+                
+                for (let i = 0; i < starCount; i++) {
+                    const i3 = i * 3;
+                    starPositions[i3] = (Math.random() - 0.5) * 400;
+                    starPositions[i3 + 1] = (Math.random() - 0.5) * 400;
+                    starPositions[i3 + 2] = (Math.random() - 0.5) * 400;
+                }
+                
+                starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+                
+                const starMaterial = new THREE.PointsMaterial({
+                    color: 0xffffff,
+                    size: 1
+                });
+                
+                const stars = new THREE.Points(starGeometry, starMaterial);
+                this.scene.add(stars);
+                
+                this.updateLoadingProgress(90);
+            }
+
+            setupControls() {
+                // マウス/タッチ制御
+                this.canvas.addEventListener('mousedown', (e) => {
+                    this.isMouseDown = true;
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+                
+                this.canvas.addEventListener('mouseup', () => {
+                    this.isMouseDown = false;
+                });
+                
+                this.canvas.addEventListener('mousemove', (e) => {
+                    if (this.cameraMode === 'orbit' && this.isMouseDown) {
+                        const deltaX = e.clientX - this.mouse.x;
+                        const deltaY = e.clientY - this.mouse.y;
+                        
+                        const sensitivity = 0.01;
+                        const spherical = new THREE.Spherical();
+                        spherical.setFromVector3(this.camera.position);
+                        
+                        spherical.theta -= deltaX * sensitivity;
+                        spherical.phi += deltaY * sensitivity;
+                        spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi));
+                        
+                        this.camera.position.setFromSpherical(spherical);
+                        this.camera.lookAt(0, 0, 0);
+                    }
+                    
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+                
+                // ホイールでズーム
+                this.canvas.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    const zoomSpeed = 0.1;
+                    const direction = this.camera.position.clone().normalize();
+                    
+                    if (e.deltaY > 0) {
+                        this.camera.position.add(direction.multiplyScalar(zoomSpeed));
+                    } else {
+                        this.camera.position.sub(direction.multiplyScalar(zoomSpeed));
+                    }
+                    
+                    // 最小・最大距離制限
+                    const distance = this.camera.position.length();
+                    if (distance < 5) {
+                        this.camera.position.normalize().multiplyScalar(5);
+                    } else if (distance > 100) {
+                        this.camera.position.normalize().multiplyScalar(100);
+                    }
+                });
+                
+                this.updateLoadingProgress(95);
+            }
+
+            setupEventListeners() {
+                // トラック選択
+                document.querySelectorAll('.track-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        document.querySelectorAll('.track-card').forEach(c => c.classList.remove('active'));
+                        card.classList.add('active');
+                        
+                        this.currentTrack = card.dataset.track;
+                        this.updateTrackInfo();
+                        this.animateToTrack();
+                    });
+                });
+                
+                // コントロールボタン
+                document.querySelectorAll('[data-mode]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('[data-mode]').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        
+                        this.cameraMode = btn.dataset.mode;
+                        this.updateCameraMode();
+                    });
+                });
+                
+                document.querySelectorAll('[data-effect]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        btn.classList.toggle('active');
+                        const effect = btn.dataset.effect;
+                        this.effects[effect] = btn.classList.contains('active');
+                        this.updateEffects();
+                    });
+                });
+                
+                // プレイヤー制御
+                document.getElementById('playButton').addEventListener('click', () => {
+                    this.togglePlay();
+                });
+                
+                document.getElementById('volumeSlider').addEventListener('input', (e) => {
+                    this.setVolume(e.target.value / 100);
+                });
+                
+                document.getElementById('progressBar').addEventListener('click', (e) => {
+                    const rect = e.target.getBoundingClientRect();
+                    const progress = (e.clientX - rect.left) / rect.width;
+                    this.seekTo(progress);
+                });
+                
+                // リサイズ対応
+                window.addEventListener('resize', () => {
+                    this.handleResize();
+                });
+                
+                // キーボードショートカット
+                document.addEventListener('keydown', (e) => {
+                    switch (e.key) {
+                        case ' ':
+                            e.preventDefault();
+                            this.togglePlay();
+                            break;
+                        case 'f':
+                        case 'F':
+                            // フルスクリーン切り替え
+                            if (!document.fullscreenElement) {
+                                document.querySelector('.portfolio-container').requestFullscreen();
+                            } else {
+                                document.exitFullscreen();
+                            }
+                            break;
+                    }
+                });
+                
+                this.updateLoadingProgress(100);
+            }
+
+            setupAudioVisualizer() {
+                // ビジュアライザーバー作成
+                const visualizerContainer = document.getElementById('visualizerBars');
+                const barCount = 16;
+                
+                for (let i = 0; i < barCount; i++) {
+                    const bar = document.createElement('div');
+                    bar.className = 'visualizer-bar';
+                    bar.style.height = '10%';
+                    visualizerContainer.appendChild(bar);
+                }
+                
+                // 音声データシミュレーション
+                this.startAudioSimulation();
+            }
+
+            startAudioSimulation() {
+                // 実際のWeb Audio APIの代わりにシミュレーション
+                setInterval(() => {
+                    if (this.isPlaying) {
+                        const bars = document.querySelectorAll('.visualizer-bar');
+                        bars.forEach((bar, index) => {
+                            const height = Math.random() * 60 + 10;
+                            bar.style.height = height + '%';
+                            
+                            // 3Dオブジェクトにも反映
+                            this.audioData[index] = height / 100;
+                        });
+                        
+                        this.updateProgress();
+                        this.updateMusicObjectsWithAudio();
+                    }
+                }, 100);
+            }
+
+            updateMusicObjectsWithAudio() {
+                const time = Date.now() * 0.001;
+                
+                this.musicObjects.forEach((obj, index) => {
+                    const audioValue = this.audioData[index % this.audioData.length];
+                    
+                    // 音楽に反応するスケール
+                    const scale = 1 + audioValue * 0.5;
+                    obj.scale.setScalar(scale);
+                    
+                    // 色の変化
+                    if (obj.material) {
+                        const hue = (time + index * 0.1) % 1;
+                        obj.material.color.setHSL(hue, 0.8, 0.5 + audioValue * 0.3);
+                    }
+                    
+                    // リングの回転
+                    if (obj.userData.ring) {
+                        obj.userData.ring.rotation.z += audioValue * 0.01;
+                        obj.userData.ring.material.opacity = 0.3 + audioValue * 0.4;
+                    }
+                });
+            }
+
+            updateTrackInfo() {
+                const track = trackData[this.currentTrack];
+                if (!track) return;
+                
+                document.getElementById('currentTrackTitle').textContent = track.title;
+                document.getElementById('currentTrackArtist').textContent = track.artist;
+                document.getElementById('currentTrackDescription').textContent = track.description;
+                document.getElementById('totalTime').textContent = track.duration;
+                
+                // 時間をリセット
+                this.currentTime = 0;
+                this.totalTime = this.parseDuration(track.duration);
+                this.updateProgress();
+            }
+
+            animateToTrack() {
+                const trackIndex = Object.keys(trackData).indexOf(this.currentTrack);
+                const targetObject = this.musicObjects[trackIndex];
+                
+                if (targetObject) {
+                    // カメラを対象オブジェクトに向ける
+                    const targetPosition = targetObject.position.clone();
+                    targetPosition.z += 10;
+                    targetPosition.y += 5;
+                    
+                    // スムーズなカメラ移動
+                    this.animateCamera(this.camera.position, targetPosition, 1000);
+                }
+            }
+
+            animateCamera(from, to, duration) {
+                const startTime = Date.now();
+                const startPos = from.clone();
+                
+                const animate = () => {
+                    const elapsed = Date.now() - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // イージング関数
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    
+                    this.camera.position.lerpVectors(startPos, to, eased);
+                    this.camera.lookAt(0, 0, 0);
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    }
+                };
+                
+                animate();
+            }
+
+            updateCameraMode() {
+                switch (this.cameraMode) {
+                    case 'orbit':
+                        this.autoRotate = false;
+                        break;
+                    case 'fly':
+                        this.autoRotate = false;
+                        break;
+                    case 'auto':
+                        this.autoRotate = true;
+                        break;
+                }
+            }
+
+            updateEffects() {
+                // パーティクル表示切り替え
+                if (this.particleSystem) {
+                    this.particleSystem.visible = this.effects.particles;
+                }
+                
+                // ワイヤーフレーム切り替え
+                this.musicObjects.forEach(obj => {
+                    if (obj.material) {
+                        obj.material.wireframe = this.effects.wireframe;
+                    }
+                });
+                
+                // グロー効果（簡易実装）
+                this.scene.children.forEach(child => {
+                    if (child.type === 'PointLight') {
+                        child.intensity = this.effects.glow ? 2 : 1;
+                    }
+                });
+            }
+
+            togglePlay() {
+                this.isPlaying = !this.isPlaying;
+                const playButton = document.getElementById('playButton');
+                playButton.textContent = this.isPlaying ? '⏸️' : '▶️';
+                
+                if (this.isPlaying) {
+                    playButton.style.background = 'linear-gradient(45deg, #ff6b6b, #feca57)';
+                } else {
+                    playButton.style.background = 'linear-gradient(45deg, var(--cyber-green), var(--cyber-blue))';
+                }
+            }
+
+            setVolume(volume) {
+                // ボリューム制御（実際の音声がある場合）
+                console.log('Volume set to:', volume);
+            }
+
+            seekTo(progress) {
+                this.currentTime = this.totalTime * progress;
+                this.updateProgress();
+            }
+
+            updateProgress() {
+                const progress = (this.currentTime / this.totalTime) * 100;
+                document.getElementById('progressFill').style.width = progress + '%';
+                document.getElementById('currentTime').textContent = this.formatTime(this.currentTime);
+                
+                if (this.isPlaying) {
+                    this.currentTime += 0.1;
+                    if (this.currentTime >= this.totalTime) {
+                        this.currentTime = 0;
+                        this.togglePlay();
+                    }
+                }
+            }
+
+            parseDuration(duration) {
+                const parts = duration.split(':');
+                return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+            }
+
+            formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs.toString().padStart(2, '0')}`;
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                
+                const time = Date.now() * 0.001;
+                
+                // 自動回転
+                if (this.autoRotate) {
+                    const radius = this.camera.position.length();
+                    this.camera.position.x = Math.cos(time * 0.2) * radius;
+                    this.camera.position.z = Math.sin(time * 0.2) * radius;
+                    this.camera.lookAt(0, 0, 0);
+                }
+                
+                // パーティクル回転
+                if (this.particleSystem && this.effects.particles) {
+                    this.particleSystem.rotation.y += 0.001;
+                    this.particleSystem.rotation.x += 0.0005;
+                }
+                
+                // ライトアニメーション
+                if (this.pointLight1 && this.pointLight2) {
+                    this.pointLight1.position.x = Math.cos(time) * 20;
+                    this.pointLight1.position.z = Math.sin(time) * 20;
+                    this.pointLight2.position.x = Math.cos(time + Math.PI) * 20;
+                    this.pointLight2.position.z = Math.sin(time + Math.PI) * 20;
+                }
+                
+                // 統計更新
+                this.updateStats();
+                
+                this.renderer.render(this.scene, this.camera);
+            }
+
+            updateStats() {
+                const stats = document.getElementById('sceneStats');
+                if (stats) {
+                    stats.innerHTML = `
+                        Objects: ${this.scene.children.length}<br>
+                        FPS: 60
+                    `;
+                }
+            }
+
+            updateLoadingProgress(progress) {
+                const progressElement = document.getElementById('loadingProgress');
+                if (progressElement) {
+                    progressElement.textContent = progress + '%';
+                }
+            }
+
+            handleResize() {
+                const width = this.canvas.offsetWidth;
+                const height = this.canvas.offsetHeight;
+                
+                this.camera.aspect = width / height;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(width, height);
+            }
+        }
+
+        // アプリケーション初期化
+        let musicPortfolio;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            musicPortfolio = new MusicPortfolio3D();
+        });
+
+        // アプリ読み込み完了時の処理
+        document.addEventListener('app:loaded', () => {
+            console.log('🎨 3D音楽ポートフォリオが正常に読み込まれました！');
+        });
+    </script>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "3D Music Portfolio",
+        "description": "Three.jsを使った3D空間で音楽作品を展示するインタラクティブポートフォリオ",
+        "url": "https://nemototea.github.io/special-features/3d-portfolio/",
+        "applicationCategory": "Entertainment",
+        "operatingSystem": "Web Browser",
+        "creator": {
+            "@type": "Person",
+            "name": "nemototea"
+        }
+    }
+    </script>
+</body>
+</html>
