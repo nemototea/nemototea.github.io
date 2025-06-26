@@ -32,13 +32,26 @@
         }
 
         .filter-btn {
-            @extend .glass-button;
-            padding: var(--space-sm) var(--space-lg);
-            transition: all var(--transition-normal);
-            cursor: pointer;
-            border: none;
             background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: var(--space-sm) var(--space-lg);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            text-decoration: none;
             color: var(--text-primary);
+        }
+
+        .filter-btn:hover {
+            background: rgba(0, 255, 157, 0.1);
+            border-color: var(--glass-border-hover);
+            box-shadow: var(--glow-cyber);
+            transform: translateY(-1px);
         }
 
         .filter-btn.active {
@@ -55,7 +68,12 @@
         }
 
         .work-card {
-            @extend .glass-card;
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-glass);
             overflow: hidden;
             transition: all var(--transition-normal);
             position: relative;
@@ -65,6 +83,8 @@
         }
 
         .work-card:hover {
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
             transform: translateY(-8px);
             box-shadow: var(--shadow-hover);
         }
@@ -157,12 +177,30 @@
         }
 
         .work-link {
-            @extend .glass-button;
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
             padding: var(--space-xs) var(--space-md);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
             text-decoration: none;
+            color: var(--text-primary);
             font-size: 0.9rem;
             flex: 1;
             text-align: center;
+            justify-content: center;
+        }
+
+        .work-link:hover {
+            background: rgba(0, 255, 157, 0.1);
+            border-color: var(--glass-border-hover);
+            box-shadow: var(--glow-cyber);
+            transform: translateY(-1px);
         }
 
         .work-link.primary {
@@ -175,8 +213,12 @@
         }
 
         .featured-work {
-            @extend .glass-card;
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
             padding: var(--space-2xl);
+            box-shadow: var(--shadow-glass);
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: var(--space-2xl);
@@ -223,9 +265,13 @@
         }
 
         .stat-card {
-            @extend .glass-card;
-            text-align: center;
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
             padding: var(--space-lg);
+            box-shadow: var(--shadow-glass);
+            text-align: center;
         }
 
         .stat-number {
