@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="エフェクター回路シミュレーター - 回路図を描いて音を試聴。エフェクトのメカニズムを体験的に学習">
+    <meta name="keywords" content="エフェクター, 回路, シミュレーター, 音響, ギター, 電子回路">
+    
+    <title>Circuit Lab - nemototea</title>
+    
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone.js/14.8.49/Tone.min.js"></script>
+    
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .circuit-hero {
+            padding: var(--space-2xl) 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .circuit-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto var(--space-xl);
+            background: linear-gradient(135deg, var(--cyber-purple), var(--cyber-blue));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(157, 78, 221, 0.4);
+            animation: circuitPulse 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes circuitPulse {
+            0% { box-shadow: 0 0 40px rgba(157, 78, 221, 0.4); }
+            100% { box-shadow: 0 0 60px rgba(157, 78, 221, 0.6); }
+        }
+
+        .circuit-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: rotate 6s linear infinite;
+        }
+
+        .lab-container {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+            height: 70vh;
+            min-height: 600px;
+        }
+
+        .component-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: var(--space-lg);
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .component-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyber-purple), var(--cyber-blue));
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--cyber-purple);
+            margin-bottom: var(--space-md);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .component-category {
+            margin-bottom: var(--space-lg);
+        }
+
+        .category-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .component-list {
+            display: grid;
+            gap: var(--space-xs);
+        }
+
+        .component-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: var(--space-sm);
+            cursor: grab;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-size: 0.9rem;
+        }
+
+        .component-item:hover {
+            background: rgba(157, 78, 221, 0.1);
+            border-color: rgba(157, 78, 221, 0.3);
+            transform: translateX(5px);
+        }
+
+        .component-item:active {
+            cursor: grabbing;
+        }
+
+        .component-icon {
+            font-size: 1.2rem;
+            min-width: 20px;
+        }
+
+        .circuit-canvas {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .circuit-canvas::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyber-green), var(--cyber-blue));
+        }
+
+        .canvas-header {
+            padding: var(--space-md) var(--space-lg);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .canvas-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--cyber-green);
+        }
+
+        .canvas-controls {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .canvas-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: var(--space-xs) var(--space-sm);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: 0.8rem;
+        }
+
+        .canvas-btn:hover {
+            background: rgba(0, 255, 157, 0.1);
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+
+        .canvas-btn.active {
+            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
+            color: #000;
+        }
+
+        #circuit-svg {
+            width: 100%;
+            height: calc(100% - 60px);
+            background: 
+                radial-gradient(circle at 20px 20px, rgba(157, 78, 221, 0.1) 1px, transparent 1px),
+                radial-gradient(circle at 20px 20px, rgba(0, 255, 157, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px, 20px 20px;
+            cursor: crosshair;
+        }
+
+        .controls-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: var(--space-lg);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .controls-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyber-blue), var(--cyber-purple));
+        }
+
+        .audio-controls {
+            margin-bottom: var(--space-xl);
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, var(--cyber-purple), var(--cyber-blue));
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-lg);
+            box-shadow: 0 0 30px rgba(157, 78, 221, 0.4);
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(157, 78, 221, 0.6);
+        }
+
+        .waveform-display {
+            height: 60px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-bottom: var(--space-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .waveform-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .parameter-controls {
+            flex: 1;
+        }
+
+        .parameter-group {
+            margin-bottom: var(--space-lg);
+        }
+
+        .parameter-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xs);
+            display: block;
+        }
+
+        .parameter-slider {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-bottom: var(--space-xs);
+        }
+
+        .parameter-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(45deg, var(--cyber-purple), var(--cyber-blue));
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(157, 78, 221, 0.5);
+        }
+
+        .parameter-value {
+            font-size: 0.8rem;
+            color: var(--cyber-purple);
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .preset-section {
+            margin-bottom: var(--space-lg);
+        }
+
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-xs);
+        }
+
+        .preset-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: var(--space-sm);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .preset-btn:hover {
+            background: rgba(157, 78, 221, 0.1);
+            border-color: rgba(157, 78, 221, 0.3);
+        }
+
+        .preset-btn.active {
+            background: linear-gradient(45deg, var(--cyber-purple), var(--cyber-blue));
+            color: white;
+        }
+
+        .circuit-info {
+            background: rgba(157, 78, 221, 0.1);
+            border-radius: 12px;
+            padding: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+
+        .info-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--cyber-purple);
+            margin-bottom: var(--space-sm);
+        }
+
+        .info-text {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .component-placed {
+            fill: rgba(157, 78, 221, 0.8);
+            stroke: var(--cyber-purple);
+            stroke-width: 2;
+            cursor: move;
+        }
+
+        .component-placed:hover {
+            fill: rgba(157, 78, 221, 1);
+            filter: drop-shadow(0 0 10px rgba(157, 78, 221, 0.8));
+        }
+
+        .wire {
+            stroke: var(--cyber-green);
+            stroke-width: 3;
+            fill: none;
+            filter: drop-shadow(0 0 5px rgba(0, 255, 157, 0.5));
+        }
+
+        .connection-point {
+            fill: var(--cyber-green);
+            stroke: white;
+            stroke-width: 1;
+            r: 4;
+            cursor: pointer;
+        }
+
+        .connection-point:hover {
+            fill: white;
+            filter: drop-shadow(0 0 8px rgba(0, 255, 157, 0.8));
+        }
+
+        .drag-preview {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .tutorials-section {
+            margin: var(--space-2xl) 0;
+        }
+
+        .tutorial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+
+        .tutorial-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: var(--space-lg);
+            text-align: center;
+            transition: all var(--transition-normal);
+        }
+
+        .tutorial-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(157, 78, 221, 0.3);
+            box-shadow: 0 8px 25px rgba(157, 78, 221, 0.2);
+        }
+
+        .tutorial-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-md);
+            display: block;
+        }
+
+        .tutorial-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+            color: var(--cyber-purple);
+        }
+
+        .tutorial-description {
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: var(--space-md);
+        }
+
+        .tutorial-btn {
+            background: linear-gradient(45deg, var(--cyber-purple), var(--cyber-blue));
+            color: white;
+            border: none;
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            font-weight: 600;
+        }
+
+        .tutorial-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(157, 78, 221, 0.4);
+        }
+
+        @media (max-width: 1200px) {
+            .lab-container {
+                grid-template-columns: 250px 1fr 250px;
+            }
+        }
+
+        @media (max-width: 968px) {
+            .lab-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr auto;
+                height: auto;
+                min-height: auto;
+            }
+
+            .component-panel,
+            .controls-panel {
+                max-height: 300px;
+                overflow-y: auto;
+            }
+
+            .circuit-canvas {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .canvas-controls {
+                flex-wrap: wrap;
+            }
+
+            .canvas-btn {
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+
+            .play-button {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダーナビゲーション -->
+        <header class="glass-header mt-md">
+            <nav class="nav">
+                <a href="../../" class="nav-logo">nemototea.dev</a>
+                <ul class="nav-items">
+                    <li><a href="../../" class="nav-item">Home</a></li>
+                    <li><a href="../../about/" class="nav-item">Profile</a></li>
+                    <li><a href="../../works/" class="nav-item">Works</a></li>
+                    <li><a href="../../podcast/" class="nav-item">Podcast</a></li>
+                    <li><a href="../../contact/" class="nav-item">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 回路ラボヒーロー -->
+        <section class="circuit-hero">
+            <div class="circuit-icon fade-in">
+                <span style="position: relative; z-index: 2;">⚡</span>
+            </div>
+            
+            <h1 class="text-hero fade-in">Circuit Lab</h1>
+            <p class="text-subtitle fade-in mb-lg">
+                エフェクター回路のメカニズムを体験的に学習
+            </p>
+            <p class="text-body fade-in" style="max-width: 600px; margin: 0 auto;">
+                回路図を描いて音を試聴できるインタラクティブなシミュレーター。<br>
+                コンポーネントをドラッグ&ドロップして、エフェクトの仕組みを理解しましょう。
+            </p>
+        </section>
+
+        <!-- メイン回路ラボ -->
+        <section class="lab-container">
+            <!-- コンポーネントパネル -->
+            <div class="component-panel slide-in-left">
+                <h3 class="panel-title">Components</h3>
+                
+                <div class="component-category">
+                    <div class="category-title">Basic</div>
+                    <div class="component-list">
+                        <div class="component-item" data-type="resistor" data-value="1k">
+                            <span class="component-icon">🟫</span>
+                            <span>Resistor 1kΩ</span>
+                        </div>
+                        <div class="component-item" data-type="capacitor" data-value="100n">
+                            <span class="component-icon">⚪</span>
+                            <span>Capacitor 100nF</span>
+                        </div>
+                        <div class="component-item" data-type="inductor" data-value="1m">
+                            <span class="component-icon">🌀</span>
+                            <span>Inductor 1mH</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component-category">
+                    <div class="category-title">Active</div>
+                    <div class="component-list">
+                        <div class="component-item" data-type="opamp" data-value="741">
+                            <span class="component-icon">🔺</span>
+                            <span>Op-Amp 741</span>
+                        </div>
+                        <div class="component-item" data-type="transistor" data-value="npn">
+                            <span class="component-icon">🔸</span>
+                            <span>Transistor NPN</span>
+                        </div>
+                        <div class="component-item" data-type="diode" data-value="1n4148">
+                            <span class="component-icon">◀</span>
+                            <span>Diode 1N4148</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component-category">
+                    <div class="category-title">I/O</div>
+                    <div class="component-list">
+                        <div class="component-item" data-type="input" data-value="guitar">
+                            <span class="component-icon">🎸</span>
+                            <span>Guitar Input</span>
+                        </div>
+                        <div class="component-item" data-type="output" data-value="amp">
+                            <span class="component-icon">🔊</span>
+                            <span>Amp Output</span>
+                        </div>
+                        <div class="component-item" data-type="ground" data-value="gnd">
+                            <span class="component-icon">⏚</span>
+                            <span>Ground</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 回路キャンバス -->
+            <div class="circuit-canvas slide-in-up">
+                <div class="canvas-header">
+                    <div class="canvas-title">Circuit Designer</div>
+                    <div class="canvas-controls">
+                        <button class="canvas-btn active" id="select-mode">Select</button>
+                        <button class="canvas-btn" id="wire-mode">Wire</button>
+                        <button class="canvas-btn" id="delete-mode">Delete</button>
+                        <button class="canvas-btn" id="clear-all">Clear</button>
+                    </div>
+                </div>
+                <svg id="circuit-svg"></svg>
+            </div>
+
+            <!-- コントロールパネル -->
+            <div class="controls-panel slide-in-right">
+                <h3 class="panel-title">Audio Engine</h3>
+                
+                <div class="audio-controls">
+                    <button class="play-button" id="play-toggle">▶</button>
+                    <div class="waveform-display">
+                        <canvas class="waveform-canvas" id="waveform"></canvas>
+                    </div>
+                </div>
+
+                <div class="preset-section">
+                    <div class="category-title">Presets</div>
+                    <div class="preset-buttons">
+                        <button class="preset-btn" data-preset="clean">Clean</button>
+                        <button class="preset-btn" data-preset="overdrive">Overdrive</button>
+                        <button class="preset-btn" data-preset="distortion">Distortion</button>
+                        <button class="preset-btn" data-preset="fuzz">Fuzz</button>
+                    </div>
+                </div>
+
+                <div class="parameter-controls">
+                    <div class="parameter-group">
+                        <label class="parameter-label">Gain</label>
+                        <input type="range" class="parameter-slider" id="gain-slider" min="0" max="100" value="50">
+                        <div class="parameter-value" id="gain-value">50%</div>
+                    </div>
+                    
+                    <div class="parameter-group">
+                        <label class="parameter-label">Tone</label>
+                        <input type="range" class="parameter-slider" id="tone-slider" min="0" max="100" value="50">
+                        <div class="parameter-value" id="tone-value">50%</div>
+                    </div>
+                    
+                    <div class="parameter-group">
+                        <label class="parameter-label">Volume</label>
+                        <input type="range" class="parameter-slider" id="volume-slider" min="0" max="100" value="70">
+                        <div class="parameter-value" id="volume-value">70%</div>
+                    </div>
+                </div>
+
+                <div class="circuit-info">
+                    <div class="info-title">Circuit Analysis</div>
+                    <div class="info-text" id="circuit-analysis">
+                        コンポーネントを配置して回路を作成してください。リアルタイムで回路の動作を分析します。
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- チュートリアルセクション -->
+        <section class="tutorials-section">
+            <h2 class="text-title text-center mb-xl fade-in">🎓 チュートリアル</h2>
+            
+            <div class="tutorial-grid">
+                <div class="tutorial-card fade-in">
+                    <span class="tutorial-icon">🎸</span>
+                    <h3 class="tutorial-title">基本のバッファ回路</h3>
+                    <p class="tutorial-description">
+                        ギター信号をそのまま増幅する最もシンプルな回路。オペアンプの基本動作を学習。
+                    </p>
+                    <button class="tutorial-btn" data-tutorial="buffer">試してみる</button>
+                </div>
+                
+                <div class="tutorial-card fade-in">
+                    <span class="tutorial-icon">🔥</span>
+                    <h3 class="tutorial-title">クリッピング回路</h3>
+                    <p class="tutorial-description">
+                        ダイオードを使った歪み回路。ディストーション・オーバードライブの基本原理。
+                    </p>
+                    <button class="tutorial-btn" data-tutorial="clipping">試してみる</button>
+                </div>
+                
+                <div class="tutorial-card fade-in">
+                    <span class="tutorial-icon">🌊</span>
+                    <h3 class="tutorial-title">トーンコントロール</h3>
+                    <p class="tutorial-description">
+                        RC回路によるハイカット・ローカットフィルター。周波数特性の調整方法。
+                    </p>
+                    <button class="tutorial-btn" data-tutorial="tone">試してみる</button>
+                </div>
+                
+                <div class="tutorial-card fade-in">
+                    <span class="tutorial-icon">⚡</span>
+                    <h3 class="tutorial-title">フィードバック回路</h3>
+                    <p class="tutorial-description">
+                        負帰還と正帰還の違い。発振回路やコンプレッサーの動作原理。
+                    </p>
+                    <button class="tutorial-btn" data-tutorial="feedback">試してみる</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 使い方セクション -->
+        <section class="mt-2xl">
+            <div class="glass-card fade-in" style="padding: var(--space-2xl);">
+                <h2 class="text-title text-center mb-md">🛠️ 使い方ガイド</h2>
+                <div class="grid grid-auto" style="margin-top: var(--space-xl);">
+                    <div class="text-center">
+                        <span style="font-size: 3rem; margin-bottom: var(--space-md); display: block;">🖱️</span>
+                        <h3 class="text-subtitle mb-sm">ドラッグ&ドロップ</h3>
+                        <p class="text-body">コンポーネントパネルから回路図へドラッグして配置</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <span style="font-size: 3rem; margin-bottom: var(--space-md); display: block;">🔌</span>
+                        <h3 class="text-subtitle mb-sm">配線接続</h3>
+                        <p class="text-body">Wireモードで接続ポイント間をクリックして配線</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <span style="font-size: 3rem; margin-bottom: var(--space-md); display: block;">🎵</span>
+                        <h3 class="text-subtitle mb-sm">音響テスト</h3>
+                        <p class="text-body">プレイボタンでリアルタイム音響シミュレーション</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <span style="font-size: 3rem; margin-bottom: var(--space-md); display: block;">📊</span>
+                        <h3 class="text-subtitle mb-sm">回路解析</h3>
+                        <p class="text-body">回路の動作特性をリアルタイムで分析・表示</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+    <script>
+        // 回路シミュレータークラス
+        class CircuitLab {
+            constructor() {
+                this.svg = document.getElementById('circuit-svg');
+                this.components = [];
+                this.wires = [];
+                this.selectedComponent = null;
+                this.mode = 'select'; // select, wire, delete
+                this.audioContext = null;
+                this.oscillator = null;
+                this.isPlaying = false;
+                this.effects = {};
+                
+                this.init();
+            }
+
+            async init() {
+                this.setupSVG();
+                this.setupEventListeners();
+                this.setupAudioEngine();
+                this.setupWaveform();
+                this.loadPreset('clean');
+            }
+
+            setupSVG() {
+                // SVGサイズ設定
+                const rect = this.svg.getBoundingClientRect();
+                this.svg.setAttribute('width', rect.width);
+                this.svg.setAttribute('height', rect.height);
+                
+                // グリッド背景
+                const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                const pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+                pattern.setAttribute('id', 'grid');
+                pattern.setAttribute('width', '20');
+                pattern.setAttribute('height', '20');
+                pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+                
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', 'M 20 0 L 0 0 0 20');
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke', 'rgba(157, 78, 221, 0.1)');
+                path.setAttribute('stroke-width', '1');
+                
+                pattern.appendChild(path);
+                defs.appendChild(pattern);
+                this.svg.appendChild(defs);
+                
+                const background = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                background.setAttribute('width', '100%');
+                background.setAttribute('height', '100%');
+                background.setAttribute('fill', 'url(#grid)');
+                this.svg.appendChild(background);
+            }
+
+            setupEventListeners() {
+                // コンポーネントドラッグ
+                document.querySelectorAll('.component-item').forEach(item => {
+                    item.addEventListener('dragstart', (e) => {
+                        e.dataTransfer.setData('text/plain', JSON.stringify({
+                            type: item.dataset.type,
+                            value: item.dataset.value
+                        }));
+                    });
+                    item.setAttribute('draggable', true);
+                });
+
+                // キャンバスドロップ
+                this.svg.addEventListener('dragover', (e) => e.preventDefault());
+                this.svg.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    const rect = this.svg.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    this.addComponent(data.type, data.value, x, y);
+                });
+
+                // モード切り替え
+                document.querySelectorAll('.canvas-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        if (btn.id === 'clear-all') {
+                            this.clearAll();
+                            return;
+                        }
+                        
+                        document.querySelectorAll('.canvas-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        
+                        if (btn.id === 'select-mode') this.mode = 'select';
+                        if (btn.id === 'wire-mode') this.mode = 'wire';
+                        if (btn.id === 'delete-mode') this.mode = 'delete';
+                        
+                        this.svg.style.cursor = this.mode === 'wire' ? 'crosshair' : 'default';
+                    });
+                });
+
+                // プリセット
+                document.querySelectorAll('.preset-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        this.loadPreset(btn.dataset.preset);
+                    });
+                });
+
+                // パラメータコントロール
+                ['gain', 'tone', 'volume'].forEach(param => {
+                    const slider = document.getElementById(`${param}-slider`);
+                    const value = document.getElementById(`${param}-value`);
+                    
+                    slider.addEventListener('input', (e) => {
+                        const val = e.target.value;
+                        value.textContent = val + '%';
+                        this.updateEffect(param, val / 100);
+                    });
+                });
+
+                // 再生ボタン
+                document.getElementById('play-toggle').addEventListener('click', () => {
+                    this.togglePlayback();
+                });
+
+                // チュートリアル
+                document.querySelectorAll('.tutorial-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        this.loadTutorial(btn.dataset.tutorial);
+                    });
+                });
+            }
+
+            async setupAudioEngine() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    
+                    // マスターゲイン
+                    this.masterGain = this.audioContext.createGain();
+                    this.masterGain.connect(this.audioContext.destination);
+                    this.masterGain.gain.value = 0.3;
+                    
+                    // エフェクトチェーン
+                    this.effects = {
+                        input: this.audioContext.createGain(),
+                        preGain: this.audioContext.createGain(),
+                        distortion: this.audioContext.createWaveShaper(),
+                        filter: this.audioContext.createBiquadFilter(),
+                        postGain: this.audioContext.createGain()
+                    };
+                    
+                    // エフェクトチェーン接続
+                    this.effects.input.connect(this.effects.preGain);
+                    this.effects.preGain.connect(this.effects.distortion);
+                    this.effects.distortion.connect(this.effects.filter);
+                    this.effects.filter.connect(this.effects.postGain);
+                    this.effects.postGain.connect(this.masterGain);
+                    
+                    // フィルター設定
+                    this.effects.filter.type = 'lowpass';
+                    this.effects.filter.frequency.value = 2000;
+                    
+                    console.log('オーディオエンジン初期化完了');
+                } catch (error) {
+                    console.warn('オーディオコンテキストの初期化に失敗:', error);
+                }
+            }
+
+            setupWaveform() {
+                this.waveformCanvas = document.getElementById('waveform');
+                this.waveformCtx = this.waveformCanvas.getContext('2d');
+                this.waveformCanvas.width = this.waveformCanvas.offsetWidth;
+                this.waveformCanvas.height = this.waveformCanvas.offsetHeight;
+                
+                this.drawWaveform();
+            }
+
+            drawWaveform() {
+                const width = this.waveformCanvas.width;
+                const height = this.waveformCanvas.height;
+                
+                this.waveformCtx.clearRect(0, 0, width, height);
+                this.waveformCtx.strokeStyle = '#9d4edd';
+                this.waveformCtx.lineWidth = 2;
+                this.waveformCtx.beginPath();
+                
+                if (this.isPlaying) {
+                    // 再生中は動的波形
+                    for (let x = 0; x < width; x += 2) {
+                        const y = height / 2 + Math.sin((x + Date.now() * 0.01) * 0.02) * height * 0.3 * Math.random();
+                        if (x === 0) {
+                            this.waveformCtx.moveTo(x, y);
+                        } else {
+                            this.waveformCtx.lineTo(x, y);
+                        }
+                    }
+                } else {
+                    // 停止中は直線
+                    this.waveformCtx.moveTo(0, height / 2);
+                    this.waveformCtx.lineTo(width, height / 2);
+                }
+                
+                this.waveformCtx.stroke();
+                
+                requestAnimationFrame(() => this.drawWaveform());
+            }
+
+            addComponent(type, value, x, y) {
+                const component = {
+                    id: Date.now(),
+                    type: type,
+                    value: value,
+                    x: Math.round(x / 20) * 20, // グリッドスナップ
+                    y: Math.round(y / 20) * 20,
+                    connections: []
+                };
+                
+                this.components.push(component);
+                this.renderComponent(component);
+                this.analyzeCircuit();
+            }
+
+            renderComponent(component) {
+                const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                group.setAttribute('class', 'component-placed');
+                group.setAttribute('transform', `translate(${component.x}, ${component.y})`);
+                group.dataset.componentId = component.id;
+                
+                let symbol;
+                
+                switch (component.type) {
+                    case 'resistor':
+                        symbol = this.createResistorSymbol();
+                        break;
+                    case 'capacitor':
+                        symbol = this.createCapacitorSymbol();
+                        break;
+                    case 'opamp':
+                        symbol = this.createOpAmpSymbol();
+                        break;
+                    case 'input':
+                        symbol = this.createInputSymbol();
+                        break;
+                    case 'output':
+                        symbol = this.createOutputSymbol();
+                        break;
+                    default:
+                        symbol = this.createGenericSymbol();
+                }
+                
+                group.appendChild(symbol);
+                
+                // 接続ポイント追加
+                this.addConnectionPoints(group, component);
+                
+                // イベントリスナー
+                group.addEventListener('click', (e) => {
+                    if (this.mode === 'delete') {
+                        this.deleteComponent(component.id);
+                    } else if (this.mode === 'select') {
+                        this.selectComponent(component.id);
+                    }
+                    e.stopPropagation();
+                });
+                
+                this.svg.appendChild(group);
+            }
+
+            createResistorSymbol() {
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                
+                // 抵抗のジグザグ線
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', 'M -20 0 L -10 0 L -8 -6 L -4 6 L 0 -6 L 4 6 L 8 -6 L 10 0 L 20 0');
+                path.setAttribute('stroke', '#9d4edd');
+                path.setAttribute('stroke-width', '3');
+                path.setAttribute('fill', 'none');
+                
+                g.appendChild(path);
+                return g;
+            }
+
+            createCapacitorSymbol() {
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                
+                // コンデンサの平行線
+                const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line1.setAttribute('x1', '-5');
+                line1.setAttribute('y1', '-15');
+                line1.setAttribute('x2', '-5');
+                line1.setAttribute('y2', '15');
+                line1.setAttribute('stroke', '#9d4edd');
+                line1.setAttribute('stroke-width', '3');
+                
+                const line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line2.setAttribute('x1', '5');
+                line2.setAttribute('y1', '-15');
+                line2.setAttribute('x2', '5');
+                line2.setAttribute('y2', '15');
+                line2.setAttribute('stroke', '#9d4edd');
+                line2.setAttribute('stroke-width', '3');
+                
+                // 接続線
+                const wire1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                wire1.setAttribute('x1', '-20');
+                wire1.setAttribute('y1', '0');
+                wire1.setAttribute('x2', '-5');
+                wire1.setAttribute('y2', '0');
+                wire1.setAttribute('stroke', '#9d4edd');
+                wire1.setAttribute('stroke-width', '2');
+                
+                const wire2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                wire2.setAttribute('x1', '5');
+                wire2.setAttribute('y1', '0');
+                wire2.setAttribute('x2', '20');
+                wire2.setAttribute('y2', '0');
+                wire2.setAttribute('stroke', '#9d4edd');
+                wire2.setAttribute('stroke-width', '2');
+                
+                g.appendChild(line1);
+                g.appendChild(line2);
+                g.appendChild(wire1);
+                g.appendChild(wire2);
+                return g;
+            }
+
+            createOpAmpSymbol() {
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                
+                // 三角形
+                const triangle = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                triangle.setAttribute('points', '-15,-15 -15,15 15,0');
+                triangle.setAttribute('fill', 'rgba(157, 78, 221, 0.3)');
+                triangle.setAttribute('stroke', '#9d4edd');
+                triangle.setAttribute('stroke-width', '2');
+                
+                // +/-記号
+                const plus = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                plus.setAttribute('x', '-10');
+                plus.setAttribute('y', '-5');
+                plus.setAttribute('fill', '#9d4edd');
+                plus.setAttribute('font-size', '12');
+                plus.textContent = '+';
+                
+                const minus = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                minus.setAttribute('x', '-10');
+                minus.setAttribute('y', '10');
+                minus.setAttribute('fill', '#9d4edd');
+                minus.setAttribute('font-size', '12');
+                minus.textContent = '-';
+                
+                g.appendChild(triangle);
+                g.appendChild(plus);
+                g.appendChild(minus);
+                return g;
+            }
+
+            createInputSymbol() {
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', '0');
+                circle.setAttribute('cy', '0');
+                circle.setAttribute('r', '15');
+                circle.setAttribute('fill', 'rgba(0, 255, 157, 0.3)');
+                circle.setAttribute('stroke', '#00ff9d');
+                circle.setAttribute('stroke-width', '2');
+                
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', '0');
+                text.setAttribute('y', '4');
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('fill', '#00ff9d');
+                text.setAttribute('font-size', '10');
+                text.textContent = 'IN';
+                
+                g.appendChild(circle);
+                g.appendChild(text);
+                return g;
+            }
+
+            createOutputSymbol() {
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', '0');
+                circle.setAttribute('cy', '0');
+                circle.setAttribute('r', '15');
+                circle.setAttribute('fill', 'rgba(0, 212, 255, 0.3)');
+                circle.setAttribute('stroke', '#00d4ff');
+                circle.setAttribute('stroke-width', '2');
+                
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', '0');
+                text.setAttribute('y', '4');
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('fill', '#00d4ff');
+                text.setAttribute('font-size', '10');
+                text.textContent = 'OUT';
+                
+                g.appendChild(circle);
+                g.appendChild(text);
+                return g;
+            }
+
+            createGenericSymbol() {
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                
+                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                rect.setAttribute('x', '-10');
+                rect.setAttribute('y', '-10');
+                rect.setAttribute('width', '20');
+                rect.setAttribute('height', '20');
+                rect.setAttribute('fill', 'rgba(157, 78, 221, 0.3)');
+                rect.setAttribute('stroke', '#9d4edd');
+                rect.setAttribute('stroke-width', '2');
+                
+                g.appendChild(rect);
+                return g;
+            }
+
+            addConnectionPoints(group, component) {
+                // コンポーネントタイプに応じて接続ポイントを追加
+                const points = this.getConnectionPoints(component.type);
+                
+                points.forEach((point, index) => {
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('class', 'connection-point');
+                    circle.setAttribute('cx', point.x);
+                    circle.setAttribute('cy', point.y);
+                    circle.setAttribute('r', '4');
+                    circle.dataset.componentId = component.id;
+                    circle.dataset.pointIndex = index;
+                    
+                    circle.addEventListener('click', (e) => {
+                        if (this.mode === 'wire') {
+                            this.handleConnectionClick(component.id, index);
+                        }
+                        e.stopPropagation();
+                    });
+                    
+                    group.appendChild(circle);
+                });
+            }
+
+            getConnectionPoints(type) {
+                switch (type) {
+                    case 'resistor':
+                    case 'capacitor':
+                        return [{ x: -20, y: 0 }, { x: 20, y: 0 }];
+                    case 'opamp':
+                        return [
+                            { x: -15, y: -8 },  // + input
+                            { x: -15, y: 8 },   // - input
+                            { x: 15, y: 0 }     // output
+                        ];
+                    case 'input':
+                    case 'output':
+                        return [{ x: 15, y: 0 }];
+                    default:
+                        return [{ x: -10, y: 0 }, { x: 10, y: 0 }];
+                }
+            }
+
+            handleConnectionClick(componentId, pointIndex) {
+                // 配線モードでの接続処理
+                if (this.wireStart) {
+                    // 2番目のクリック - 配線作成
+                    if (this.wireStart.componentId !== componentId) {
+                        this.createWire(this.wireStart, { componentId, pointIndex });
+                    }
+                    this.wireStart = null;
+                } else {
+                    // 1番目のクリック - 開始点設定
+                    this.wireStart = { componentId, pointIndex };
+                }
+            }
+
+            createWire(start, end) {
+                const startComponent = this.components.find(c => c.id === start.componentId);
+                const endComponent = this.components.find(c => c.id === end.componentId);
+                
+                if (!startComponent || !endComponent) return;
+                
+                const startPoints = this.getConnectionPoints(startComponent.type);
+                const endPoints = this.getConnectionPoints(endComponent.type);
+                
+                const startPoint = startPoints[start.pointIndex];
+                const endPoint = endPoints[end.pointIndex];
+                
+                const wire = {
+                    id: Date.now(),
+                    start: {
+                        x: startComponent.x + startPoint.x,
+                        y: startComponent.y + startPoint.y,
+                        componentId: start.componentId,
+                        pointIndex: start.pointIndex
+                    },
+                    end: {
+                        x: endComponent.x + endPoint.x,
+                        y: endComponent.y + endPoint.y,
+                        componentId: end.componentId,
+                        pointIndex: end.pointIndex
+                    }
+                };
+                
+                this.wires.push(wire);
+                this.renderWire(wire);
+                this.analyzeCircuit();
+            }
+
+            renderWire(wire) {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('class', 'wire');
+                line.setAttribute('x1', wire.start.x);
+                line.setAttribute('y1', wire.start.y);
+                line.setAttribute('x2', wire.end.x);
+                line.setAttribute('y2', wire.end.y);
+                line.dataset.wireId = wire.id;
+                
+                line.addEventListener('click', (e) => {
+                    if (this.mode === 'delete') {
+                        this.deleteWire(wire.id);
+                    }
+                    e.stopPropagation();
+                });
+                
+                this.svg.appendChild(line);
+            }
+
+            deleteComponent(componentId) {
+                // コンポーネントを削除
+                this.components = this.components.filter(c => c.id !== componentId);
+                
+                // 関連する配線も削除
+                this.wires = this.wires.filter(w => 
+                    w.start.componentId !== componentId && w.end.componentId !== componentId
+                );
+                
+                // SVGから削除
+                const element = this.svg.querySelector(`[data-component-id="${componentId}"]`);
+                if (element) element.remove();
+                
+                // 関連する配線をSVGから削除
+                this.svg.querySelectorAll('.wire').forEach(wire => {
+                    const wireId = parseInt(wire.dataset.wireId);
+                    if (!this.wires.find(w => w.id === wireId)) {
+                        wire.remove();
+                    }
+                });
+                
+                this.analyzeCircuit();
+            }
+
+            deleteWire(wireId) {
+                this.wires = this.wires.filter(w => w.id !== wireId);
+                const element = this.svg.querySelector(`[data-wire-id="${wireId}"]`);
+                if (element) element.remove();
+                this.analyzeCircuit();
+            }
+
+            clearAll() {
+                this.components = [];
+                this.wires = [];
+                
+                // SVGからコンポーネントと配線を削除
+                this.svg.querySelectorAll('.component-placed, .wire').forEach(el => el.remove());
+                
+                this.analyzeCircuit();
+            }
+
+            analyzeCircuit() {
+                const analysis = document.getElementById('circuit-analysis');
+                
+                if (this.components.length === 0) {
+                    analysis.textContent = 'コンポーネントを配置して回路を作成してください。';
+                    return;
+                }
+                
+                const hasInput = this.components.some(c => c.type === 'input');
+                const hasOutput = this.components.some(c => c.type === 'output');
+                const hasAmplifier = this.components.some(c => c.type === 'opamp');
+                const hasFilter = this.components.some(c => c.type === 'capacitor' || c.type === 'resistor');
+                
+                let analysisText = '';
+                
+                if (!hasInput || !hasOutput) {
+                    analysisText = '入力と出力を配置してください。';
+                } else if (this.wires.length === 0) {
+                    analysisText = 'コンポーネント間を配線で接続してください。';
+                } else {
+                    analysisText = '回路が接続されました。';
+                    
+                    if (hasAmplifier) {
+                        analysisText += ' アンプ回路が検出されました。';
+                    }
+                    if (hasFilter) {
+                        analysisText += ' フィルター要素が含まれています。';
+                    }
+                }
+                
+                analysis.textContent = analysisText;
+            }
+
+            async togglePlayback() {
+                const button = document.getElementById('play-toggle');
+                
+                if (!this.audioContext) {
+                    await this.setupAudioEngine();
+                }
+                
+                if (this.audioContext.state === 'suspended') {
+                    await this.audioContext.resume();
+                }
+                
+                if (!this.isPlaying) {
+                    this.startPlayback();
+                    button.textContent = '⏸';
+                    button.style.background = 'linear-gradient(45deg, #ff6b6b, #feca57)';
+                } else {
+                    this.stopPlayback();
+                    button.textContent = '▶';
+                    button.style.background = 'linear-gradient(45deg, var(--cyber-purple), var(--cyber-blue))';
+                }
+                
+                this.isPlaying = !this.isPlaying;
+            }
+
+            startPlayback() {
+                if (this.oscillator) {
+                    this.oscillator.stop();
+                }
+                
+                // 簡単なギター音をシミュレート
+                this.oscillator = this.audioContext.createOscillator();
+                this.oscillator.type = 'sawtooth';
+                this.oscillator.frequency.setValueAtTime(220, this.audioContext.currentTime); // A3
+                
+                // 音に表情をつけるためのLFO
+                const lfo = this.audioContext.createOscillator();
+                lfo.frequency.value = 5;
+                const lfoGain = this.audioContext.createGain();
+                lfoGain.gain.value = 10;
+                lfo.connect(lfoGain);
+                lfoGain.connect(this.oscillator.frequency);
+                
+                this.oscillator.connect(this.effects.input);
+                this.oscillator.start();
+                lfo.start();
+                
+                // 自動停止
+                setTimeout(() => {
+                    if (this.isPlaying) {
+                        this.togglePlayback();
+                    }
+                }, 5000);
+            }
+
+            stopPlayback() {
+                if (this.oscillator) {
+                    this.oscillator.stop();
+                    this.oscillator = null;
+                }
+            }
+
+            updateEffect(param, value) {
+                if (!this.effects) return;
+                
+                switch (param) {
+                    case 'gain':
+                        this.effects.preGain.gain.value = 1 + value * 10; // 1-11倍
+                        break;
+                    case 'tone':
+                        this.effects.filter.frequency.value = 500 + value * 3500; // 500-4000Hz
+                        break;
+                    case 'volume':
+                        this.effects.postGain.gain.value = value;
+                        break;
+                }
+            }
+
+            loadPreset(preset) {
+                const presets = {
+                    clean: { gain: 10, tone: 70, volume: 70 },
+                    overdrive: { gain: 60, tone: 50, volume: 60 },
+                    distortion: { gain: 80, tone: 40, volume: 50 },
+                    fuzz: { gain: 90, tone: 30, volume: 40 }
+                };
+                
+                const settings = presets[preset];
+                if (!settings) return;
+                
+                Object.entries(settings).forEach(([param, value]) => {
+                    const slider = document.getElementById(`${param}-slider`);
+                    const valueDisplay = document.getElementById(`${param}-value`);
+                    
+                    slider.value = value;
+                    valueDisplay.textContent = value + '%';
+                    this.updateEffect(param, value / 100);
+                });
+            }
+
+            loadTutorial(tutorial) {
+                this.clearAll();
+                
+                const tutorials = {
+                    buffer: () => {
+                        this.addComponent('input', 'guitar', 100, 200);
+                        this.addComponent('opamp', '741', 300, 200);
+                        this.addComponent('output', 'amp', 500, 200);
+                    },
+                    clipping: () => {
+                        this.addComponent('input', 'guitar', 100, 200);
+                        this.addComponent('diode', '1n4148', 300, 180);
+                        this.addComponent('diode', '1n4148', 300, 220);
+                        this.addComponent('output', 'amp', 500, 200);
+                    },
+                    tone: () => {
+                        this.addComponent('input', 'guitar', 100, 200);
+                        this.addComponent('capacitor', '100n', 300, 200);
+                        this.addComponent('resistor', '1k', 400, 200);
+                        this.addComponent('output', 'amp', 500, 200);
+                    },
+                    feedback: () => {
+                        this.addComponent('input', 'guitar', 100, 200);
+                        this.addComponent('opamp', '741', 300, 200);
+                        this.addComponent('resistor', '10k', 300, 100);
+                        this.addComponent('output', 'amp', 500, 200);
+                    }
+                };
+                
+                if (tutorials[tutorial]) {
+                    tutorials[tutorial]();
+                    
+                    // チュートリアル説明
+                    const descriptions = {
+                        buffer: 'バッファ回路：信号をそのまま増幅するシンプルな回路です。',
+                        clipping: 'クリッピング回路：ダイオードで信号をクリップして歪みを作ります。',
+                        tone: 'トーンコントロール：RC回路で高域をカットするフィルターです。',
+                        feedback: 'フィードバック回路：負帰還で安定したアンプを作ります。'
+                    };
+                    
+                    document.getElementById('circuit-analysis').textContent = descriptions[tutorial];
+                }
+            }
+        }
+
+        // アプリケーション初期化
+        let circuitLab;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            circuitLab = new CircuitLab();
+        });
+
+        // アプリ読み込み完了時の処理
+        document.addEventListener('app:loaded', () => {
+            console.log('⚡ エフェクター回路ラボが正常に読み込まれました！');
+        });
+    </script>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Circuit Lab",
+        "description": "エフェクター回路のメカニズムを体験的に学習できるインタラクティブシミュレーター",
+        "url": "https://nemototea.github.io/special-features/circuit-lab/",
+        "applicationCategory": "Educational",
+        "operatingSystem": "Web Browser",
+        "creator": {
+            "@type": "Person",
+            "name": "nemototea"
+        }
+    }
+    </script>
+</body>
+</html>
