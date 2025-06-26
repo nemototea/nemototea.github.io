@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="nemototea 特別機能 - インタラクティブな体験コンテンツで技術と創作の世界を探索">
+    <meta name="keywords" content="インタラクティブ, AI診断, 3Dポートフォリオ, 回路シミュレーター, 日本茶, フレーバーホイール">
+    
+    <title>Special Features - nemototea</title>
+    
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico">
+    
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .features-hero {
+            padding: var(--space-2xl) 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--space-xl);
+            margin: var(--space-2xl) 0;
+        }
+        
+        .feature-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            transition: all var(--transition-normal);
+            border-radius: 20px;
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-glass);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--text-primary);
+            display: block;
+        }
+        
+        .feature-card:hover {
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cyber-green), var(--cyber-blue), var(--cyber-purple));
+        }
+        
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: var(--space-md);
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 157, 0.5));
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            color: var(--cyber-green);
+        }
+        
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .feature-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+        }
+        
+        .status-live {
+            background: rgba(0, 255, 157, 0.2);
+            color: var(--cyber-green);
+        }
+        
+        .status-beta {
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--cyber-blue);
+        }
+        
+        .status-preview {
+            background: rgba(157, 78, 221, 0.2);
+            color: var(--cyber-purple);
+        }
+        
+        .feature-tags {
+            display: flex;
+            gap: var(--space-xs);
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: var(--space-md);
+        }
+        
+        .feature-tag {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .coming-soon-section {
+            margin: var(--space-2xl) 0;
+            text-align: center;
+        }
+        
+        .coming-soon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+        
+        .coming-soon-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: var(--blur-light);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: var(--space-lg);
+            text-align: center;
+            position: relative;
+            opacity: 0.7;
+        }
+        
+        .coming-soon-card::before {
+            content: '🚧';
+            position: absolute;
+            top: var(--space-sm);
+            right: var(--space-sm);
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-lg);
+            }
+            
+            .feature-card {
+                padding: var(--space-lg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ヘッダーナビゲーション -->
+        <header class="glass-header mt-md">
+            <nav class="nav">
+                <a href="../" class="nav-logo">nemototea.dev</a>
+                <ul class="nav-items">
+                    <li><a href="../" class="nav-item">Home</a></li>
+                    <li><a href="../profile/" class="nav-item">Profile</a></li>
+                    <li><a href="../works/" class="nav-item active">Works</a></li>
+                    <li><a href="../podcast/" class="nav-item">Podcast</a></li>
+                    <li><a href="../contact/" class="nav-item">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 特別機能ヒーロー -->
+        <section class="features-hero">
+            <h1 class="text-hero fade-in">🌟 Special Features</h1>
+            <p class="text-subtitle fade-in mb-lg">
+                Interactive Digital Experiences
+            </p>
+            <p class="text-body fade-in" style="max-width: 700px; margin: 0 auto;">
+                技術と創作の境界を探る、インタラクティブな体験コンテンツ。<br>
+                AI、3D技術、回路シミュレーション、データビジュアライゼーションを活用した<br>
+                次世代のWebエクスペリエンスをお楽しみください。
+            </p>
+        </section>
+
+        <!-- メイン機能 -->
+        <section class="features-grid">
+            <a href="tea-ai-diagnosis/" class="feature-card fade-in">
+                <span class="feature-status status-live">🟢 LIVE</span>
+                <span class="feature-icon">🤖</span>
+                <h3 class="feature-title">日本茶AI診断</h3>
+                <p class="feature-description">
+                    AIがあなたの好みを分析して、最適な日本茶を提案します。
+                    機械学習アルゴリズムと茶葉データベースを組み合わせたパーソナライゼーション体験。
+                </p>
+                <div class="feature-tags">
+                    <span class="feature-tag">AI</span>
+                    <span class="feature-tag">Machine Learning</span>
+                    <span class="feature-tag">日本茶</span>
+                    <span class="feature-tag">診断</span>
+                </div>
+            </a>
+            
+            <a href="3d-portfolio/" class="feature-card fade-in">
+                <span class="feature-status status-live">🟢 LIVE</span>
+                <span class="feature-icon">🌌</span>
+                <h3 class="feature-title">3D Interactive Portfolio</h3>
+                <p class="feature-description">
+                    Three.jsで構築された3D空間でのポートフォリオ体験。
+                    音楽ビジュアライザーと連動したインタラクティブな作品展示。
+                </p>
+                <div class="feature-tags">
+                    <span class="feature-tag">Three.js</span>
+                    <span class="feature-tag">3D</span>
+                    <span class="feature-tag">音楽</span>
+                    <span class="feature-tag">ビジュアライザー</span>
+                </div>
+            </a>
+            
+            <a href="circuit-lab/" class="feature-card fade-in">
+                <span class="feature-status status-beta">🔵 BETA</span>
+                <span class="feature-icon">⚡</span>
+                <h3 class="feature-title">Virtual Circuit Lab</h3>
+                <p class="feature-description">
+                    エフェクター回路をブラウザでシミュレーション。
+                    回路設計の基礎から応用まで学べるインタラクティブな学習環境。
+                </p>
+                <div class="feature-tags">
+                    <span class="feature-tag">回路設計</span>
+                    <span class="feature-tag">シミュレーション</span>
+                    <span class="feature-tag">エフェクター</span>
+                    <span class="feature-tag">学習</span>
+                </div>
+            </a>
+            
+            <a href="tea-wheel/" class="feature-card fade-in">
+                <span class="feature-status status-live">🟢 LIVE</span>
+                <span class="feature-icon">🍃</span>
+                <h3 class="feature-title">Tea Flavor Wheel</h3>
+                <p class="feature-description">
+                    日本茶のフレーバープロファイルを視覚化したインタラクティブホイール。
+                    茶葉の特徴と風味の関係性を探索できます。
+                </p>
+                <div class="feature-tags">
+                    <span class="feature-tag">データビジュアライゼーション</span>
+                    <span class="feature-tag">日本茶</span>
+                    <span class="feature-tag">フレーバー</span>
+                    <span class="feature-tag">分析</span>
+                </div>
+            </a>
+        </section>
+
+        <!-- 近日公開 -->
+        <section class="coming-soon-section">
+            <h2 class="text-title text-center mb-xl fade-in">🚀 Coming Soon</h2>
+            
+            <div class="coming-soon-grid">
+                <div class="coming-soon-card fade-in">
+                    <span class="feature-icon" style="opacity: 0.5;">🎵</span>
+                    <h3 class="feature-title">音楽制作ツール</h3>
+                    <p class="feature-description">
+                        ブラウザ上で動作するシンセサイザーとエフェクトチェーン。
+                        自作エフェクターのデジタル版を開発中。
+                    </p>
+                </div>
+                
+                <div class="coming-soon-card fade-in">
+                    <span class="feature-icon" style="opacity: 0.5;">📊</span>
+                    <h3 class="feature-title">コード品質分析</h3>
+                    <p class="feature-description">
+                        GitHubリポジトリの技術的負債を可視化する
+                        静的解析ツール。
+                    </p>
+                </div>
+                
+                <div class="coming-soon-card fade-in">
+                    <span class="feature-icon" style="opacity: 0.5;">🎨</span>
+                    <h3 class="feature-title">AI アートジェネレーター</h3>
+                    <p class="feature-description">
+                        音楽から視覚的なアートを生成する
+                        AIベースのクリエイティブツール。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 技術情報 -->
+        <section class="mt-2xl">
+            <div class="glass-card text-center fade-in" style="padding: var(--space-2xl);">
+                <h2 class="text-title mb-md">💻 Technology Stack</h2>
+                <p class="text-body mb-xl" style="max-width: 700px; margin: 0 auto;">
+                    これらの特別機能は、最新のWeb技術を活用して構築されています。<br>
+                    すべてのコードはGitHubで公開予定です。
+                </p>
+                
+                <div class="flex" style="justify-content: center; gap: var(--space-lg); flex-wrap: wrap; margin-top: var(--space-xl);">
+                    <div class="glass-button">JavaScript ES6+</div>
+                    <div class="glass-button">Three.js</div>
+                    <div class="glass-button">Web Audio API</div>
+                    <div class="glass-button">Canvas API</div>
+                    <div class="glass-button">CSS3 Animations</div>
+                    <div class="glass-button">PWA</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- フィードバック -->
+        <section class="mt-2xl">
+            <div class="glass-card text-center fade-in" style="padding: var(--space-2xl);">
+                <h2 class="text-title mb-md">💬 Feedback Welcome</h2>
+                <p class="text-body mb-xl">
+                    これらの機能についてのご意見・ご感想をお聞かせください。<br>
+                    新しいアイデアやコラボレーションのご提案もお待ちしています。
+                </p>
+                
+                <div class="flex" style="justify-content: center; gap: var(--space-md); flex-wrap: wrap;">
+                    <a href="../contact/" class="glass-button">
+                        📧 お問い合わせ
+                    </a>
+                    <a href="https://github.com/nemototea" class="glass-button" target="_blank" rel="noopener">
+                        💻 GitHub
+                    </a>
+                    <a href="../podcast/" class="glass-button">
+                        🎙️ Podcast
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 共通フッター -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="../" class="footer-logo">nemototea.dev</a>
+                    <p class="footer-description">
+                        Creative Tech Hub - Technology meets Creativity
+                    </p>
+                </div>
+                
+                <div class="footer-links">
+                    <a href="../" class="footer-link">Home</a>
+                    <a href="../profile/" class="footer-link">Profile</a>
+                    <a href="../works/" class="footer-link">Works</a>
+                    <a href="../podcast/" class="footer-link">Podcast</a>
+                    <a href="../contact/" class="footer-link">Contact</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © 2025 nemototea. Built with passion for technology and creativity.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 機能カードのインタラクション
+            const featureCards = document.querySelectorAll('.feature-card');
+            
+            featureCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    const icon = card.querySelector('.feature-icon');
+                    icon.style.transform = 'scale(1.1) rotate(5deg)';
+                    icon.style.filter = 'drop-shadow(0 0 30px var(--cyber-green))';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    const icon = card.querySelector('.feature-icon');
+                    icon.style.transform = 'scale(1) rotate(0deg)';
+                    icon.style.filter = 'drop-shadow(0 0 20px rgba(0, 255, 157, 0.5))';
+                });
+            });
+
+            // ランダムなグロー効果
+            setInterval(() => {
+                featureCards.forEach(card => {
+                    if (Math.random() < 0.1) {
+                        card.style.boxShadow = '0 0 40px rgba(0, 255, 157, 0.3)';
+                        setTimeout(() => {
+                            card.style.boxShadow = '';
+                        }, 1500);
+                    }
+                });
+            }, 3000);
+
+            // ページフェードイン
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Special Features - nemototea",
+        "description": "インタラクティブな体験コンテンツで技術と創作の世界を探索",
+        "url": "https://nemototea.github.io/special-features/",
+        "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": [
+                {
+                    "@type": "SoftwareApplication",
+                    "name": "日本茶AI診断",
+                    "description": "AIがあなたの好みを分析して最適な日本茶を提案"
+                },
+                {
+                    "@type": "SoftwareApplication", 
+                    "name": "3D Interactive Portfolio",
+                    "description": "Three.jsで構築された3D空間でのポートフォリオ体験"
+                },
+                {
+                    "@type": "SoftwareApplication",
+                    "name": "Virtual Circuit Lab", 
+                    "description": "エフェクター回路をブラウザでシミュレーション"
+                },
+                {
+                    "@type": "SoftwareApplication",
+                    "name": "Tea Flavor Wheel",
+                    "description": "日本茶のフレーバープロファイルを視覚化したインタラクティブホイール"
+                }
+            ]
+        }
+    }
+    </script>
+</body>
+</html>

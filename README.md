@@ -9,7 +9,7 @@
 
 ## ディレクトリ構成
 - `index.html` : トップページ
-- `about/` : サイト・運営者情報
+- `profile/` : サイト・運営者情報
 - `contact/` : お問い合わせ
 - `podcast/` : ポッドキャスト
 - `special-features/` : スペシャルコンテンツ
