@@ -610,4 +610,659 @@
     <div class="tooltip" id="tooltip"></div>
 
     <script src="../../assets/js/main.js"></script>
+
+    <script>
+        // 日本茶データ
+        const teaData = [
+            {
+                name: "煎茶",
+                type: "緑茶",
+                icon: "🍵",
+                flavors: ["青草", "海苔", "清涼感", "甘味"],
+                aromas: ["青草", "海藻", "花香", "フレッシュ"],
+                intensity: { astringency: 6, sweetness: 5, bitterness: 4, umami: 7 },
+                brewing: { waterTemp: "70-80℃", amount: "3g", time: "1-2分", bestTime: "朝・昼" },
+                color: "#4a7c59",
+                season: "春",
+                angle: 0
+            },
+            {
+                name: "玉露",
+                type: "高級緑茶",
+                icon: "💎",
+                flavors: ["旨味", "甘味", "濃厚", "まろやか"],
+                aromas: ["海苔", "青草", "花香", "上品"],
+                intensity: { astringency: 3, sweetness: 9, bitterness: 2, umami: 10 },
+                brewing: { waterTemp: "50-60℃", amount: "4g", time: "2-3分", bestTime: "午後・夕方" },
+                color: "#2d5016",
+                season: "春",
+                angle: 30
+            },
+            {
+                name: "抹茶",
+                type: "粉末緑茶",
+                icon: "🍃",
+                flavors: ["苦味", "甘味", "旨味", "濃厚"],
+                aromas: ["青草", "石臼", "深み", "芳香"],
+                intensity: { astringency: 5, sweetness: 7, bitterness: 8, umami: 9 },
+                brewing: { waterTemp: "70-80℃", amount: "2g", time: "撹拌", bestTime: "いつでも" },
+                color: "#228b22",
+                season: "オールシーズン",
+                angle: 60
+            },
+            {
+                name: "ほうじ茶",
+                type: "焙煎茶",
+                icon: "🔥",
+                flavors: ["香ばしい", "まろやか", "甘香", "軽やか"],
+                aromas: ["ロースト", "カラメル", "ナッツ", "香ばしい"],
+                intensity: { astringency: 2, sweetness: 6, bitterness: 3, umami: 4 },
+                brewing: { waterTemp: "90-100℃", amount: "3g", time: "30秒-1分", bestTime: "夜・リラックス" },
+                color: "#8b4513",
+                season: "秋・冬",
+                angle: 90
+            },
+            {
+                name: "玄米茶",
+                type: "ブレンド茶",
+                icon: "🌾",
+                flavors: ["香ばしい", "さっぱり", "軽やか", "玄米"],
+                aromas: ["玄米", "ポップコーン", "香ばしい", "穀物"],
+                intensity: { astringency: 3, sweetness: 5, bitterness: 2, umami: 3 },
+                brewing: { waterTemp: "90-100℃", amount: "3g", time: "30秒", bestTime: "食後" },
+                color: "#cd853f",
+                season: "オールシーズン",
+                angle: 120
+            },
+            {
+                name: "深蒸し茶",
+                type: "蒸し製緑茶",
+                icon: "💚",
+                flavors: ["濃厚", "まろやか", "コク", "甘味"],
+                aromas: ["青草", "濃厚", "深み", "蒸し香"],
+                intensity: { astringency: 7, sweetness: 6, bitterness: 5, umami: 8 },
+                brewing: { waterTemp: "70-80℃", amount: "3g", time: "45秒", bestTime: "朝・昼" },
+                color: "#006400",
+                season: "夏",
+                angle: 150
+            },
+            {
+                name: "番茶",
+                type: "普通煎茶",
+                icon: "🌿",
+                flavors: ["すっきり", "軽やか", "さっぱり", "自然"],
+                aromas: ["青草", "自然", "すっきり", "清涼"],
+                intensity: { astringency: 4, sweetness: 3, bitterness: 3, umami: 4 },
+                brewing: { waterTemp: "80-90℃", amount: "3g", time: "1分", bestTime: "食事中" },
+                color: "#9acd32",
+                season: "夏",
+                angle: 180
+            },
+            {
+                name: "新茶",
+                type: "一番茶",
+                icon: "🌱",
+                flavors: ["フレッシュ", "甘味", "青草", "爽やか"],
+                aromas: ["新緑", "花香", "フレッシュ", "春"],
+                intensity: { astringency: 5, sweetness: 8, bitterness: 3, umami: 7 },
+                brewing: { waterTemp: "70℃", amount: "3g", time: "1分", bestTime: "午前中" },
+                color: "#adff2f",
+                season: "春",
+                angle: 210
+            },
+            {
+                name: "茎茶",
+                type: "副産物茶",
+                icon: "🎋",
+                flavors: ["清涼感", "甘味", "軽やか", "上品"],
+                aromas: ["青草", "清涼", "茎の香り", "爽やか"],
+                intensity: { astringency: 3, sweetness: 6, bitterness: 2, umami: 5 },
+                brewing: { waterTemp: "80℃", amount: "3g", time: "1分", bestTime: "午後" },
+                color: "#32cd32",
+                season: "春・夏",
+                angle: 240
+            },
+            {
+                name: "芽茶",
+                type: "選別茶",
+                icon: "🌿",
+                flavors: ["濃厚", "旨味", "コク", "まろやか"],
+                aromas: ["濃厚", "青草", "深み", "芽の香り"],
+                intensity: { astringency: 6, sweetness: 7, bitterness: 4, umami: 9 },
+                brewing: { waterTemp: "70℃", amount: "2g", time: "1分30秒", bestTime: "特別な時間" },
+                color: "#228b22",
+                season: "春",
+                angle: 270
+            },
+            {
+                name: "粉茶",
+                type: "粉末状茶",
+                icon: "💨",
+                flavors: ["濃厚", "渋味", "コク", "苦味"],
+                aromas: ["濃厚", "青草", "粉の香り", "深み"],
+                intensity: { astringency: 8, sweetness: 4, bitterness: 6, umami: 6 },
+                brewing: { waterTemp: "80℃", amount: "2g", time: "30秒", bestTime: "朝" },
+                color: "#556b2f",
+                season: "オールシーズン",
+                angle: 300
+            },
+            {
+                name: "かぶせ茶",
+                type: "被覆茶",
+                icon: "☂️",
+                flavors: ["旨味", "甘味", "まろやか", "上品"],
+                aromas: ["青草", "被覆香", "花香", "上品"],
+                intensity: { astringency: 4, sweetness: 8, bitterness: 3, umami: 8 },
+                brewing: { waterTemp: "70℃", amount: "3g", time: "1分", bestTime: "午後・夕方" },
+                color: "#6b8e23",
+                season: "春・夏",
+                angle: 330
+            }
+        ];
+
+        // フレーバーホイール管理クラス
+        class TeaFlavorWheel {
+            constructor() {
+                this.svg = d3.select("#tea-wheel-svg");
+                this.tooltip = d3.select("#tooltip");
+                this.currentView = 'flavor';
+                this.selectedTea = null;
+                this.comparisonTeas = [];
+                this.width = 500;
+                this.height = 500;
+                this.radius = Math.min(this.width, this.height) / 2 - 40;
+                this.centerX = this.width / 2;
+                this.centerY = this.height / 2;
+                
+                this.init();
+            }
+
+            init() {
+                this.setupSVG();
+                this.createWheel();
+                this.setupControls();
+                this.setupComparison();
+                this.setupEventListeners();
+                
+                // 最初の茶葉を選択
+                this.selectTea(teaData[0]);
+            }
+
+            setupSVG() {
+                this.svg.attr("viewBox", `0 0 ${this.width} ${this.height}`);
+                
+                // グラデーション定義
+                const defs = this.svg.append("defs");
+                
+                teaData.forEach((tea, i) => {
+                    const gradient = defs.append("linearGradient")
+                        .attr("id", `gradient-${i}`)
+                        .attr("x1", "0%").attr("y1", "0%")
+                        .attr("x2", "100%").attr("y2", "100%");
+                    
+                    gradient.append("stop")
+                        .attr("offset", "0%")
+                        .attr("stop-color", tea.color)
+                        .attr("stop-opacity", 0.8);
+                    
+                    gradient.append("stop")
+                        .attr("offset", "100%")
+                        .attr("stop-color", d3.rgb(tea.color).darker(0.5))
+                        .attr("stop-opacity", 1);
+                });
+
+                // 中央のグラデーション
+                const centerGradient = defs.append("radialGradient")
+                    .attr("id", "center-gradient");
+                
+                centerGradient.append("stop")
+                    .attr("offset", "0%")
+                    .attr("stop-color", "#2d5016")
+                    .attr("stop-opacity", 0.8);
+                
+                centerGradient.append("stop")
+                    .attr("offset", "100%")
+                    .attr("stop-color", "#4a7c59")
+                    .attr("stop-opacity", 1);
+            }
+
+            createWheel() {
+                const angleStep = 360 / teaData.length;
+                const innerRadius = 80;
+                const outerRadius = this.radius;
+
+                // メインホイールグループ
+                this.wheelGroup = this.svg.append("g")
+                    .attr("transform", `translate(${this.centerX}, ${this.centerY})`);
+
+                // 茶葉セクション
+                this.teaSections = this.wheelGroup.selectAll(".tea-section")
+                    .data(teaData)
+                    .enter()
+                    .append("g")
+                    .attr("class", "tea-section");
+
+                // セクションの弧
+                this.teaSections.append("path")
+                    .attr("class", "tea-arc")
+                    .attr("d", (d, i) => {
+                        const startAngle = (i * angleStep) * Math.PI / 180;
+                        const endAngle = ((i + 1) * angleStep) * Math.PI / 180;
+                        return this.createArcPath(startAngle, endAngle, innerRadius, outerRadius);
+                    })
+                    .attr("fill", (d, i) => `url(#gradient-${i})`)
+                    .attr("stroke", "#ffffff")
+                    .attr("stroke-width", 2)
+                    .attr("opacity", 0.9)
+                    .style("cursor", "pointer");
+
+                // 茶葉名テキスト
+                this.teaSections.append("text")
+                    .attr("class", "tea-name-text")
+                    .attr("transform", (d, i) => {
+                        const angle = (i * angleStep + angleStep / 2) * Math.PI / 180;
+                        const textRadius = (innerRadius + outerRadius) / 2;
+                        const x = Math.cos(angle - Math.PI / 2) * textRadius;
+                        const y = Math.sin(angle - Math.PI / 2) * textRadius;
+                        const rotation = (i * angleStep + angleStep / 2) > 180 ? 
+                            (i * angleStep + angleStep / 2) - 180 : 
+                            (i * angleStep + angleStep / 2);
+                        return `translate(${x}, ${y}) rotate(${rotation > 90 && rotation < 270 ? rotation + 180 : rotation})`;
+                    })
+                    .attr("text-anchor", "middle")
+                    .attr("dominant-baseline", "middle")
+                    .attr("font-size", "11px")
+                    .attr("font-weight", "600")
+                    .attr("fill", "#ffffff")
+                    .attr("stroke", "#000000")
+                    .attr("stroke-width", "0.5px")
+                    .text(d => d.name);
+
+                // 茶葉アイコン
+                this.teaSections.append("text")
+                    .attr("class", "tea-icon-text")
+                    .attr("transform", (d, i) => {
+                        const angle = (i * angleStep + angleStep / 2) * Math.PI / 180;
+                        const iconRadius = outerRadius - 25;
+                        const x = Math.cos(angle - Math.PI / 2) * iconRadius;
+                        const y = Math.sin(angle - Math.PI / 2) * iconRadius;
+                        return `translate(${x}, ${y})`;
+                    })
+                    .attr("text-anchor", "middle")
+                    .attr("dominant-baseline", "middle")
+                    .attr("font-size", "20px")
+                    .text(d => d.icon)
+                    .style("pointer-events", "none");
+
+                // 中央円
+                this.wheelGroup.append("circle")
+                    .attr("cx", 0)
+                    .attr("cy", 0)
+                    .attr("r", innerRadius)
+                    .attr("fill", "url(#center-gradient)")
+                    .attr("stroke", "#ffffff")
+                    .attr("stroke-width", 3);
+
+                // 中央テキスト
+                this.wheelGroup.append("text")
+                    .attr("x", 0)
+                    .attr("y", -10)
+                    .attr("text-anchor", "middle")
+                    .attr("font-size", "16px")
+                    .attr("font-weight", "bold")
+                    .attr("fill", "#ffffff")
+                    .text("日本茶");
+
+                this.wheelGroup.append("text")
+                    .attr("x", 0)
+                    .attr("y", 10)
+                    .attr("text-anchor", "middle")
+                    .attr("font-size", "12px")
+                    .attr("fill", "#ffffff")
+                    .text("フレーバー");
+
+                this.wheelGroup.append("text")
+                    .attr("x", 0)
+                    .attr("y", 25)
+                    .attr("text-anchor", "middle")
+                    .attr("font-size", "12px")
+                    .attr("fill", "#ffffff")
+                    .text("ホイール");
+
+                this.setupInteractions();
+            }
+
+            createArcPath(startAngle, endAngle, innerRadius, outerRadius) {
+                const x1 = Math.cos(startAngle - Math.PI / 2) * innerRadius;
+                const y1 = Math.sin(startAngle - Math.PI / 2) * innerRadius;
+                const x2 = Math.cos(startAngle - Math.PI / 2) * outerRadius;
+                const y2 = Math.sin(startAngle - Math.PI / 2) * outerRadius;
+                const x3 = Math.cos(endAngle - Math.PI / 2) * outerRadius;
+                const y3 = Math.sin(endAngle - Math.PI / 2) * outerRadius;
+                const x4 = Math.cos(endAngle - Math.PI / 2) * innerRadius;
+                const y4 = Math.sin(endAngle - Math.PI / 2) * innerRadius;
+
+                const largeArcFlag = endAngle - startAngle > Math.PI ? 1 : 0;
+
+                return `M ${x1} ${y1} L ${x2} ${y2} A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x3} ${y3} L ${x4} ${y4} A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x1} ${y1}`;
+            }
+            
+            setupInteractions() {
+                this.teaSections
+                    .on("mouseover", (event, d) => {
+                        this.showTooltip(event, d);
+                        this.highlightSection(d);
+                    })
+                    .on("mouseout", (event, d) => {
+                        this.hideTooltip();
+                        this.unhighlightSection(d);
+                    })
+                    .on("click", (event, d) => {
+                        this.selectTea(d);
+                        this.animateWheel();
+                    });
+            }
+
+            showTooltip(event, tea) {
+                const tooltip = this.tooltip;
+                const content = `
+                    <strong>${tea.name}</strong><br>
+                    ${tea.type}<br>
+                    <small>クリックで詳細表示</small>
+                `;
+                
+                tooltip
+                    .html(content)
+                    .classed("show", true)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 10) + "px");
+            }
+
+            hideTooltip() {
+                this.tooltip.classed("show", false);
+            }
+
+            highlightSection(tea) {
+                this.teaSections
+                    .select(".tea-arc")
+                    .transition()
+                    .duration(200)
+                    .attr("opacity", d => d === tea ? 1 : 0.5)
+                    .attr("stroke-width", d => d === tea ? 4 : 2);
+            }
+
+            unhighlightSection(tea) {
+                if (this.selectedTea !== tea) {
+                    this.teaSections
+                        .select(".tea-arc")
+                        .transition()
+                        .duration(200)
+                        .attr("opacity", 0.9)
+                        .attr("stroke-width", 2);
+                }
+            }
+
+            selectTea(tea) {
+                this.selectedTea = tea;
+                this.updateInfoPanel(tea);
+                this.highlightSelectedTea(tea);
+                this.animateSelection();
+            }
+
+            highlightSelectedTea(tea) {
+                this.teaSections
+                    .select(".tea-arc")
+                    .transition()
+                    .duration(300)
+                    .attr("opacity", d => d === tea ? 1 : 0.7)
+                    .attr("stroke-width", d => d === tea ? 5 : 2)
+                    .attr("stroke", d => d === tea ? "#ffffff" : "#ffffff");
+            }
+
+            updateInfoPanel(tea) {
+                // 基本情報更新
+                document.getElementById("tea-name").textContent = tea.name;
+                document.getElementById("tea-type").textContent = tea.type;
+                document.getElementById("selectedTeaIcon").textContent = tea.icon;
+
+                // フレーバータグ更新
+                const flavorContainer = document.getElementById("flavor-tags");
+                flavorContainer.innerHTML = tea.flavors.map(flavor => 
+                    `<span class="flavor-tag">${flavor}</span>`
+                ).join("");
+
+                const aromaContainer = document.getElementById("aroma-tags");
+                aromaContainer.innerHTML = tea.aromas.map(aroma => 
+                    `<span class="flavor-tag">${aroma}</span>`
+                ).join("");
+
+                // 強度バー更新
+                this.updateIntensityBars(tea.intensity);
+
+                // 淹れ方情報更新
+                document.getElementById("water-temp").textContent = tea.brewing.waterTemp;
+                document.getElementById("tea-amount").textContent = tea.brewing.amount;
+                document.getElementById("steeping-time").textContent = tea.brewing.time;
+                document.getElementById("best-time").textContent = tea.brewing.bestTime;
+                
+                document.getElementById("brewing-info").style.display = "block";
+            }
+
+            updateIntensityBars(intensity) {
+                Object.entries(intensity).forEach(([key, value]) => {
+                    const fill = document.getElementById(`${key}-fill`);
+                    const valueSpan = document.getElementById(`${key}-value`);
+                    
+                    if (fill && valueSpan) {
+                        fill.style.width = `${value * 10}%`;
+                        valueSpan.textContent = value;
+                    }
+                });
+            }
+
+            animateWheel() {
+                this.wheelGroup
+                    .classed("wheel-rotating", true);
+                
+                setTimeout(() => {
+                    this.wheelGroup.classed("wheel-rotating", false);
+                }, 500);
+            }
+
+            animateSelection() {
+                this.wheelGroup
+                    .classed("wheel-pulse", true);
+                
+                setTimeout(() => {
+                    this.wheelGroup.classed("wheel-pulse", false);
+                }, 300);
+            }
+
+            setupControls() {
+                const controlButtons = document.querySelectorAll(".wheel-control-btn");
+                
+                controlButtons.forEach(button => {
+                    button.addEventListener("click", () => {
+                        if (button.dataset.action === 'random') {
+                            // ランダム選択
+                            const randomTea = teaData[Math.floor(Math.random() * teaData.length)];
+                            this.selectTea(randomTea);
+                            
+                            // 特別なアニメーション
+                            button.style.transform = "scale(1.2) rotate(360deg)";
+                            setTimeout(() => {
+                                button.style.transform = "";
+                            }, 500);
+                            return;
+                        }
+                        
+                        controlButtons.forEach(btn => {
+                            if (!btn.dataset.action) btn.classList.remove("active");
+                        });
+                        button.classList.add("active");
+                        
+                        this.currentView = button.dataset.view;
+                        this.updateWheelView();
+                    });
+                });
+            }
+
+            updateWheelView() {
+                // 視点に応じてホイールの色や表示を変更
+                const transitions = this.teaSections.select(".tea-arc")
+                    .transition()
+                    .duration(500);
+
+                switch (this.currentView) {
+                    case 'flavor':
+                        transitions.attr("fill", (d, i) => `url(#gradient-${i})`);
+                        break;
+                    case 'aroma':
+                        transitions.attr("fill", d => {
+                            const aromaIntensity = d.aromas.length / 4;
+                            return d3.interpolateGreens(aromaIntensity);
+                        });
+                        break;
+                    case 'intensity':
+                        transitions.attr("fill", d => {
+                            const avgIntensity = (d.intensity.astringency + d.intensity.bitterness) / 20;
+                            return d3.interpolateReds(avgIntensity);
+                        });
+                        break;
+                    case 'season':
+                        transitions.attr("fill", d => {
+                            const seasonColors = {
+                                '春': '#9acd32',
+                                '夏': '#00ff7f',
+                                '秋': '#ff8c00',
+                                '冬': '#4169e1',
+                                'オールシーズン': '#dda0dd'
+                            };
+                            return seasonColors[d.season] || '#gray';
+                        });
+                        break;
+                }
+
+                this.animateWheel();
+            }
+
+            setupComparison() {
+                const comparisonGrid = document.getElementById("comparison-grid");
+                
+                teaData.forEach(tea => {
+                    const card = document.createElement("div");
+                    card.className = "tea-comparison-card";
+                    card.dataset.teaName = tea.name;
+                    
+                    card.innerHTML = `
+                        <span class="comparison-icon">${tea.icon}</span>
+                        <div class="comparison-name">${tea.name}</div>
+                        <div class="comparison-type">${tea.type}</div>
+                    `;
+                    
+                    card.addEventListener("click", () => {
+                        this.toggleComparison(tea, card);
+                    });
+                    
+                    comparisonGrid.appendChild(card);
+                });
+            }
+
+            toggleComparison(tea, card) {
+                if (card.classList.contains("selected")) {
+                    card.classList.remove("selected");
+                    this.comparisonTeas = this.comparisonTeas.filter(t => t !== tea);
+                } else {
+                    if (this.comparisonTeas.length < 3) {
+                        card.classList.add("selected");
+                        this.comparisonTeas.push(tea);
+                    } else {
+                        // 最大3つまで
+                        alert("最大3つまでの茶葉を比較できます");
+                    }
+                }
+                
+                this.updateComparisonHighlight();
+            }
+
+            updateComparisonHighlight() {
+                this.teaSections
+                    .select(".tea-arc")
+                    .transition()
+                    .duration(300)
+                    .attr("stroke", d => {
+                        if (d === this.selectedTea) return "#ffffff";
+                        if (this.comparisonTeas.includes(d)) return "#ffd700";
+                        return "#ffffff";
+                    })
+                    .attr("stroke-width", d => {
+                        if (d === this.selectedTea) return 5;
+                        if (this.comparisonTeas.includes(d)) return 4;
+                        return 2;
+                    });
+            }
+
+            setupEventListeners() {
+                window.addEventListener("resize", () => {
+                    this.handleResize();
+                });
+
+                // キーボード操作
+                document.addEventListener("keydown", (e) => {
+                    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+                        e.preventDefault();
+                        const currentIndex = teaData.indexOf(this.selectedTea);
+                        let newIndex;
+                        
+                        if (e.key === "ArrowLeft") {
+                            newIndex = currentIndex > 0 ? currentIndex - 1 : teaData.length - 1;
+                        } else {
+                            newIndex = currentIndex < teaData.length - 1 ? currentIndex + 1 : 0;
+                        }
+                        
+                        this.selectTea(teaData[newIndex]);
+                    }
+                });
+            }
+
+            handleResize() {
+                // レスポンシブ対応
+                const container = document.querySelector(".wheel-section");
+                const containerWidth = container.offsetWidth - 80;
+                const newSize = Math.min(containerWidth, 500);
+                
+                this.svg.attr("width", newSize).attr("height", newSize);
+            }
+        }
+
+        // アプリケーション初期化
+        let teaWheel;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            teaWheel = new TeaFlavorWheel();
+        });
+
+        // アプリ読み込み完了時の処理
+        document.addEventListener('app:loaded', () => {
+            console.log('🍵 日本茶フレーバーホイールが正常に読み込まれました！');
+        });
+    </script>
     
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Tea Flavor Wheel",
+        "description": "日本茶の味わいと香りを視覚的に探索するインタラクティブなフレーバーホイール",
+        "url": "https://nemototea.github.io/special-features/tea-wheel/",
+        "applicationCategory": "Educational",
+        "operatingSystem": "Web Browser",
+        "creator": {
+            "@type": "Person",
+            "name": "nemototea"
+        }
+    }
+    </script>
+</body>
+</html>
