@@ -52,6 +52,7 @@
         .hero-content {
             position: relative;
             z-index: 10;
+            width: 100%;
         }
           .hero-title {
             font-size: clamp(3rem, 8vw, 6rem);
@@ -73,30 +74,15 @@
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
         }
-        
-        /* ヒーロータイトルの追加アニメーション */
-        .hero-title.mouse-active {
-            animation: gradientShift 2s ease-in-out infinite, pulseGlow 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulseGlow {
-            0%, 100% { 
-                text-shadow: 0 0 30px rgba(0, 255, 157, 0.3);
-                filter: brightness(1);
-            }
-            50% { 
-                text-shadow: 0 0 50px rgba(0, 255, 157, 0.5), 0 0 80px rgba(58, 134, 255, 0.3);
-                filter: brightness(1.1);
-            }
+          /* ヒーロータイトルのアニメーション */
+        .hero-title.scroll-active {
+            animation: gradientShift 3s ease-in-out infinite, scrollFloat 3s ease-in-out infinite;
         }
         
         /* スクロール連動アニメーション */
         @keyframes scrollFloat {
             0%, 100% { transform: translateY(0px) scale(1); }
             50% { transform: translateY(-10px) scale(1.02); }
-        }
-          .hero-title.scroll-active {
-            animation: gradientShift 3s ease-in-out infinite, scrollFloat 3s ease-in-out infinite;
         }
         
         /* 初期表示アニメーション */
@@ -336,26 +322,52 @@
             flex-wrap: wrap;
             margin-top: var(--space-xl);
         }
-          /* レスポンシブ対応 */
+        
+        /* レスポンシブ対応 */
         @media (max-width: 768px) {
+            /* ヒーローセクション全体を中央配置 */
+            .hero-section {
+                justify-content: center;
+                text-align: center;
+                padding: var(--space-lg) var(--space-md);
+            }
+            
+            /* ヒーローコンテンツ全体を中央寄せ */
+            .hero-content {
+                text-align: center;
+                max-width: 100%;
+                margin: 0 auto;
+            }
+            
             .hero-cta {
-                flex-direction: column;
+                flex-direction: row;
+                justify-content: center;
                 align-items: center;
+                gap: var(--space-sm);
+            }
+              /* CTAボタンを小さめに調整 */
+            .cta-primary,
+            .cta-secondary {
+                font-size: 0.9rem;
+                padding: var(--space-sm) var(--space-md);
+                min-width: auto;
+                flex: 1;
+                max-width: 140px;
+                text-align: center;
+                white-space: nowrap;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
             
             .latest-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .cta-primary,
-            .cta-secondary {
-                text-align: center;
-                min-width: 200px;
-            }
               /* モバイルでのタイトルアニメーション調整 */
             .hero-title {
                 font-size: clamp(2.5rem, 10vw, 4rem);
                 text-shadow: 0 0 20px rgba(0, 255, 157, 0.4);
+                text-align: center;
             }
             
             .hero-title.scroll-active {
@@ -378,6 +390,54 @@
                 background: rgba(0, 255, 157, 0.1);
                 border-color: rgba(0, 255, 157, 0.2);
                 transform: translateY(-2px);
+            }
+              /* 音楽ビジュアライザーも中央寄せ */
+            .wave-visualizer {
+                justify-content: center;
+            }
+        }
+          /* 極小デバイス対応 */
+        @media (max-width: 480px) {
+            .hero-section {
+                min-height: 90vh;
+                padding: var(--space-md) var(--space-sm);
+            }
+            
+            .hero-content {
+                padding: 0 var(--space-xs);
+            }
+            
+            .hero-title {
+                font-size: clamp(2rem, 12vw, 3.5rem);
+                line-height: 1;
+                margin-bottom: var(--space-sm);
+            }
+            
+            .hero-subtitle {
+                font-size: clamp(0.9rem, 5vw, 1.2rem);
+                padding: var(--space-xs);
+                margin-bottom: var(--space-lg);
+            }
+            
+            .hero-cta {
+                gap: var(--space-xs);
+                margin-bottom: var(--space-lg);
+            }
+              .cta-primary,
+            .cta-secondary {
+                font-size: 0.85rem;
+                padding: 10px 16px;
+                max-width: 120px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+            
+            .wave-visualizer {
+                transform: scale(0.8);
+                margin-top: var(--space-sm);
             }
         }
     </style>
@@ -753,78 +813,13 @@
             
             // 定期的にメッセージを変更（オプション）
             // setInterval(changeHeroSubtitle, 10000); // 10秒ごと
-            
-            // ヒーローセクションの強化されたエフェクト
+              // ヒーローセクションのエフェクト（スクロール連動のみ）
             const heroTitle = document.querySelector('.hero-title');
             if (heroTitle) {
-                let mouseX = 0;
-                let mouseY = 0;
-                let isMouseActive = false;
-                let animationId = null;
-                
                 // デバイス判定
                 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
                 
-                if (!isMobile) {
-                    // デスクトップ: マウス追従エフェクト
-                    document.addEventListener('mousemove', Utils.throttle((e) => {
-                        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-                        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-                        
-                        if (!isMouseActive) {
-                            isMouseActive = true;
-                            heroTitle.classList.add('mouse-active');
-                        }
-                        
-                        const intensity = 15; // 動きの強度を上げる
-                        const tiltX = mouseY * intensity;
-                        const tiltY = mouseX * intensity;
-                        
-                        // より滑らかな変換
-                        heroTitle.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(20px)`;
-                    }, 16));
-                    
-                    // マウスが離れた時のリセット
-                    document.addEventListener('mouseleave', () => {
-                        if (isMouseActive) {
-                            isMouseActive = false;
-                            heroTitle.classList.remove('mouse-active');
-                            heroTitle.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
-                        }
-                    });
-                } else {
-                    // モバイル: タッチとジャイロスコープ対応
-                    let touchActive = false;
-                    
-                    // タッチイベント
-                    heroTitle.addEventListener('touchstart', () => {
-                        touchActive = true;
-                        heroTitle.classList.add('mouse-active');
-                    });
-                    
-                    heroTitle.addEventListener('touchend', () => {
-                        touchActive = false;
-                        heroTitle.classList.remove('mouse-active');
-                        heroTitle.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
-                    });
-                    
-                    // デバイスの向き変更対応（可能な場合）
-                    if (window.DeviceOrientationEvent) {
-                        window.addEventListener('deviceorientation', Utils.throttle((e) => {
-                            if (!touchActive) {
-                                const beta = e.beta || 0;  // X軸回転
-                                const gamma = e.gamma || 0; // Y軸回転
-                                
-                                const tiltX = Math.max(-30, Math.min(30, beta)) * 0.3;
-                                const tiltY = Math.max(-30, Math.min(30, gamma)) * 0.3;
-                                
-                                heroTitle.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(10px)`;
-                            }
-                        }, 100));
-                    }
-                }
-                
-                // 共通: スクロール連動エフェクト
+                // スクロール連動エフェクト
                 let scrollActive = false;
                 
                 window.addEventListener('scroll', Utils.throttle(() => {
@@ -848,15 +843,9 @@
                                 heroTitle.classList.remove('scroll-active');
                             }
                             
-                            // パララックス効果の強化
+                            // パララックス効果
                             const parallaxIntensity = isMobile ? 0.05 : 0.1;
                             heroContent.style.transform = `translateY(${scrolled * parallaxIntensity}px)`;
-                            
-                            // スクロール量に応じたスケール調整
-                            const scaleValue = Math.max(0.9, 1 - scrollProgress * 0.1);
-                            if (!isMouseActive && !touchActive) {
-                                heroTitle.style.transform = `${heroTitle.style.transform} scale(${scaleValue})`;
-                            }
                         } else if (scrollActive) {
                             scrollActive = false;
                             heroTitle.classList.remove('scroll-active');
