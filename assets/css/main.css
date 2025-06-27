@@ -199,6 +199,8 @@ body {
     border-radius: 20px;
     padding: var(--space-md) var(--space-lg);
     backdrop-filter: var(--blur-heavy);
+    position: relative;
+    z-index: 1000;
 }
 
 .glass-button {
@@ -595,7 +597,7 @@ body {
     justify-content: center;
     min-width: 44px;
     min-height: 44px;
-    z-index: 1001;
+    z-index: 9998;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
     user-select: none;
@@ -689,6 +691,7 @@ body {
     
     .nav {
         position: relative;
+        z-index: 9999;
     }
     
     .nav-items {
@@ -708,7 +711,7 @@ body {
         visibility: hidden;
         pointer-events: none;
         transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 1000;
+        z-index: 9999;
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
         list-style: none;
         margin: 0;
@@ -741,6 +744,10 @@ body {
         transition: all var(--transition-fast);
         cursor: pointer;
         position: relative;
+        z-index: 10000;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+        user-select: none;
     }
     
     .nav-item:hover {

@@ -52,6 +52,22 @@ class NemototeaApp {
             }
         });
     }
+
+    initBackgroundEffects() {
+        this.backgroundEffects = new BackgroundEffects();
+    }
+
+    initScrollAnimations() {
+        this.scrollAnimations = new ScrollAnimations();
+    }
+
+    initAudioVisualization() {
+        this.audioVisualization = new AudioVisualization();
+    }
+
+    initMobileNavigation() {
+        this.mobileNavigation = new MobileNavigation();
+    }
 }
 
 // ===== BACKGROUND EFFECTS SYSTEM =====
@@ -563,30 +579,30 @@ class ThemeSystem {
 }
 
 // ===== GLOBAL INITIALIZATION =====
-let app, backgroundEffects, scrollAnimations, audioVisualization, mobileNav, performanceOptimizer, themeSystem;
+let app, performanceOptimizer, themeSystem;
 
 // DOM読み込み完了時に初期化
 document.addEventListener('DOMContentLoaded', () => {
-    // メインアプリケーション初期化
+    // メインアプリケーション初期化（内部で各システムを初期化）
     app = new NemototeaApp();
     
-    // 各システム初期化
-    backgroundEffects = new BackgroundEffects();
-    scrollAnimations = new ScrollAnimations();
-    audioVisualization = new AudioVisualization();
-    mobileNav = new MobileNavigation();
+    // 独立したシステム初期化
     performanceOptimizer = new PerformanceOptimizer();
     themeSystem = new ThemeSystem();
     
     // 音声コンテキスト初期化（ユーザーインタラクション後）
     document.addEventListener('click', () => {
-        if (!audioVisualization.isInitialized) {
-            audioVisualization.init();
+        if (app.audioVisualization && !app.audioVisualization.isInitialized) {
+            app.audioVisualization.init();
         }
     }, { once: true });
     
-    // パフォーマンス監視開始
-    if (process.env.NODE_ENV === 'development') {
+    // パフォーマンス監視開始（開発環境判定）
+    const isDevelopment = window.location.hostname === 'localhost' || 
+                         window.location.hostname === '127.0.0.1' || 
+                         window.location.protocol === 'file:';
+                         
+    if (isDevelopment) {
         performanceOptimizer.monitorFPS();
     }
 });
@@ -594,10 +610,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // グローバルエクスポート（他のスクリプトから使用可能）
 window.NemototeaSystem = {
     app,
-    backgroundEffects,
-    scrollAnimations,
-    audioVisualization,
-    mobileNav,
+    get backgroundEffects() { return app?.backgroundEffects; },
+    get scrollAnimations() { return app?.scrollAnimations; },
+    get audioVisualization() { return app?.audioVisualization; },
+    get mobileNav() { return app?.mobileNavigation; },
     performanceOptimizer,
     themeSystem,
     Utils
