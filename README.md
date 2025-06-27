@@ -1,6 +1,6 @@
 # nemototea.github.io
 
-このリポジトリは、[NEMOTOTEA](https://nemototea.github.io/) の公式ウェブサイトのソースコードです。
+このリポジトリは、[nemotea](https://nemototea.github.io/) の公式ウェブサイトのソースコードです。
 
 ## サイト概要
 - お茶や音楽、テクノロジーに関する情報発信サイト

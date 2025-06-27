@@ -1,10 +1,10 @@
 /**
- * 🌌 nemototea.dev - Ultra Think JavaScript System
+ * 🌌 nemotea.dev - Ultra Think JavaScript System
  * ダークモード・グラスモーフィズム × サイバーパンク × ミニマル・テック
  */
 
 // ===== CORE SYSTEM =====
-class NemototeaApp {
+class NemoteaApp {
     constructor() {
         this.isLoaded = false;
         this.particles = [];
@@ -23,7 +23,7 @@ class NemototeaApp {
         
         // ページ読み込み完了イベント
         this.emit('app:loaded');
-        console.log('🚀 nemototea.dev Ultra Think System initialized');
+        console.log('🚀 nemotea.dev Ultra Think System initialized');
     }
 
     // イベントシステム
@@ -584,7 +584,7 @@ let app, performanceOptimizer, themeSystem;
 // DOM読み込み完了時に初期化
 document.addEventListener('DOMContentLoaded', () => {
     // メインアプリケーション初期化（内部で各システムを初期化）
-    app = new NemototeaApp();
+    app = new NemoteaApp();
     
     // 独立したシステム初期化
     performanceOptimizer = new PerformanceOptimizer();
@@ -608,7 +608,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // グローバルエクスポート（他のスクリプトから使用可能）
-window.NemototeaSystem = {
+window.NemoteaSystem = {
     app,
     get backgroundEffects() { return app?.backgroundEffects; },
     get scrollAnimations() { return app?.scrollAnimations; },

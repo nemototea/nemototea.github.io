@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="nemototea - Creative Tech Hub. 音楽制作、アプリ開発、日本茶への情熱を通じて、デジタルとアナログの境界を探求。">
+    <meta name="description" content="nemotea - Creative Tech Hub. 音楽制作、アプリ開発、日本茶への情熱を通じて、デジタルとアナログの境界を探求。">
     <meta name="keywords" content="音楽制作, アプリ開発, 日本茶, エフェクター, ポッドキャスト, PHP, Kotlin, React">
-    <meta name="author" content="nemototea">
+    <meta name="author" content="nemotea">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://nemototea.github.io/">
-    <meta property="og:title" content="nemototea - Creative Tech Hub">
+    <meta property="og:title" content="nemotea - Creative Tech Hub">
     <meta property="og:description" content="技術とクリエイティビティが交差する場所">
     <meta property="og:image" content="https://nemototea.github.io/assets/images/og-image.jpg">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://nemototea.github.io/">
-    <meta property="twitter:title" content="nemototea - Creative Tech Hub">
+    <meta property="twitter:title" content="nemotea - Creative Tech Hub">
     <meta property="twitter:description" content="技術とクリエイティビティが交差する場所">
     <meta property="twitter:image" content="https://nemototea.github.io/assets/images/og-image.jpg">
 
-    <title>nemototea - Creative Tech Hub</title>
+    <title>nemotea - Creative Tech Hub</title>
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="assets/css/main.css">
@@ -447,7 +447,7 @@
         <!-- ヘッダーナビゲーション -->
         <header class="glass-header mt-md">
             <nav class="nav">
-                <a href="/" class="nav-logo">nemototea.dev</a>
+                <a href="/" class="nav-logo">nemotea.dev</a>
                 <button class="nav-toggle" id="nav-toggle" aria-label="メニューを開く" aria-expanded="false">
                     ☰
                 </button>
@@ -574,7 +574,7 @@
                                 <div style="width: 40px; height: 40px; background: var(--cyber-green); border-radius: 8px;"></div>
                                 <div>
                                     <div style="font-weight: 600; font-size: 0.9rem;">Cyber Dreams</div>
-                                    <div style="color: var(--text-muted); font-size: 0.8rem;">nemototea</div>
+                                    <div style="color: var(--text-muted); font-size: 0.8rem;">nemotea</div>
                                 </div>
                             </div>
                             <button class="glass-button">▶</button>
@@ -716,7 +716,7 @@
         <div class="container">
             <div class="flex-between" style="flex-wrap: wrap; gap: var(--space-md);">
                 <div>
-                    <div class="nav-logo mb-sm">nemototea.dev</div>
+                    <div class="nav-logo mb-sm">nemotea.dev</div>
                     <p class="text-small">Creative Tech Hub - Technology meets Creativity</p>
                 </div>
                 
@@ -730,7 +730,7 @@
             
             <div class="text-center mt-lg">
                 <p class="text-small" style="color: var(--text-muted);">
-                    © 2025 nemototea. Built with passion for technology and creativity.
+                    © 2025 nemotea. Built with passion for technology and creativity.
                 </p>
             </div>
         </div>
@@ -757,7 +757,7 @@
             function changeHeroSubtitle() {
                 if (!heroSubtitle) return;
                 
-                const lastMessage = localStorage.getItem('nemototea-last-subtitle');
+                const lastMessage = localStorage.getItem('nemotea-last-subtitle');
                 let availableMessages = heroSubtitleMessages.filter(msg => msg !== lastMessage);
                 
                 // もし全て使い切ったら、リセット
@@ -772,7 +772,7 @@
                 
                 setTimeout(() => {
                     heroSubtitle.textContent = newMessage;
-                    localStorage.setItem('nemototea-last-subtitle', newMessage);
+                    localStorage.setItem('nemotea-last-subtitle', newMessage);
                     heroSubtitle.classList.remove('changing');
                     heroSubtitle.classList.add('fade-in');
                     
@@ -786,7 +786,7 @@
             function initializeSubtitle() {
                 if (!heroSubtitle) return;
                 
-                const lastMessage = localStorage.getItem('nemototea-last-subtitle');
+                const lastMessage = localStorage.getItem('nemotea-last-subtitle');
                 
                 if (lastMessage) {
                     // 前回と違うメッセージを表示
@@ -794,7 +794,7 @@
                 } else {
                     // 初回訪問の場合、最初のメッセージを保存
                     const currentMessage = heroSubtitle.textContent.trim();
-                    localStorage.setItem('nemototea-last-subtitle', currentMessage);
+                    localStorage.setItem('nemotea-last-subtitle', currentMessage);
                 }
             }
               // 初回読み込み時にランダムメッセージを設定
@@ -918,7 +918,7 @@
         
         // アプリ読み込み完了時の処理
         document.addEventListener('app:loaded', () => {
-            console.log('🎉 nemototea.dev ホームページが正常に読み込まれました！');
+            console.log('🎉 nemotea.dev ホームページが正常に読み込まれました！');
             
             // Google Analytics等の外部スクリプトをここで読み込み
             // 例: loadGoogleAnalytics();
@@ -930,7 +930,7 @@
     {
         "@context": "https://schema.org",
         "@type": "Person",
-        "name": "nemototea",
+        "name": "nemotea",
         "url": "https://nemototea.github.io/",
         "description": "Creative Tech Hub - 音楽制作、アプリ開発、日本茶への情熱を通じて、デジタルとアナログの境界を探求",
         "sameAs": [
