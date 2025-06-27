@@ -84,39 +84,7 @@
             flex-wrap: wrap;
             margin-bottom: var(--space-2xl);
         }
-        
-        .cta-primary {
-            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
-            color: #000;
-            padding: var(--space-md) var(--space-xl);
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all var(--transition-normal);
-            box-shadow: 0 0 30px rgba(0, 255, 157, 0.3);
-        }
-        
-        .cta-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 40px rgba(0, 255, 157, 0.4);
-        }
-          .cta-secondary {
-            background: var(--glass-bg);
-            backdrop-filter: var(--blur-medium);
-            border: 1px solid var(--glass-border);
-            transition: all var(--transition-normal);
-            border-radius: 50px;
-            padding: var(--space-md) var(--space-xl);
-            cursor: pointer;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-xs);
-            text-decoration: none;
-            color: var(--text-primary);
-            font-size: 1.1rem;
-        }
+    
         
         .activities-grid {
             display: grid;
@@ -124,7 +92,8 @@
             gap: var(--space-lg);
             margin: var(--space-2xl) 0;
         }
-          .activity-card {
+        
+        .activity-card {
             background: var(--glass-bg);
             backdrop-filter: var(--blur-medium);
             border: 1px solid var(--glass-border);
@@ -161,7 +130,8 @@
             line-height: 1.6;
             margin-bottom: var(--space-md);
         }
-          .activity-link {
+        
+        .activity-link {
             background: var(--glass-bg);
             backdrop-filter: var(--blur-medium);
             border: 1px solid var(--glass-border);
@@ -188,7 +158,8 @@
             grid-template-columns: 2fr 1fr;
             gap: var(--space-xl);
         }
-          .latest-main {
+
+        .latest-main {
             background: var(--glass-bg);
             backdrop-filter: var(--blur-medium);
             border: 1px solid var(--glass-border);
@@ -203,7 +174,8 @@
             flex-direction: column;
             gap: var(--space-md);
         }
-          .latest-item {
+
+        .latest-item {
             background: var(--glass-bg);
             backdrop-filter: var(--blur-medium);
             border: 1px solid var(--glass-border);
@@ -245,7 +217,8 @@
             gap: var(--space-lg);
             margin-top: var(--space-xl);
         }
-          .stat-item {
+        
+        .stat-item {
             background: var(--glass-bg);
             backdrop-filter: var(--blur-medium);
             border: 1px solid var(--glass-border);
@@ -333,9 +306,14 @@
 </head>
 <body>
     <div class="container">
-        <!-- ヘッダーナビゲーション -->        <header class="glass-header mt-md">
+        <!-- ヘッダーナビゲーション -->
+        <header class="glass-header mt-md">
             <nav class="nav">
-                <a href="/" class="nav-logo">nemototea.dev</a>                <ul class="nav-items">
+                <a href="/" class="nav-logo">nemototea.dev</a>
+                <button class="nav-toggle" id="nav-toggle" aria-label="メニューを開く" aria-expanded="false">
+                    ☰
+                </button>
+                <ul class="nav-items" id="nav-items">
                     <li><a href="/" class="nav-item active">Home</a></li>
                     <li><a href="profile/" class="nav-item">Profile</a></li>
                     <li><a href="works/" class="nav-item">Works</a></li>

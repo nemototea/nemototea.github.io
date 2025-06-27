@@ -290,33 +290,35 @@ class MobileNavigation {
     }
 
     init() {
-        this.createMobileToggle();
+        this.navToggle = document.getElementById('nav-toggle');
+        this.navItems = document.getElementById('nav-items');
+        
+        if (!this.navToggle || !this.navItems) {
+            console.warn('Navigation elements not found');
+            return;
+        }
+        
         this.setupEventListeners();
     }
 
-    createMobileToggle() {
-        const nav = document.querySelector('.nav');
-        if (!nav) return;
-
-        // ハンバーガーメニューボタンを作成
-        this.navToggle = document.createElement('button');
-        this.navToggle.className = 'nav-toggle glass-button';
-        this.navToggle.innerHTML = '☰';
-        this.navToggle.style.display = 'none';
-        
-        this.navItems = document.querySelector('.nav-items');
-        
-        nav.appendChild(this.navToggle);
-        
-        // レスポンシブ表示制御
-        this.updateNavDisplay();
-        window.addEventListener('resize', () => this.updateNavDisplay());
-    }
-
     setupEventListeners() {
-        if (this.navToggle) {
-            this.navToggle.addEventListener('click', () => this.toggle());
-        }
+        // ハンバーガーメニューボタンのクリック
+        this.navToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.toggle();
+        });
+
+        // ナビゲーションアイテムのクリック
+        const navLinks = this.navItems.querySelectorAll('.nav-item');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (this.isOpen) {
+                    // ナビゲーション先への遷移を優先し、少し遅延してメニューを閉じる
+                    setTimeout(() => this.close(), 150);
+                }
+            });
+        });
 
         // 外側クリックで閉じる
         document.addEventListener('click', (e) => {
@@ -331,21 +333,13 @@ class MobileNavigation {
                 this.close();
             }
         });
-    }
 
-    updateNavDisplay() {
-        const isMobile = window.innerWidth <= 480;
-        
-        if (this.navToggle) {
-            this.navToggle.style.display = isMobile ? 'flex' : 'none';
-        }
-        
-        if (this.navItems) {
-            if (!isMobile) {
-                this.navItems.classList.remove('active');
-                this.isOpen = false;
+        // ウィンドウリサイズ時の処理
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && this.isOpen) {
+                this.close();
             }
-        }
+        });
     }
 
     toggle() {
@@ -354,22 +348,22 @@ class MobileNavigation {
 
     open() {
         this.isOpen = true;
-        if (this.navItems) {
-            this.navItems.classList.add('active');
-        }
-        if (this.navToggle) {
-            this.navToggle.innerHTML = '✕';
-        }
+        this.navItems.classList.add('active');
+        this.navToggle.innerHTML = '✕';
+        this.navToggle.setAttribute('aria-expanded', 'true');
+        
+        // ボディのスクロールを防ぐ
+        document.body.style.overflow = 'hidden';
     }
 
     close() {
         this.isOpen = false;
-        if (this.navItems) {
-            this.navItems.classList.remove('active');
-        }
-        if (this.navToggle) {
-            this.navToggle.innerHTML = '☰';
-        }
+        this.navItems.classList.remove('active');
+        this.navToggle.innerHTML = '☰';
+        this.navToggle.setAttribute('aria-expanded', 'false');
+        
+        // ボディのスクロールを復元
+        document.body.style.overflow = '';
     }
 }
 
