@@ -53,29 +53,81 @@
             position: relative;
             z-index: 10;
         }
-        
-        .hero-title {
+          .hero-title {
             font-size: clamp(3rem, 8vw, 6rem);
             font-weight: 800;
             line-height: 0.9;
-            margin-bottom: var(--space-md);            background: linear-gradient(45deg, #ffffff, var(--cyber-green), var(--cyber-blue));
+            margin-bottom: var(--space-md);
+            background: linear-gradient(45deg, #ffffff, var(--cyber-green), var(--cyber-blue));
             background-size: 300% 300%;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: gradientShift 4s ease-in-out infinite;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            text-shadow: 0 0 30px rgba(0, 255, 157, 0.3);
+            will-change: transform;
         }
-        
-        @keyframes gradientShift {
+          @keyframes gradientShift {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
         }
         
-        .hero-subtitle {
+        /* ヒーロータイトルの追加アニメーション */
+        .hero-title.mouse-active {
+            animation: gradientShift 2s ease-in-out infinite, pulseGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { 
+                text-shadow: 0 0 30px rgba(0, 255, 157, 0.3);
+                filter: brightness(1);
+            }
+            50% { 
+                text-shadow: 0 0 50px rgba(0, 255, 157, 0.5), 0 0 80px rgba(58, 134, 255, 0.3);
+                filter: brightness(1.1);
+            }
+        }
+        
+        /* スクロール連動アニメーション */
+        @keyframes scrollFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-10px) scale(1.02); }
+        }
+          .hero-title.scroll-active {
+            animation: gradientShift 3s ease-in-out infinite, scrollFloat 3s ease-in-out infinite;
+        }
+        
+        /* 初期表示アニメーション */
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0px);
+            }
+        }
+          .hero-subtitle {
             font-size: clamp(1.2rem, 3vw, 1.8rem);
             color: var(--text-secondary);
             margin-bottom: var(--space-xl);
             line-height: 1.4;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .hero-subtitle.changing {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        
+        .hero-subtitle.fade-in {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .hero-cta {
@@ -299,7 +351,33 @@
             .cta-secondary {
                 text-align: center;
                 min-width: 200px;
-                justify-content: center;
+            }
+              /* モバイルでのタイトルアニメーション調整 */
+            .hero-title {
+                font-size: clamp(2.5rem, 10vw, 4rem);
+                text-shadow: 0 0 20px rgba(0, 255, 157, 0.4);
+            }
+            
+            .hero-title.scroll-active {
+                animation: gradientShift 4s ease-in-out infinite, scrollFloat 4s ease-in-out infinite;
+            }
+            
+            .hero-subtitle {
+                font-size: clamp(1rem, 4vw, 1.4rem);
+                text-align: center;
+                padding: var(--space-xs) var(--space-sm);
+                border-radius: 8px;
+                background: rgba(0, 255, 157, 0.05);
+                border: 1px solid rgba(0, 255, 157, 0.1);
+                max-width: 90vw;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .hero-subtitle:hover {
+                background: rgba(0, 255, 157, 0.1);
+                border-color: rgba(0, 255, 157, 0.2);
+                transform: translateY(-2px);
             }
         }
     </style>
@@ -325,15 +403,13 @@
 
         <!-- ヒーローセクション -->
         <section class="hero-section">
-            <div class="hero-content fade-in">
+            <div class="hero-content fade-in"> 
                 <h1 class="hero-title">
-                    Creative<br>
-                    Tech Hub
+                    Tea-Driven<br>
+                    Development
                 </h1>
-                <p class="hero-subtitle">
-                    技術とクリエイティビティが交差する場所。<br>
-                    音楽制作、アプリ開発、日本茶への情熱を通じて、<br>
-                    デジタルとアナログの境界を探求しています。
+                <p class="hero-subtitle" id="hero-subtitle">
+                    キーボードにお茶こぼすな
                 </p>
                 
                 <div class="hero-cta">
@@ -606,21 +682,201 @@
     <script>
         // ページ固有のJavaScript
         document.addEventListener('DOMContentLoaded', () => {
-            // ヒーローセクションの特別なエフェクト
+            
+            // ランダムサブタイトル機能
+            const heroSubtitleMessages = [
+                'キーボードにお茶こぼすな',
+                '5分休憩が、1時間の休憩を呼ぶ',
+                'console.log("お茶をこぼしました");',
+                'リファクタリングは茶道の心',
+                'sudo brew install motivation',
+            ];
+            
+            const heroSubtitle = document.getElementById('hero-subtitle');
+              // ランダムメッセージを選択・表示する関数
+            function changeHeroSubtitle() {
+                if (!heroSubtitle) return;
+                
+                const lastMessage = localStorage.getItem('nemototea-last-subtitle');
+                let availableMessages = heroSubtitleMessages.filter(msg => msg !== lastMessage);
+                
+                // もし全て使い切ったら、リセット
+                if (availableMessages.length === 0) {
+                    availableMessages = heroSubtitleMessages;
+                }
+                
+                const newMessage = availableMessages[Math.floor(Math.random() * availableMessages.length)];
+                
+                // フェードアウト
+                heroSubtitle.classList.add('changing');
+                
+                setTimeout(() => {
+                    heroSubtitle.textContent = newMessage;
+                    localStorage.setItem('nemototea-last-subtitle', newMessage);
+                    heroSubtitle.classList.remove('changing');
+                    heroSubtitle.classList.add('fade-in');
+                    
+                    setTimeout(() => {
+                        heroSubtitle.classList.remove('fade-in');
+                    }, 600);
+                }, 300);
+            }
+            
+            // 初回読み込み時の処理
+            function initializeSubtitle() {
+                if (!heroSubtitle) return;
+                
+                const lastMessage = localStorage.getItem('nemototea-last-subtitle');
+                
+                if (lastMessage) {
+                    // 前回と違うメッセージを表示
+                    changeHeroSubtitle();
+                } else {
+                    // 初回訪問の場合、最初のメッセージを保存
+                    const currentMessage = heroSubtitle.textContent.trim();
+                    localStorage.setItem('nemototea-last-subtitle', currentMessage);
+                }
+            }
+              // 初回読み込み時にランダムメッセージを設定
+            initializeSubtitle();
+            
+            // クリックでメッセージ変更
+            if (heroSubtitle) {
+                heroSubtitle.addEventListener('click', () => {
+                    changeHeroSubtitle();
+                });
+                
+                // ホバー時にカーソルを変更
+                heroSubtitle.style.cursor = 'pointer';
+                heroSubtitle.title = 'クリックでメッセージを変更';
+            }
+            
+            // 定期的にメッセージを変更（オプション）
+            // setInterval(changeHeroSubtitle, 10000); // 10秒ごと
+            
+            // ヒーローセクションの強化されたエフェクト
             const heroTitle = document.querySelector('.hero-title');
             if (heroTitle) {
                 let mouseX = 0;
                 let mouseY = 0;
+                let isMouseActive = false;
+                let animationId = null;
                 
-                document.addEventListener('mousemove', (e) => {
-                    mouseX = e.clientX / window.innerWidth;
-                    mouseY = e.clientY / window.innerHeight;
+                // デバイス判定
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+                
+                if (!isMobile) {
+                    // デスクトップ: マウス追従エフェクト
+                    document.addEventListener('mousemove', Utils.throttle((e) => {
+                        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+                        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+                        
+                        if (!isMouseActive) {
+                            isMouseActive = true;
+                            heroTitle.classList.add('mouse-active');
+                        }
+                        
+                        const intensity = 15; // 動きの強度を上げる
+                        const tiltX = mouseY * intensity;
+                        const tiltY = mouseX * intensity;
+                        
+                        // より滑らかな変換
+                        heroTitle.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(20px)`;
+                    }, 16));
                     
-                    const xRotation = (mouseY - 0.5) * 10;
-                    const yRotation = (mouseX - 0.5) * 10;
+                    // マウスが離れた時のリセット
+                    document.addEventListener('mouseleave', () => {
+                        if (isMouseActive) {
+                            isMouseActive = false;
+                            heroTitle.classList.remove('mouse-active');
+                            heroTitle.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+                        }
+                    });
+                } else {
+                    // モバイル: タッチとジャイロスコープ対応
+                    let touchActive = false;
                     
-                    heroTitle.style.transform = `perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
-                });
+                    // タッチイベント
+                    heroTitle.addEventListener('touchstart', () => {
+                        touchActive = true;
+                        heroTitle.classList.add('mouse-active');
+                    });
+                    
+                    heroTitle.addEventListener('touchend', () => {
+                        touchActive = false;
+                        heroTitle.classList.remove('mouse-active');
+                        heroTitle.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+                    });
+                    
+                    // デバイスの向き変更対応（可能な場合）
+                    if (window.DeviceOrientationEvent) {
+                        window.addEventListener('deviceorientation', Utils.throttle((e) => {
+                            if (!touchActive) {
+                                const beta = e.beta || 0;  // X軸回転
+                                const gamma = e.gamma || 0; // Y軸回転
+                                
+                                const tiltX = Math.max(-30, Math.min(30, beta)) * 0.3;
+                                const tiltY = Math.max(-30, Math.min(30, gamma)) * 0.3;
+                                
+                                heroTitle.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(10px)`;
+                            }
+                        }, 100));
+                    }
+                }
+                
+                // 共通: スクロール連動エフェクト
+                let scrollActive = false;
+                
+                window.addEventListener('scroll', Utils.throttle(() => {
+                    const scrolled = window.pageYOffset;
+                    const heroSection = document.querySelector('.hero-section');
+                    const heroContent = document.querySelector('.hero-content');
+                    
+                    if (heroSection && heroContent) {
+                        const sectionRect = heroSection.getBoundingClientRect();
+                        const isInView = sectionRect.bottom > 0 && sectionRect.top < window.innerHeight;
+                        
+                        if (isInView) {
+                            // ヒーローセクションが表示されている間
+                            const scrollProgress = Math.min(1, scrolled / (heroSection.offsetHeight * 0.5));
+                            
+                            if (!scrollActive && scrollProgress > 0.1) {
+                                scrollActive = true;
+                                heroTitle.classList.add('scroll-active');
+                            } else if (scrollActive && scrollProgress <= 0.1) {
+                                scrollActive = false;
+                                heroTitle.classList.remove('scroll-active');
+                            }
+                            
+                            // パララックス効果の強化
+                            const parallaxIntensity = isMobile ? 0.05 : 0.1;
+                            heroContent.style.transform = `translateY(${scrolled * parallaxIntensity}px)`;
+                            
+                            // スクロール量に応じたスケール調整
+                            const scaleValue = Math.max(0.9, 1 - scrollProgress * 0.1);
+                            if (!isMouseActive && !touchActive) {
+                                heroTitle.style.transform = `${heroTitle.style.transform} scale(${scaleValue})`;
+                            }
+                        } else if (scrollActive) {
+                            scrollActive = false;
+                            heroTitle.classList.remove('scroll-active');
+                        }
+                    }
+                }, 16));
+                
+                // Intersection Observer for performance
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            // ビューポートに入った時の初期アニメーション
+                            setTimeout(() => {
+                                heroTitle.style.animation = `${heroTitle.style.animation}, fadeInScale 1s ease-out`;
+                            }, 300);
+                        }
+                    });
+                }, { threshold: 0.1 });
+                
+                observer.observe(heroTitle);
             }
             
             // 統計数字のランダムアニメーション
@@ -669,16 +925,6 @@
                     }
                 });
             }
-            
-            // スクロール時のパララックス効果
-            window.addEventListener('scroll', Utils.throttle(() => {
-                const scrolled = window.pageYOffset;
-                const heroContent = document.querySelector('.hero-content');
-                
-                if (heroContent) {
-                    heroContent.style.transform = `translateY(${scrolled * 0.1}px)`;
-                }
-            }, 16));
         });
         
         // アプリ読み込み完了時の処理
