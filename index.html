@@ -199,71 +199,12 @@
             isolation: isolate;
             touch-action: manipulation;
         }
-        
-        .activity-link:hover {
+          .activity-link:hover {
             background: rgba(0, 255, 157, 0.1);
             border-color: var(--glass-border-hover);
             box-shadow: var(--glow-cyber);
             transform: translateY(-2px);
         }
-        
-        .latest-section {
-            margin: var(--space-2xl) 0;
-        }
-        
-        .latest-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: var(--space-xl);
-        }
-
-        .latest-main {
-            background: var(--glass-bg);
-            backdrop-filter: var(--blur-medium);
-            border: 1px solid var(--glass-border);
-            transition: all var(--transition-normal);
-            border-radius: 20px;
-            padding: var(--space-xl);
-            box-shadow: var(--shadow-glass);
-        }
-        
-        .latest-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-md);
-        }
-
-        .latest-item {
-            background: var(--glass-bg);
-            backdrop-filter: var(--blur-medium);
-            border: 1px solid var(--glass-border);
-            transition: all var(--transition-normal);
-            border-radius: 20px;
-            padding: var(--space-md);
-            box-shadow: var(--shadow-glass);
-        }
-        
-        .latest-item:hover {
-            background: var(--glass-bg-hover);
-            border-color: var(--glass-border-hover);
-        }
-        
-        .latest-date {
-            font-size: 0.85rem;
-            color: var(--cyber-green);
-            margin-bottom: var(--space-xs);
-        }
-        
-        .latest-title {
-            font-weight: 600;
-            margin-bottom: var(--space-xs);
-        }
-        
-        .latest-excerpt {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-  
         
         /* CTAセクションのスタイル調整 */
         .cta-section {
@@ -344,8 +285,7 @@
                 align-items: center;
                 gap: var(--space-sm);
             }
-              /* CTAボタンを小さめに調整 */
-            .cta-primary,
+              /* CTAボタンを小さめに調整 */            .cta-primary,
             .cta-secondary {
                 font-size: 0.9rem;
                 padding: var(--space-sm) var(--space-md);
@@ -359,10 +299,7 @@
                 justify-content: center;
             }
             
-            .latest-grid {
-                grid-template-columns: 1fr;
-            }
-              /* モバイルでのタイトルアニメーション調整 */
+            /* モバイルでのタイトルアニメーション調整 */
             .hero-title {
                 font-size: clamp(2.5rem, 10vw, 4rem);
                 text-shadow: 0 0 20px rgba(0, 255, 157, 0.4);
@@ -548,64 +485,7 @@
                     <p class="activity-description">
                         日本茶AI診断、3Dポートフォリオ、音楽ビジュアライザーなどのインタラクティブ体験。
                     </p>
-                    <a href="special-features/" class="activity-link">体験してみる</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- 最新情報セクション -->
-        <section class="latest-section">
-            <h2 class="text-title text-center mb-xl fade-in">📈 最新の活動</h2>
-            
-            <div class="latest-grid">
-                <div class="latest-main slide-in-left">
-                    <h3 class="text-subtitle mb-md">🎵 最新トラック公開</h3>
-                    <div class="latest-date">2025.06.20</div>
-                    <h4 class="latest-title">Cyber Dreams - Ambient Electronic</h4>
-                    <p class="latest-excerpt">
-                        自作エフェクターを活用した新しいアンビエント作品。グラニュラーシンセシスとリバーブエフェクトを組み合わせた実験的な楽曲をSoundCloudで公開しました。
-                    </p>
-                    
-                    <!-- SoundCloud埋め込み風のダミープレーヤー -->
-                    <div class="glass mt-lg p-md" style="border-radius: 12px;">
-                        <div class="flex-between">
-                            <div class="flex" style="align-items: center; gap: 12px;">
-                                <div style="width: 40px; height: 40px; background: var(--cyber-green); border-radius: 8px;"></div>
-                                <div>
-                                    <div style="font-weight: 600; font-size: 0.9rem;">Cyber Dreams</div>
-                                    <div style="color: var(--text-muted); font-size: 0.8rem;">nemotea</div>
-                                </div>
-                            </div>
-                            <button class="glass-button">▶</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="latest-sidebar">
-                    <div class="latest-item slide-in-right">
-                        <div class="latest-date">2025.06.18</div>
-                        <h4 class="latest-title">ポッドキャスト Episode 15</h4>
-                        <p class="latest-excerpt">KMP開発の現実と理想について語りました。</p>
-                    </div>
-                    
-                    <div class="latest-item slide-in-right">
-                        <div class="latest-date">2025.06.15</div>
-                        <h4 class="latest-title">日本茶AI診断リリース</h4>
-                        <p class="latest-excerpt">質問に答えて最適な茶葉を見つけるAI機能を追加。</p>
-                    </div>
-                    
-                    <div class="latest-item slide-in-right">
-                        <div class="latest-date">2025.06.10</div>
-                        <h4 class="latest-title">新しいディストーション完成</h4>
-                        <p class="latest-excerpt">オペアンプを使ったクリッピング回路の実験作品。</p>
-                    </div>
-                    
-                    <div class="latest-item slide-in-right">
-                        <div class="latest-date">2025.06.05</div>
-                        <h4 class="latest-title">KMPアプリ更新</h4>
-                        <p class="latest-excerpt">iOS/Android同時対応の新機能を追加しました。</p>
-                    </div>
-                </div>
+                    <a href="special-features/" class="activity-link">体験してみる</a>                </div>
             </div>
         </section>
 
@@ -692,9 +572,7 @@
                 </p>
             </div>
         </div>
-    </footer>
-
-    <!-- JavaScript -->
+    </footer>    <!-- JavaScript -->
     <script src="assets/js/main.js"></script>
     
     <script>
@@ -823,39 +701,9 @@
                     });
                 }, { threshold: 0.1 });
                 
-                observer.observe(heroTitle);
-            }
+                observer.observe(heroTitle);            }
   
-            
-            // 音楽プレーヤーのインタラクション
-            const playButton = document.querySelector('.glass-button');
-            if (playButton && playButton.textContent === '▶') {
-                playButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    
-                    if (playButton.textContent === '▶') {
-                        playButton.textContent = '⏸';
-                        playButton.style.color = 'var(--cyber-green)';
-                        
-                        // ビジュアライザーをアクティブ化
-                        const visualizer = document.getElementById('hero-visualizer');
-                        if (visualizer) {
-                            visualizer.classList.add('active');
-                        }
-                    } else {
-                        playButton.textContent = '▶';
-                        playButton.style.color = '';
-                        
-                        const visualizer = document.getElementById('hero-visualizer');
-                        if (visualizer) {
-                            visualizer.classList.remove('active');
-                        }
-                    }
-                });
-            }
-        });
-        
-        // アプリ読み込み完了時の処理
+        });// アプリ読み込み完了時の処理
         document.addEventListener('app:loaded', () => {
             console.log('🎉 nemotea.dev ホームページが正常に読み込まれました！');
             
