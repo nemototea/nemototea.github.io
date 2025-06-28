@@ -263,42 +263,7 @@
             font-size: 0.9rem;
             color: var(--text-secondary);
         }
-        
-        .stats-section {
-            margin: var(--space-2xl) 0;
-            text-align: center;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-lg);
-            margin-top: var(--space-xl);
-        }
-        
-        .stat-item {
-            background: var(--glass-bg);
-            backdrop-filter: var(--blur-medium);
-            border: 1px solid var(--glass-border);
-            transition: all var(--transition-normal);
-            border-radius: 20px;
-            padding: var(--space-lg);
-            box-shadow: var(--shadow-glass);
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--cyber-green);
-            display: block;
-            margin-bottom: var(--space-xs);
-        }
-        
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
+  
         
         /* CTAセクションのスタイル調整 */
         .cta-section {
@@ -554,7 +519,7 @@
                     <span class="activity-icon">🍃</span>
                     <h3 class="activity-title">日本茶事業</h3>
                     <p class="activity-description">
-                        PHPで日本茶ECプラットフォームを開発中。伝統と技術の融合プロジェクト。
+                        2025年に個人事業主として開業。日本茶製品の小売・卸売の準備中。
                     </p>
                     <a href="works/tea-platform/" class="activity-link">詳細を見る</a>
                 </div>
@@ -563,7 +528,7 @@
                     <span class="activity-icon">⚡</span>
                     <h3 class="activity-title">エフェクター制作</h3>
                     <p class="activity-description">
-                        ギターエフェクターの回路設計・制作。アナログとデジタルの音響探求。
+                        エフェクターのモディファイや、レプリカの制作。
                     </p>
                     <a href="works/effects/" class="activity-link">エフェクターを見る</a>
                 </div>
@@ -572,7 +537,7 @@
                     <span class="activity-icon">🎵</span>
                     <h3 class="activity-title">音楽制作</h3>
                     <p class="activity-description">
-                        SoundCloudで楽曲を発表。エフェクターと組み合わせた実験的なサウンドを探求。
+                        バイノーラルマイクで収録した音をサンプリングして適当にポチポチするだけ。
                     </p>
                     <a href="works/music/" class="activity-link">音楽作品を見る</a>
                 </div>
@@ -640,46 +605,6 @@
                         <h4 class="latest-title">KMPアプリ更新</h4>
                         <p class="latest-excerpt">iOS/Android同時対応の新機能を追加しました。</p>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 統計セクション -->
-        <section class="stats-section">
-            <h2 class="text-title text-center fade-in">📊 これまでの軌跡</h2>
-            <p class="text-body text-center mt-md mb-xl fade-in">
-                継続的な創作活動の成果をご紹介します
-            </p>
-            
-            <div class="stats-grid">
-                <div class="stat-item fade-in">
-                    <span class="stat-number counter" data-target="24" data-duration="2000">0</span>
-                    <div class="stat-label">楽曲制作</div>
-                </div>
-                
-                <div class="stat-item fade-in">
-                    <span class="stat-number counter" data-target="8" data-duration="2000">0</span>
-                    <div class="stat-label">アプリリリース</div>
-                </div>
-                
-                <div class="stat-item fade-in">
-                    <span class="stat-number counter" data-target="15" data-duration="2000">0</span>
-                    <div class="stat-label">ポッドキャストエピソード</div>
-                </div>
-                
-                <div class="stat-item fade-in">
-                    <span class="stat-number counter" data-target="6" data-duration="2000">0</span>
-                    <div class="stat-label">エフェクター制作</div>
-                </div>
-                
-                <div class="stat-item fade-in">
-                    <span class="stat-number counter" data-target="150" data-duration="2500">0</span>
-                    <div class="stat-label">日本茶の種類研究</div>
-                </div>
-                
-                <div class="stat-item fade-in">
-                    <span class="stat-number counter" data-target="3" data-duration="1500">0</span>
-                    <div class="stat-label">年間活動年数</div>
                 </div>
             </div>
         </section>
@@ -901,26 +826,7 @@
                 
                 observer.observe(heroTitle);
             }
-            
-            // 統計数字のランダムアニメーション
-            const counters = document.querySelectorAll('.counter');
-            counters.forEach(counter => {
-                counter.addEventListener('mouseenter', () => {
-                    const current = parseInt(counter.textContent);
-                    const target = parseInt(counter.getAttribute('data-target'));
-                    
-                    // 一時的に数字を変動させる
-                    const interval = setInterval(() => {
-                        const variation = Math.floor(Math.random() * 3) - 1;
-                        counter.textContent = Math.max(0, current + variation);
-                    }, 100);
-                    
-                    setTimeout(() => {
-                        clearInterval(interval);
-                        counter.textContent = target;
-                    }, 500);
-                });
-            });
+  
             
             // 音楽プレーヤーのインタラクション
             const playButton = document.querySelector('.glass-button');
