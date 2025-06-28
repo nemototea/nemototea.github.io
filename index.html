@@ -33,12 +33,18 @@
     
     <!-- Preload critical resources -->
     <link rel="preload" href="assets/js/main.js" as="script">
-    
-    <style>
+      <style>
         /* ページ固有のスタイル */
         body {
             opacity: 0;
             transition: opacity 0.5s ease;
+        }
+        
+        /* 背景要素の確実なz-index設定 */
+        .bg-cyber-grid,
+        .bg-floating-particles {
+            pointer-events: none !important;
+            z-index: 1 !important;
         }
         
         .hero-section {
@@ -123,15 +129,14 @@
             margin-bottom: var(--space-2xl);
         }
     
-        
         .activities-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: var(--space-lg);
             margin: var(--space-2xl) 0;
-        }
-        
-        .activity-card {
+            position: relative;
+            z-index: 3;
+        }        .activity-card {
             background: var(--glass-bg);
             backdrop-filter: var(--blur-medium);
             border: 1px solid var(--glass-border);
@@ -142,11 +147,14 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            z-index: 5;
+            isolation: isolate;
         }
         
         .activity-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-hover);
+            z-index: 15;
         }
         
         .activity-icon {
@@ -185,6 +193,18 @@
             color: var(--text-primary);
             font-size: 0.9rem;
             margin-top: auto;
+            position: relative;
+            z-index: 20;
+            pointer-events: auto !important;
+            isolation: isolate;
+            touch-action: manipulation;
+        }
+        
+        .activity-link:hover {
+            background: rgba(0, 255, 157, 0.1);
+            border-color: var(--glass-border-hover);
+            box-shadow: var(--glow-cyber);
+            transform: translateY(-2px);
         }
         
         .latest-section {
@@ -321,6 +341,20 @@
             gap: var(--space-lg);
             flex-wrap: wrap;
             margin-top: var(--space-xl);
+        }
+        
+        /* cyber-glowエフェクトの調整 */
+        .cyber-glow::before,
+        .cyber-glow::after {
+            z-index: -1;
+        }
+        
+        .cyber-glow::after {
+            top: -25%;
+            left: -25%;
+            width: 150%;
+            height: 150%;
+            border-radius: 20px;
         }
         
         /* レスポンシブ対応 */
@@ -499,26 +533,26 @@
             
             <div class="activities-grid">
                 <div class="activity-card fade-in cyber-glow">
-                    <span class="activity-icon">🎵</span>
-                    <h3 class="activity-title">音楽制作</h3>
-                    <p class="activity-description">
-                        SoundCloudで楽曲を発表。エフェクターと組み合わせた実験的なサウンドを探求。
-                    </p>
-                    <a href="works/music/" class="activity-link">音楽作品を見る</a>
-                </div>
-                
-                <div class="activity-card fade-in cyber-glow">
                     <span class="activity-icon">📱</span>
-                    <h3 class="activity-title">アプリ開発</h3>
+                    <h3 class="activity-title">アプリ・Web開発</h3>
                     <p class="activity-description">
-                        Kotlin/SwiftでモバイルアプリやKMP/CMPでマルチプラットフォーム開発。
+                        Kotlin/Swiftでモバイルアプリ開発、PHPでWebアプリケーション開発を行っています。
                     </p>
                     <a href="works/apps/" class="activity-link">アプリを見る</a>
+                </div>
+
+                <div class="activity-card fade-in cyber-glow">
+                    <span class="activity-icon">🎙️</span>
+                    <h3 class="activity-title">ポッドキャスト</h3>
+                    <p class="activity-description">
+                        日本茶について語るポッドキャスト。定期的にエピソードを配信中。
+                    </p>
+                    <a href="podcast/" class="activity-link">聴いてみる</a>
                 </div>
                 
                 <div class="activity-card fade-in cyber-glow">
                     <span class="activity-icon">🍃</span>
-                    <h3 class="activity-title">日本茶プラットフォーム</h3>
+                    <h3 class="activity-title">日本茶事業</h3>
                     <p class="activity-description">
                         PHPで日本茶ECプラットフォームを開発中。伝統と技術の融合プロジェクト。
                     </p>
@@ -533,14 +567,14 @@
                     </p>
                     <a href="works/effects/" class="activity-link">エフェクターを見る</a>
                 </div>
-                
+
                 <div class="activity-card fade-in cyber-glow">
-                    <span class="activity-icon">🎙️</span>
-                    <h3 class="activity-title">ポッドキャスト</h3>
+                    <span class="activity-icon">🎵</span>
+                    <h3 class="activity-title">音楽制作</h3>
                     <p class="activity-description">
-                        技術と創作について語るポッドキャスト。定期的にエピソードを配信中。
+                        SoundCloudで楽曲を発表。エフェクターと組み合わせた実験的なサウンドを探求。
                     </p>
-                    <a href="podcast/" class="activity-link">聴いてみる</a>
+                    <a href="works/music/" class="activity-link">音楽作品を見る</a>
                 </div>
                 
                 <div class="activity-card fade-in cyber-glow">
