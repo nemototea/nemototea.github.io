@@ -15,19 +15,55 @@
         body {
             opacity: 0;
             transition: opacity 0.5s ease;
-        }
-
-        .works-hero {
+        }        .works-hero {
             padding: var(--space-2xl) 0;
             text-align: center;
             position: relative;
+        }
+
+        .section-nav {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            margin: var(--space-xl) 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-section {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-medium);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: var(--space-md) var(--space-xl);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .nav-section:hover {
+            background: rgba(0, 255, 157, 0.1);
+            border-color: var(--glass-border-hover);
+            box-shadow: var(--glow-cyber);
+            transform: translateY(-2px);
+        }
+
+        .nav-section.active {
+            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
+            color: #000;
+            box-shadow: var(--glow-cyber);
         }
 
         .category-filter {
             display: flex;
             justify-content: center;
             gap: var(--space-md);
-            margin: var(--space-xl) 0;
+            margin: var(--space-lg) 0;
             flex-wrap: wrap;
         }
 
@@ -351,18 +387,26 @@
                     <li><a href="../contact/" class="nav-item">Contact</a></li>
                 </ul>
             </nav>
-        </header>
-
-        <!-- 作品ヒーロー -->
+        </header>        <!-- 作品ヒーロー -->
         <section class="works-hero">
-            <h1 class="text-hero fade-in">Creative Works</h1>
+            <h1 class="text-hero fade-in">Creative Works & Interactive</h1>
             <p class="text-subtitle fade-in mb-lg">
                 技術とアートの境界を探求する創作の記録
             </p>
             <p class="text-body fade-in" style="max-width: 600px; margin: 0 auto;">
                 音楽制作からアプリ開発、エフェクター制作、日本茶プラットフォームまで、<br>
-                多分野にわたる創作活動をご紹介します。
+                多分野にわたる創作活動とインタラクティブ体験をご紹介します。
             </p>
+        </section>
+
+        <!-- セクションナビゲーション -->
+        <section class="section-nav fade-in">
+            <button class="nav-section active" data-section="products">
+                🎨 完成作品
+            </button>
+            <button class="nav-section" data-section="interactive">
+                ⚡ 体験コンテンツ
+            </button>
         </section>
 
         <!-- 統計セクション -->
@@ -383,15 +427,22 @@
                 <span class="stat-number counter" data-target="1">0</span>
                 <div class="stat-label">プラットフォーム</div>
             </div>
-        </section>
-
-        <!-- カテゴリフィルター -->
-        <section class="category-filter fade-in">
+        </section>        <!-- カテゴリフィルター -->
+        <section class="category-filter fade-in" id="products-filters">
             <button class="filter-btn active" data-filter="all">All Works</button>
             <button class="filter-btn" data-filter="music">🎵 Music</button>
             <button class="filter-btn" data-filter="apps">📱 Apps</button>
             <button class="filter-btn" data-filter="tea">🍃 Tea Platform</button>
             <button class="filter-btn" data-filter="effects">⚡ Effects</button>
+        </section>
+
+        <!-- インタラクティブ機能フィルター -->
+        <section class="category-filter fade-in" id="interactive-filters" style="display: none;">
+            <button class="filter-btn active" data-filter="all">All Features</button>
+            <button class="filter-btn" data-filter="portfolio">📦 3D Portfolio</button>
+            <button class="filter-btn" data-filter="simulation">⚡ Circuit Lab</button>
+            <button class="filter-btn" data-filter="ai">🤖 AI Diagnosis</button>
+            <button class="filter-btn" data-filter="visualization">🎯 Tea Wheel</button>
         </section>
 
         <!-- 注目作品 -->
@@ -413,7 +464,7 @@
                     </div>
                     <div class="work-links">
                         <a href="tea-platform/" class="work-link primary">詳細を見る</a>
-                        <a href="../special-features/tea-ai-diagnosis/" class="work-link">AI診断を試す</a>
+                        <a href="interactive/tea-ai-diagnosis/" class="work-link">AI診断を試す</a>
                     </div>
                 </div>
                 <div class="featured-visual">
@@ -492,7 +543,7 @@
                     </div>
                     <div class="work-links">
                         <a href="effects/" class="work-link primary">詳細を見る</a>
-                        <a href="../special-features/circuit-lab/" class="work-link">シミュレーター</a>
+                        <a href="interactive/circuit-lab/" class="work-link">シミュレーター</a>
                     </div>
                 </div>
             </div>
@@ -563,10 +614,109 @@
                         <span class="tech-tag">Analog</span>
                         <span class="tech-tag">Delay</span>
                         <span class="tech-tag">Vintage</span>
-                    </div>
-                    <div class="work-links">
+                    </div>                    <div class="work-links">
                         <a href="effects/" class="work-link primary">詳細を見る</a>
                         <a href="#" class="work-link">音源サンプル</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- インタラクティブ機能 - 3D Portfolio -->
+            <div class="work-card visible fade-in" data-category="portfolio" data-section="interactive" style="display: none;">
+                <div class="work-image">
+                    <span class="work-icon">📦</span>
+                </div>
+                <div class="work-content">
+                    <div class="work-category">Interactive Experience</div>
+                    <h3 class="work-title">3D Portfolio Showcase</h3>
+                    <p class="work-description">
+                        Three.jsを使用した3Dインタラクティブポートフォリオ。
+                        没入感のある3D空間で作品を体験できる革新的なプレゼンテーション。
+                    </p>
+                    <div class="work-tech">
+                        <span class="tech-tag">Three.js</span>
+                        <span class="tech-tag">WebGL</span>
+                        <span class="tech-tag">3D Graphics</span>
+                        <span class="tech-tag">Interactive</span>
+                    </div>
+                    <div class="work-links">
+                        <a href="interactive/3d-portfolio/" class="work-link primary">体験する</a>
+                        <a href="#" class="work-link">技術解説</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- インタラクティブ機能 - Circuit Lab -->
+            <div class="work-card visible fade-in" data-category="simulation" data-section="interactive" style="display: none;">
+                <div class="work-image">
+                    <span class="work-icon">⚡</span>
+                </div>
+                <div class="work-content">
+                    <div class="work-category">Circuit Simulation</div>
+                    <h3 class="work-title">エフェクター回路シミュレーター</h3>
+                    <p class="work-description">
+                        ブラウザ上でエフェクター回路の動作をシミュレーション。
+                        抵抗値やコンデンサ値を変更して、リアルタイムで音の変化を体験できます。
+                    </p>
+                    <div class="work-tech">
+                        <span class="tech-tag">Web Audio API</span>
+                        <span class="tech-tag">Circuit Simulation</span>
+                        <span class="tech-tag">Real-time</span>
+                        <span class="tech-tag">Educational</span>
+                    </div>
+                    <div class="work-links">
+                        <a href="interactive/circuit-lab/" class="work-link primary">シミュレート</a>
+                        <a href="#" class="work-link">回路解説</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- インタラクティブ機能 - AI Diagnosis -->
+            <div class="work-card visible fade-in" data-category="ai" data-section="interactive" style="display: none;">
+                <div class="work-image">
+                    <span class="work-icon">🤖</span>
+                </div>
+                <div class="work-content">
+                    <div class="work-category">AI Application</div>
+                    <h3 class="work-title">日本茶AI診断システム</h3>
+                    <p class="work-description">
+                        機械学習アルゴリズムを活用した個人向け茶葉推薦システム。
+                        味覚の嗜好や体調に合わせて最適な日本茶を提案します。
+                    </p>
+                    <div class="work-tech">
+                        <span class="tech-tag">Machine Learning</span>
+                        <span class="tech-tag">Recommendation</span>
+                        <span class="tech-tag">Japanese Tea</span>
+                        <span class="tech-tag">Personalization</span>
+                    </div>
+                    <div class="work-links">
+                        <a href="interactive/tea-ai-diagnosis/" class="work-link primary">診断を受ける</a>
+                        <a href="#" class="work-link">アルゴリズム解説</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- インタラクティブ機能 - Tea Wheel -->
+            <div class="work-card visible fade-in" data-category="visualization" data-section="interactive" style="display: none;">
+                <div class="work-image">
+                    <span class="work-icon">🎯</span>
+                </div>
+                <div class="work-content">
+                    <div class="work-category">Data Visualization</div>
+                    <h3 class="work-title">日本茶フレーバーホイール</h3>
+                    <p class="work-description">
+                        インタラクティブな茶葉フレーバーホイールで日本茶の味わいを可視化。
+                        D3.jsを使用した美しいデータビジュアライゼーション。
+                    </p>
+                    <div class="work-tech">
+                        <span class="tech-tag">D3.js</span>
+                        <span class="tech-tag">Data Visualization</span>
+                        <span class="tech-tag">Interactive</span>
+                        <span class="tech-tag">Flavor Mapping</span>
+                    </div>
+                    <div class="work-links">
+                        <a href="interactive/tea-wheel/" class="work-link primary">ホイールを回す</a>
+                        <a href="#" class="work-link">データ解説</a>
                     </div>
                 </div>
             </div>
@@ -631,23 +781,90 @@
     </footer>
 
     <script src="../assets/js/main.js"></script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // フィルタリング機能
-            const filterButtons = document.querySelectorAll('.filter-btn');
+      <script>        document.addEventListener('DOMContentLoaded', () => {
+            // URLパラメータをチェックしてセクションを自動切り替え
+            const urlParams = new URLSearchParams(window.location.search);
+            const sectionParam = urlParams.get('section');
+            
+            if (sectionParam === 'interactive') {
+                const interactiveButton = document.querySelector('[data-section="interactive"]');
+                if (interactiveButton) {
+                    interactiveButton.click();
+                }
+            }
+
+            // セクション切り替え機能
+            const sectionButtons = document.querySelectorAll('.nav-section');
+            const productsFilters = document.getElementById('products-filters');
+            const interactiveFilters = document.getElementById('interactive-filters');
             const workCards = document.querySelectorAll('.work-card');
+
+            sectionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const section = button.getAttribute('data-section');
+                    
+                    // ボタンの状態更新
+                    sectionButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // フィルターの表示切り替え
+                    if (section === 'products') {
+                        productsFilters.style.display = 'flex';
+                        interactiveFilters.style.display = 'none';
+                        
+                        // 作品カードの表示切り替え
+                        workCards.forEach(card => {
+                            if (card.getAttribute('data-section') === 'interactive') {
+                                card.style.display = 'none';
+                            } else {
+                                card.style.display = 'block';
+                            }
+                        });
+                        
+                        // 最初のフィルターボタンをアクティブに
+                        const firstFilter = productsFilters.querySelector('.filter-btn');
+                        if (firstFilter) firstFilter.click();
+                        
+                    } else if (section === 'interactive') {
+                        productsFilters.style.display = 'none';
+                        interactiveFilters.style.display = 'flex';
+                        
+                        // インタラクティブカードの表示切り替え
+                        workCards.forEach(card => {
+                            if (card.getAttribute('data-section') === 'interactive') {
+                                card.style.display = 'block';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                        
+                        // 最初のフィルターボタンをアクティブに
+                        const firstFilter = interactiveFilters.querySelector('.filter-btn');
+                        if (firstFilter) firstFilter.click();
+                    }
+                });
+            });            // フィルタリング機能
+            const filterButtons = document.querySelectorAll('.filter-btn');
 
             filterButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const filter = button.getAttribute('data-filter');
+                    const currentSection = document.querySelector('.nav-section.active').getAttribute('data-section');
                     
-                    // アクティブボタンの切り替え
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // 親フィルターコンテナ内のボタンのみ更新
+                    const parentFilter = button.closest('.category-filter');
+                    parentFilter.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
                     
-                    // カードのフィルタリング
-                    workCards.forEach(card => {
+                    // 現在のセクションのカードのみフィルタリング
+                    let targetCards;
+                    if (currentSection === 'interactive') {
+                        targetCards = document.querySelectorAll('.work-card[data-section="interactive"]');
+                    } else {
+                        targetCards = document.querySelectorAll('.work-card:not([data-section="interactive"])');
+                    }
+                    
+                    targetCards.forEach(card => {
                         const category = card.getAttribute('data-category');
                         
                         if (filter === 'all' || category === filter) {
