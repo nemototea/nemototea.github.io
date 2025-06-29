@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="nemotea プロフィール - 音楽制作、アプリ開発、日本茶への情熱を持つクリエイティブテクノロジスト">
-    <meta name="keywords" content="プロフィール, 音楽制作, アプリ開発, PHP, Kotlin, Swift, React, 日本茶, エフェクター">
+    <meta name="description" content="nemotea プロフィール">
+    <meta name="keywords" content="プロフィール, 音楽制作, アプリ開発, PHP, Kotlin, Swift, 日本茶, エフェクター">
     
     <title>Profile - nemotea</title>
     
@@ -67,17 +67,18 @@
         
         .tech-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: var(--space-md);
             margin-top: var(--space-xl);
         }
-          .tech-item {
+        
+        .tech-item {
             background: var(--glass-bg);
             backdrop-filter: var(--blur-medium);
             border: 1px solid var(--glass-border);
             transition: all var(--transition-normal);
             border-radius: 20px;
-            padding: var(--space-lg);
+            padding: var(--space-lg) var(--space-md);
             box-shadow: var(--shadow-glass);
             text-align: center;
             position: relative;
@@ -90,17 +91,17 @@
             border-color: var(--glass-border-hover);
         }
         
-        .tech-item.expert {
+        .tech-item.yoku-tsukau {
             border-color: var(--cyber-green);
             box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
         }
         
-        .tech-item.intermediate {
+        .tech-item.tamani-tsukau {
             border-color: var(--cyber-blue);
             box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
         }
         
-        .tech-item.learning {
+        .tech-item.benkyou {
             border-color: var(--cyber-purple);
             box-shadow: 0 0 20px rgba(157, 78, 221, 0.2);
         }
@@ -117,23 +118,24 @@
         }
         
         .tech-level {
-            font-size: 0.8rem;
-            padding: 4px 8px;
+            font-size: 0.75rem;
+            padding: 3px 6px;
             border-radius: 12px;
             font-weight: 500;
+            white-space: nowrap;
         }
         
-        .tech-level.expert {
+        .tech-level.yoku-tsukau {
             background: rgba(0, 255, 157, 0.2);
             color: var(--cyber-green);
         }
         
-        .tech-level.intermediate {
+        .tech-level.tamani-tsukau {
             background: rgba(0, 212, 255, 0.2);
             color: var(--cyber-blue);
         }
         
-        .tech-level.learning {
+        .tech-level.benkyou {
             background: rgba(157, 78, 221, 0.2);
             color: var(--cyber-purple);
         }
@@ -273,7 +275,9 @@
             gap: var(--space-md);
             flex-wrap: wrap;
             margin-top: var(--space-xl);
-        }        .contact-link {
+        }
+        
+        .contact-link {
             background: var(--glass-bg);
             backdrop-filter: var(--blur-medium);
             border: 1px solid var(--glass-border);
@@ -315,7 +319,7 @@
         }
         
         .skill-name {
-            min-width: 120px;
+            min-width: 140px;
             font-weight: 500;
         }
         
@@ -359,6 +363,43 @@
             color: var(--cyber-green);
         }
         
+        /* ユーモラスなスキル項目のスタイル */
+        .skill-bar[data-humor="true"] .skill-name {
+            position: relative;
+        }
+        
+        .skill-bar[data-humor="true"] .skill-name::after {
+            content: '✨';
+            margin-left: 8px;
+            animation: twinkle 2s ease-in-out infinite alternate;
+        }
+        
+        .skill-bar[data-humor="infinity"] .skill-fill {
+            background: linear-gradient(90deg, var(--cyber-green), var(--cyber-blue), var(--cyber-purple), var(--cyber-green));
+            background-size: 200% 100%;
+            animation: rainbow-flow 3s linear infinite;
+        }
+        
+        .skill-bar[data-humor="infinity"] .skill-percentage {
+            color: var(--cyber-purple);
+            animation: pulse-glow 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        @keyframes rainbow-flow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { text-shadow: 0 0 5px var(--cyber-purple); }
+            50% { text-shadow: 0 0 20px var(--cyber-purple), 0 0 30px var(--cyber-purple); }
+        }
+        
         @media (max-width: 768px) {
             .timeline::before {
                 left: 20px;
@@ -387,7 +428,8 @@
 </head>
 <body>
     <div class="container">
-        <!-- ヘッダーナビゲーション -->        <header class="glass-header mt-md">
+        <!-- ヘッダーナビゲーション -->
+        <header class="glass-header mt-md">
             <nav class="nav">
                 <a href="../" class="nav-logo">nemotea.dev</a>
                 <button class="nav-toggle" id="nav-toggle" aria-label="メニューを開く" aria-expanded="false">
@@ -407,17 +449,17 @@
         <section class="profile-hero">
             <div class="profile-image-container fade-in">
                 <div class="profile-image">
-                    <span class="profile-emoji">🎯</span>
+                    <span class="profile-emoji">🦆</span>
                 </div>
             </div>
             
             <h1 class="text-hero fade-in">nemotea</h1>
             <p class="text-subtitle fade-in mb-lg">
-                Creative Technologist & Music Producer
+                日本茶インストラクター・プログラマー
             </p>
             <p class="text-body fade-in" style="max-width: 600px; margin: 0 auto;">
-                技術とクリエイティビティの境界を探求する、マルチディシプリナリーなクリエイター。<br>
-                音楽制作、アプリ開発、日本茶への深い愛情を通じて、デジタルとアナログの調和を追求しています。
+                普段は某企業で社員として働き、音楽関係の自社サービスの開発担当。<br>
+                趣味・副業で日本茶関連の事業を開発中
             </p>
         </section>
 
@@ -426,102 +468,112 @@
             <h2 class="text-title text-center mb-md fade-in">🛠️ Technology Stack</h2>
             <p class="text-body text-center mb-xl fade-in">
                 継続的な学習と実践によって培った技術領域
-            </p>
-            
-            <div class="tech-grid">
+            </p>              <div class="tech-grid">
                 <!-- バックエンド -->
-                <div class="tech-item expert fade-in">
+                <div class="tech-item yoku-tsukau fade-in">
                     <span class="tech-icon">🐘</span>
                     <div class="tech-name">PHP</div>
-                    <span class="tech-level expert">Expert</span>
+                    <span class="tech-level yoku-tsukau">よく使う</span>
                 </div>
                 
                 <!-- モバイル開発 -->
-                <div class="tech-item expert fade-in">
+                <div class="tech-item yoku-tsukau fade-in">
                     <span class="tech-icon">🤖</span>
                     <div class="tech-name">Kotlin</div>
-                    <span class="tech-level expert">Expert</span>
+                    <span class="tech-level yoku-tsukau">よく使う</span>
                 </div>
-                
-                <div class="tech-item intermediate fade-in">
-                    <span class="tech-icon">🍎</span>
-                    <div class="tech-name">Swift</div>
-                    <span class="tech-level intermediate">Intermediate</span>
-                </div>
-                
-                <div class="tech-item expert fade-in">
+                                
+                <div class="tech-item benkyou fade-in">
                     <span class="tech-icon">🔄</span>
                     <div class="tech-name">KMP/CMP</div>
-                    <span class="tech-level expert">Expert</span>
+                    <span class="tech-level benkyou">勉強中</span>
+                </div>
+                
+                <div class="tech-item tamani-tsukau fade-in">
+                    <span class="tech-icon">🪽</span>
+                    <div class="tech-name">Swift</div>
+                    <span class="tech-level tamani-tsukau">たまに使う</span>
                 </div>
                 
                 <!-- フロントエンド -->
-                <div class="tech-item intermediate fade-in">
+                <div class="tech-item benkyou fade-in">
                     <span class="tech-icon">⚛️</span>
                     <div class="tech-name">React</div>
-                    <span class="tech-level intermediate">Intermediate</span>
+                    <span class="tech-level benkyou">勉強中</span>
                 </div>
                 
-                <div class="tech-item expert fade-in">
+                <div class="tech-item tamani-tsukau fade-in">
                     <span class="tech-icon">🌐</span>
                     <div class="tech-name">HTML/CSS</div>
-                    <span class="tech-level expert">Expert</span>
+                    <span class="tech-level tamani-tsukau">たまに使う</span>
                 </div>
                 
-                <div class="tech-item intermediate fade-in">
+                <div class="tech-item tamani-tsukau fade-in">
                     <span class="tech-icon">⚡</span>
                     <div class="tech-name">JavaScript</div>
-                    <span class="tech-level intermediate">Intermediate</span>
+                    <span class="tech-level tamani-tsukau">たまに使う</span>
                 </div>
-                
-                <!-- 音楽制作 -->
-                <div class="tech-item expert fade-in">
-                    <span class="tech-icon">🎵</span>
-                    <div class="tech-name">Logic Pro</div>
-                    <span class="tech-level expert">Expert</span>
-                </div>
-                
-                <div class="tech-item intermediate fade-in">
-                    <span class="tech-icon">🔊</span>
-                    <div class="tech-name">Audio Engineering</div>
-                    <span class="tech-level intermediate">Intermediate</span>
-                </div>
-                
-                <!-- その他 -->
-                <div class="tech-item intermediate fade-in">
+                  <!-- その他 -->
+                <div class="tech-item yoku-tsukau fade-in">
                     <span class="tech-icon">🗄️</span>
                     <div class="tech-name">MySQL</div>
-                    <span class="tech-level intermediate">Intermediate</span>
+                    <span class="tech-level yoku-tsukau">よく使う</span>
                 </div>
                 
-                <div class="tech-item learning fade-in">
-                    <span class="tech-icon">🦀</span>
-                    <div class="tech-name">Rust</div>
-                    <span class="tech-level learning">Learning</span>
+                <!-- 新しい技術 -->
+                <div class="tech-item tamani-tsukau fade-in">
+                    <span class="tech-icon">🟦</span>
+                    <div class="tech-name">C#</div>
+                    <span class="tech-level tamani-tsukau">たまに使う</span>
                 </div>
                 
-                <div class="tech-item learning fade-in">
-                    <span class="tech-icon">🧠</span>
-                    <div class="tech-name">Machine Learning</div>
-                    <span class="tech-level learning">Learning</span>
+                <div class="tech-item tamani-tsukau fade-in">
+                    <span class="tech-icon">⚙️</span>
+                    <div class="tech-name">VC++</div>
+                    <span class="tech-level tamani-tsukau">たまに使う</span>
+                </div>
+                
+                <!-- PHPフレームワーク -->
+                <div class="tech-item yoku-tsukau fade-in">
+                    <span class="tech-icon">🔥</span>
+                    <div class="tech-name">CodeIgniter</div>
+                    <span class="tech-level yoku-tsukau">よく使う</span>
+                </div>
+                
+                <div class="tech-item benkyou fade-in">
+                    <span class="tech-icon">🚀</span>
+                    <div class="tech-name">Laravel</div>
+                    <span class="tech-level benkyou">勉強中</span>
+                </div>
+                
+                <div class="tech-item tamani-tsukau fade-in">
+                    <span class="tech-icon">🎼</span>
+                    <div class="tech-name">Symfony</div>
+                    <span class="tech-level tamani-tsukau">たまに使う</span>
+                </div>
+                
+                <div class="tech-item tamani-tsukau fade-in">
+                    <span class="tech-icon">🌸</span>
+                    <div class="tech-name">mojavi</div>
+                    <span class="tech-level tamani-tsukau">たまに使う</span>
                 </div>
             </div>
         </section>
 
-        <!-- スキル視覚化 -->
+        <!-- スキル視覚化 --> 
         <section class="skills-visualization glass-card">
             <h3 class="text-subtitle mb-lg fade-in">📊 Skills Overview</h3>
             
             <div class="skill-bar fade-in">
-                <div class="skill-name">PHP Development</div>
+                <div class="skill-name">Web フロントエンド</div>
                 <div class="skill-progress">
-                    <div class="skill-fill" data-width="95%"></div>
+                    <div class="skill-fill" data-width="70%"></div>
                 </div>
-                <div class="skill-percentage">95%</div>
+                <div class="skill-percentage">70%</div>
             </div>
-            
+                        
             <div class="skill-bar fade-in">
-                <div class="skill-name">Kotlin/KMP</div>
+                <div class="skill-name">Web バックエンド</div>
                 <div class="skill-progress">
                     <div class="skill-fill" data-width="90%"></div>
                 </div>
@@ -529,35 +581,27 @@
             </div>
             
             <div class="skill-bar fade-in">
-                <div class="skill-name">Music Production</div>
+                <div class="skill-name">モバイルアプリ開発</div>
                 <div class="skill-progress">
-                    <div class="skill-fill" data-width="85%"></div>
+                    <div class="skill-fill" data-width="90%"></div>
                 </div>
-                <div class="skill-percentage">85%</div>
+                <div class="skill-percentage">90%</div>
             </div>
-            
-            <div class="skill-bar fade-in">
-                <div class="skill-name">Swift/iOS</div>
+
+            <div class="skill-bar fade-in" data-humor="infinity">
+                <div class="skill-name">朝の弱さレベル 💤</div>
                 <div class="skill-progress">
-                    <div class="skill-fill" data-width="75%"></div>
+                    <div class="skill-fill" data-width="100%"></div>
                 </div>
-                <div class="skill-percentage">75%</div>
+                <div class="skill-percentage">∞%</div>
             </div>
-            
-            <div class="skill-bar fade-in">
-                <div class="skill-name">React</div>
+
+            <div class="skill-bar fade-in" data-humor="infinity">
+                <div class="skill-name">睡眠への落下速度 💤</div>
                 <div class="skill-progress">
-                    <div class="skill-fill" data-width="70%"></div>
+                    <div class="skill-fill" data-width="100%"></div>
                 </div>
-                <div class="skill-percentage">70%</div>
-            </div>
-            
-            <div class="skill-bar fade-in">
-                <div class="skill-name">Circuit Design</div>
-                <div class="skill-progress">
-                    <div class="skill-fill" data-width="65%"></div>
-                </div>
-                <div class="skill-percentage">65%</div>
+                <div class="skill-percentage">∞%</div>
             </div>
         </section>
 
@@ -568,60 +612,109 @@
             <div class="timeline">
                 <div class="timeline-item left slide-in-left">
                     <div class="timeline-content">
+                        <div class="timeline-year">2015</div>
+                        <h3 class="timeline-title">プログラミングを始める</h3>
+                        <p class="timeline-description">
+                            新卒でなんとなくIT系に就職してエクセルポチポチ、C#などを触り始める。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right slide-in-right">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2017</div>
+                        <h3 class="timeline-title">Windows（WPF）アプリ開発</h3>
+                        <p class="timeline-description">
+                            プログラミングが出来なさすぎて流石に独学を開始。
+                            スクショ付きの手順書を作成するGUIアプリケーションを自作。
+                        </p>
+                    </div>
+                </div>
+               
+                <div class="timeline-item left slide-in-left">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2018~2019</div>
+                        <h3 class="timeline-title">日本茶に目覚める</h3>
+                        <p class="timeline-description">
+                            IT系の仕事を続けていく自信がなくなっていた頃、岡倉天心の「茶の本」を読んでお茶業界に興味を持つ。
+                            日本茶インストラクター試験1次試験、2次試験に合格し、資格取得。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item right slide-in-right">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2019</div>
+                        <h3 class="timeline-title">モバイルアプリ開発を開始</h3>
+                        <p class="timeline-description">
+                            C#,Xamarinを使用したクロスプラットフォーム開発に着手。
+                            RSSリーダー、ARでドロイド君を配置するアプリ、日本茶のニュースアプリを試作。
+                            その後、KotlinでのAndroidネイティブアプリ開発に移行し、電卓アプリをGoogle Playストアにリリース。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right slide-in-right">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2019</div>
+                        <h3 class="timeline-title">エフェクター制作を開始</h3>
+                        <p class="timeline-description">
+                            義父がエフェクター制作をしていたことから、自分も興味を持つ。
+                            MXR DISTORTION+のレプリカを作成。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item left slide-in-left">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2020</div>
+                        <h3 class="timeline-title">転職して本業でアプリ開発</h3>
+                        <p class="timeline-description">
+                            楽しい。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item right slide-in-right">
+                    <div class="timeline-content">
                         <div class="timeline-year">2022</div>
-                        <h3 class="timeline-title">プログラミングへの目覚め</h3>
+                        <h3 class="timeline-title">本業でWeb開発も開始</h3>
                         <p class="timeline-description">
-                            PHPでのWeb開発からスタート。最初の個人プロジェクトで日本茶に関するWebサイトを制作し、技術と情熱の融合を体験。
+                            楽しい（本業なので詳しくは書けない）。
                         </p>
                     </div>
                 </div>
-                
+
                 <div class="timeline-item right slide-in-right">
                     <div class="timeline-content">
-                        <div class="timeline-year">2023</div>
-                        <h3 class="timeline-title">モバイル開発への挑戦</h3>
+                        <div class="timeline-year">2022</div>
+                        <h3 class="timeline-title">エフェクター制作2</h3>
                         <p class="timeline-description">
-                            KotlinでAndroidアプリ開発を学習。その後SwiftでiOS開発も習得し、KMP/CMPによるマルチプラットフォーム開発に魅力を感じる。
+                            ブティック系ファズのレプリカキットを購入し組み立て。
+                            ラッカー塗装だけオリジナルで頑張った。
+                            その後、中古のBOSS OD-3を頂きモディファイ。
                         </p>
                     </div>
                 </div>
-                
-                <div class="timeline-item left slide-in-left">
-                    <div class="timeline-content">
-                        <div class="timeline-year">2023</div>
-                        <h3 class="timeline-title">音楽制作の開始</h3>
-                        <p class="timeline-description">
-                            Logic Proを使った楽曲制作をスタート。エフェクター制作と並行して、アナログとデジタルの音響技術を深く探求。
-                        </p>
-                    </div>
-                </div>
-                
-                <div class="timeline-item right slide-in-right">
-                    <div class="timeline-content">
-                        <div class="timeline-year">2024</div>
-                        <h3 class="timeline-title">日本茶プラットフォーム企画</h3>
-                        <p class="timeline-description">
-                            日本茶への愛を技術で表現するECプラットフォームの企画を開始。伝統文化とモダンテクノロジーの架け橋を目指す。
-                        </p>
-                    </div>
-                </div>
-                
+
                 <div class="timeline-item left slide-in-left">
                     <div class="timeline-content">
                         <div class="timeline-year">2024</div>
-                        <h3 class="timeline-title">ポッドキャスト配信開始</h3>
+                        <h3 class="timeline-title">Misskeyサーバー、ちゃすきー開始</h3>
                         <p class="timeline-description">
-                            技術と創作活動について語るポッドキャストを開始。知識の共有とコミュニティ形成への貢献を重視。
+                            ちゃすきーというお茶好きのコミュニティを開始。
+                            Fediverse面白いよ。
                         </p>
                     </div>
                 </div>
-                
+
                 <div class="timeline-item right slide-in-right">
                     <div class="timeline-content">
                         <div class="timeline-year">2025</div>
-                        <h3 class="timeline-title">Tea-Driven Development構想</h3>
+                        <h3 class="timeline-title">開業届提出</h3>
                         <p class="timeline-description">
-                            すべての活動を統合するクリエイティブ・テック・ハブとして、このWebサイトを立ち上げ。未来への新しいステップ。
+                            日本茶の仕事をしたくて、個人事業主になる。
+                            スマホで開業届出せるんだね。
                         </p>
                     </div>
                 </div>
@@ -719,8 +812,7 @@
     <script src="../assets/js/main.js"></script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // スキルバーのアニメーション
+        document.addEventListener('DOMContentLoaded', () => {            // スキルバーのアニメーション
             const animateSkillBars = () => {
                 const skillFills = document.querySelectorAll('.skill-fill');
                 skillFills.forEach(fill => {
@@ -731,6 +823,33 @@
                         fill.style.width = targetWidth;
                     }, 500);
                 });
+                
+                // ユーモラスなスキル項目の特別処理
+                setTimeout(() => {
+                    const humorSkills = document.querySelectorAll('[data-humor="true"]');
+                    humorSkills.forEach((skill, index) => {
+                        setTimeout(() => {
+                            skill.style.transform = 'scale(1.02)';
+                            setTimeout(() => {
+                                skill.style.transform = 'scale(1)';
+                            }, 200);
+                        }, index * 100);
+                    });
+                    
+                    const infinitySkill = document.querySelector('[data-humor="infinity"]');
+                    if (infinitySkill) {
+                        setTimeout(() => {
+                            infinitySkill.addEventListener('mouseenter', () => {
+                                infinitySkill.style.transform = 'scale(1.05)';
+                                infinitySkill.style.filter = 'hue-rotate(45deg)';
+                            });
+                            infinitySkill.addEventListener('mouseleave', () => {
+                                infinitySkill.style.transform = 'scale(1)';
+                                infinitySkill.style.filter = 'none';
+                            });
+                        }, 1000);
+                    }
+                }, 1500);
             };
 
             // スクロール時にスキルバーをアニメーション
