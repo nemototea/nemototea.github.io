@@ -19,16 +19,21 @@
             padding: var(--space-2xl) 0;
             text-align: center;
             position: relative;
-        }
-
-        .works-grid {
+        }        .works-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: var(--space-xl);
-            margin: var(--space-2xl) 0;
+            margin: var(--space-xl) 0;
         }
 
-        .work-card {
+        .work-section {
+            margin: var(--space-2xl) 0;
+            padding: var(--space-xl) 0;
+        }
+
+        .work-section:first-child {
+            margin-top: 0;
+        }.work-card {
             background: var(--glass-bg);
             backdrop-filter: var(--blur-medium);
             border: 1px solid var(--glass-border);
@@ -41,6 +46,16 @@
             min-height: 400px;
             display: flex;
             flex-direction: column;
+        }
+
+        .work-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyber-green), var(--cyber-blue), var(--cyber-purple));
         }
 
         .work-card:hover {
@@ -78,12 +93,19 @@
 
         .work-card:hover .work-image::before {
             transform: translateX(100%);
-        }
-
-        .work-icon {
+        }        .work-icon {
             filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
             z-index: 2;
             position: relative;
+        }
+
+        .work-actual-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            position: relative;
+            z-index: 2;
         }
 
         .work-content {
@@ -129,44 +151,54 @@
             border-radius: 8px;
             font-size: 0.75rem;
             font-weight: 500;
-        }
-
-        .work-links {
+        }        .work-links {
             display: flex;
-            gap: var(--space-sm);
             margin-top: auto;
         }
 
         .work-link {
-            background: var(--glass-bg);
-            backdrop-filter: var(--blur-medium);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: var(--space-xs) var(--space-md);
+            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
+            border: none;
+            border-radius: 16px;
+            padding: var(--space-md) var(--space-lg);
+            color: #000;
+            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            font-weight: 500;
-            transition: all var(--transition-fast);
-            display: inline-flex;
+            transition: all var(--transition-normal);
+            display: flex;
             align-items: center;
+            justify-content: center;
             gap: var(--space-xs);
             text-decoration: none;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-            flex: 1;
-            text-align: center;
-            justify-content: center;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(0, 255, 157, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .work-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
         }
 
         .work-link:hover {
-            background: rgba(0, 255, 157, 0.1);
-            border-color: var(--glass-border-hover);
-            box-shadow: var(--glow-cyber);
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 157, 0.5);
         }
 
-        .work-link.primary {
-            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
-            color: #000;
+        .work-link:hover::before {
+            left: 100%;
+        }
+
+        .work-link:active {
+            transform: translateY(0);
         }
 
         /* カテゴリ別の色分け */
@@ -223,250 +255,299 @@
                 インタラクティブ体験ページの紹介
             </p>
         </section>
-
+        
         <!-- 作品グリッド -->
-        <section class="works-grid">
-            <!-- 音楽作品 -->
-            <div class="work-card fade-in" data-category="music">
-                <div class="work-image">
-                    <span class="work-icon">🎵</span>
-                </div>
-                <div class="work-content">
-                    <div class="work-category">Music Production</div>
-                    <h3 class="work-title">Cyber Dreams</h3>
-                    <p class="work-description">
-                        自作エフェクターを活用したアンビエント・エレクトロニック作品。
-                        グラニュラーシンセシスとリバーブエフェクトを組み合わせた実験的な楽曲。
-                    </p>
-                    <div class="work-tech">
-                        <span class="tech-tag">Logic Pro</span>
-                        <span class="tech-tag">自作エフェクター</span>
-                        <span class="tech-tag">Ambient</span>
+        <!-- アプリ・Web開発セクション -->
+        <section id="apps" class="work-section">
+            <h2 class="text-title text-center mb-xl fade-in">📱 アプリ・Web開発</h2>
+            
+            <div class="works-grid">
+                <!-- アプリ開発 -->
+                <div class="work-card fade-in" data-category="apps">
+                    <div class="work-image">
+                        <span class="work-icon">📒</span>
                     </div>
-                    <div class="work-links">
-                        <a href="https://soundcloud.com/spcmsc" class="work-link primary" target="_blank">SoundCloud</a>
-                        <a href="music/" class="work-link">詳細</a>
+                    <div class="work-content">
+                        <div class="work-category">Mobile Development</div>
+                        <h3 class="work-title">OneLine</h3>
+                        <p class="work-description">
+                            １行日記を手軽に記録するアプリ。
+                            Kotlinで開発し、現在Android版のみ。KMP+CMPでiOSにも対応予定。
+                            ウィジェット機能で、ホーム画面から簡単に日記を追加できます。
+                        </p>
+                        <div class="work-tech">
+                            <span class="tech-tag">Kotlin</span>
+                            <span class="tech-tag">KMP</span>
+                            <span class="tech-tag">iOS</span>
+                            <span class="tech-tag">Android</span>
+                        </div>
+                        <div class="work-links">
+                            <a href="apps/oneline" class="work-link">📱 詳細を見る</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- アプリ開発2 -->
+                <div class="work-card fade-in" data-category="apps">
+                    <div class="work-image">
+                        <span class="work-icon">🔊</span>
+                    </div>
+                    <div class="work-content">
+                        <div class="work-category">Mobile Development</div>
+                        <h3 class="work-title">Musicalc</h3>
+                        <p class="work-description">
+                            サンプラーのように音を鳴らしながら計算する電卓アプリ。
+                            ギター・ベース・ピアノ・ドラムの音色を切り替えて、
+                            Fmスケール・Emスケールをなぞりながら計算しよう。
+                            現在ストア非公開。
+                        </p>
+                        <div class="work-tech">
+                            <span class="tech-tag">Kotlin</span>
+                            <span class="tech-tag">Android</span>
+                        </div>
+                        <div class="work-links">
+                            <a href="https://github.com/nemototea/Musicalc" class="work-link">🔊 GitHub</a>
+                        </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- アプリ開発 -->
-            <div class="work-card fade-in" data-category="apps">
-                <div class="work-image">
-                    <span class="work-icon">📱</span>
-                </div>
-                <div class="work-content">
-                    <div class="work-category">Mobile Development</div>
-                    <h3 class="work-title">TeaTime Tracker</h3>
-                    <p class="work-description">
-                        日本茶の飲用記録と体調管理を組み合わせたKMP製アプリ。
-                        iOS/Android同時開発で、茶葉の効能と健康データを可視化。
-                    </p>
-                    <div class="work-tech">
-                        <span class="tech-tag">Kotlin</span>
-                        <span class="tech-tag">KMP</span>
-                        <span class="tech-tag">iOS</span>
-                        <span class="tech-tag">Android</span>
+        <!-- 日本茶事業セクション -->
+        <section id="tea" class="work-section">
+            <h2 class="text-title text-center mb-xl fade-in">🍃 日本茶関連</h2>
+            
+            <div class="works-grid">
+                <!-- 日本茶プラットフォームプレースホルダー -->
+                <div class="work-card fade-in" data-category="tea">
+                    <div class="work-image">
+                        <span class="work-icon">🍃</span>
                     </div>
-                    <div class="work-links">
-                        <a href="apps/" class="work-link primary">詳細を見る</a>
-                        <a href="#" class="work-link">プロトタイプ</a>
+                    <div class="work-content">
+                        <div class="work-category">Business Platform</div>
+                        <h3 class="work-title">日本茶販売</h3>
+                        <p class="work-description">
+                            2025年開業予定の個人事業。厳選した日本茶の小売・卸売をスモールスタートして、
+                            将来的には法人化を目指します。
+                        </p>
+                        <div class="work-tech">
+                            <span class="tech-tag">E-Commerce</span>
+                            <span class="tech-tag">Japanese Tea</span>
+                            <span class="tech-tag">Individual Business</span>
+                            <span class="tech-tag">Coming Soon</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="work-card fade-in" data-category="tea">
+                    <div class="work-image">
+                        <span class="work-icon">🍃</span>
+                    </div>
+                    <div class="work-content">
+                        <div class="work-category">SNS</div>
+                        <h3 class="work-title">ちゃすきー</h3>
+                        <p class="work-description">
+                            Misskeyサーバーを利用した、お茶専門のSNS。
+                            Fediverseの一部として、茶葉や茶器の情報交換を行うことができます。
+                        </p>
+                        <div class="work-tech">
+                            <span class="tech-tag">SNS</span>
+                            <span class="tech-tag">Japanese Tea</span>
+                            <span class="tech-tag">Web</span>
+                        </div>
+                        <div class="work-links">
+                            <a href="https://chaskey.net/" class="work-link">🍃 登録はこちら</a>
+                        </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- エフェクター -->
-            <div class="work-card fade-in" data-category="effects">
-                <div class="work-image">
-                    <span class="work-icon">⚡</span>
-                </div>
-                <div class="work-content">
-                    <div class="work-category">Circuit Design</div>
-                    <h3 class="work-title">Quantum Distortion</h3>
-                    <p class="work-description">
-                        オペアンプとダイオードクリッピングを組み合わせたディストーションペダル。
-                        音楽的な歪みとアナログ回路の美しさを追求した手作りエフェクター。
-                    </p>
-                    <div class="work-tech">
-                        <span class="tech-tag">Analog Circuit</span>
-                        <span class="tech-tag">OpAmp</span>
-                        <span class="tech-tag">PCB Design</span>
+        <!-- エフェクター制作セクション -->
+        <section id="effects" class="work-section">
+            <h2 class="text-title text-center mb-xl fade-in">⚡ エフェクター制作</h2>
+            
+            <div class="works-grid">
+                <!-- エフェクター -->
+                <div class="work-card fade-in" data-category="effects">
+                    <div class="work-image">
+                        <img src="../assets/images/works/ochadrive2.jpeg" alt="OCHA DRIVE エフェクター" class="work-actual-image">
                     </div>
-                    <div class="work-links">
-                        <a href="effects/" class="work-link primary">詳細を見る</a>
-                        <a href="interactive/circuit-lab/" class="work-link">シミュレーター</a>
+                    <div class="work-content">
+                        <div class="work-category">Circuit Design</div>
+                        <h3 class="work-title">OCHA DRIVE</h3>
+                        <p class="work-description">
+                            中身はブティック系のファズの回路を再現したレプリカ。
+                            LEDの配色・ツマミ・筐体のデザインにこだわり、ラッカー塗装を施しました。
+                            ちょっと音がこもっているが見た目には楽しめるエフェクター。
+                            友人と義父に譲渡済み。
+
+                            ボリューム=お湯の量、ゲイン=茶葉の量、トーン=お湯の温度で、お茶を淹れるように音色を変えよう。非常にわかりづらい。
+                        </p>
+                    </div>
+                </div>
+                <div class="work-card fade-in" data-category="effects">
+                    <div class="work-image">
+                        <img src="../assets/images/works/od-3.jpg" alt="BOSS OD-3 MOD" class="work-actual-image">
+                    </div>
+                    <div class="work-content">
+                        <div class="work-category">Circuit Design</div>
+                        <h3 class="work-title">BOSS OD-3 MOD</h3>
+                        <p class="work-description">
+                            OD-3をモディファイ。中低域に抜け感がないと言われているこの機種。
+                            凛として時雨のTKがこれをMODしているという噂から、ジャキジャキ感のあるサウンドに変更。
+                            回路については義父が調べてくれてパーツもくれたので、中古の筐体を自分で買って改造。
+                            新品の方はそのまま使っているので音の違いは明らか。
+                            友人に譲渡済み。
+                        </p>
+                    </div>
+                </div>
+                <div class="work-card fade-in" data-category="effects">
+                    <div class="work-image">
+                        <img src="../assets/images/works/mxrdistortion+.jpg" alt="BOSS OD-3 MOD" class="work-actual-image">
+                    </div>
+                    <div class="work-content">
+                        <div class="work-category">Circuit Design</div>
+                        <h3 class="work-title">MXR Distortion±</h3>
+                        <p class="work-description">
+                            某エフェクターDIYショップで、プリント基板で回路を再現した制作キットから。
+                            はんだ付けと配線と組み立ての練習用で貰いました。
+                            塗装は義父がやってくれたそうなんですが、完成度高すぎん？
+                        </p>
                     </div>
                 </div>
             </div>
-
-            <!-- 音楽作品2 -->
-            <div class="work-card fade-in" data-category="music">
-                <div class="work-image">
-                    <span class="work-icon">🎹</span>
-                </div>
-                <div class="work-content">
-                    <div class="work-category">Music Production</div>
-                    <h3 class="work-title">Digital Zen</h3>
-                    <p class="work-description">
-                        日本茶を飲みながら制作したローファイ・チルアウト楽曲。
-                        自然音とエレクトロニックサウンドの融合による瞑想的な音響体験。
-                    </p>
-                    <div class="work-tech">
-                        <span class="tech-tag">Logic Pro</span>
-                        <span class="tech-tag">Field Recording</span>
-                        <span class="tech-tag">Lo-Fi</span>
+        </section>
+        
+        <!-- 音楽制作セクション -->
+        <section id="music" class="work-section">
+            <h2 class="text-title text-center mb-xl fade-in">🎵 音楽制作</h2>
+            
+            <div class="works-grid">
+                <!-- 音楽作品 -->
+                <div class="work-card fade-in" data-category="music">
+                    <div class="work-image">
+                        <span class="work-icon">🎤</span>
                     </div>
-                    <div class="work-links">
-                        <a href="https://soundcloud.com/spcmsc" class="work-link primary" target="_blank">聴く</a>
-                        <a href="music/" class="work-link">詳細</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- アプリ開発2 -->
-            <div class="work-card fade-in" data-category="apps">
-                <div class="work-image">
-                    <span class="work-icon">🔊</span>
-                </div>
-                <div class="work-content">
-                    <div class="work-category">Mobile Development</div>
-                    <h3 class="work-title">Audio Visualizer</h3>
-                    <p class="work-description">
-                        リアルタイム音声解析による美しいビジュアライザーアプリ。
-                        Kotlinで実装したFFT解析とカスタムビュー描画によるパフォーマンス最適化。
-                    </p>
-                    <div class="work-tech">
-                        <span class="tech-tag">Kotlin</span>
-                        <span class="tech-tag">FFT</span>
-                        <span class="tech-tag">Custom View</span>
-                        <span class="tech-tag">Audio API</span>
-                    </div>
-                    <div class="work-links">
-                        <a href="apps/" class="work-link primary">詳細を見る</a>
+                    <div class="work-content">
+                        <div class="work-category">Music Production</div>
+                        <h3 class="work-title">音楽作品</h3>
+                        <p class="work-description">
+                            TASCAMのバイノーラルマイクや、スマートフォンのマイクから収録した音をサンプリングして
+                            曲っぽくしたりしています。
+                            フットワークが重すぎて数年に一度くらいしかやる気になりません。気が向いたらサンクラに上げます。
+                        </p>
+                        <div class="work-tech">
+                            <span class="tech-tag">フィールドレコーディング</span>
+                            <span class="tech-tag">自作エフェクター</span>
+                            <span class="tech-tag">Ambient</span>
+                            <span class="tech-tag">Lo-Fi</span>
+                        </div>
+                        <div class="work-links">
+                            <a href="https://soundcloud.com/spcmsc" class="work-link">🎵 SoundCloudで聴く</a>
+                        </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- エフェクター2 -->
-            <div class="work-card fade-in" data-category="effects">
-                <div class="work-image">
-                    <span class="work-icon">🌊</span>
-                </div>
-                <div class="work-content">
-                    <div class="work-category">Circuit Design</div>
-                    <h3 class="work-title">Analog Delay</h3>
-                    <p class="work-description">
-                        BBD（バケツリレー）チップを使用したアナログディレイエフェクター。
-                        温かみのあるアナログサウンドと美しい回路設計にこだわった作品。
-                    </p>
-                    <div class="work-tech">
-                        <span class="tech-tag">BBD Chip</span>
-                        <span class="tech-tag">Analog</span>
-                        <span class="tech-tag">Delay</span>
-                        <span class="tech-tag">Vintage</span>
-                    </div>                    <div class="work-links">
-                        <a href="effects/" class="work-link primary">詳細を見る</a>
-                        <a href="#" class="work-link">音源サンプル</a>
+        <!-- インタラクティブ体験セクション -->
+        <section id="interactive" class="work-section">
+            <h2 class="text-title text-center mb-xl fade-in">🌟 インタラクティブ体験</h2>
+            
+            <div class="works-grid">
+                <!-- インタラクティブ機能 - 3D Portfolio -->
+                <div class="work-card fade-in" data-category="portfolio" data-section="interactive">
+                    <div class="work-image">
+                        <span class="work-icon">📦</span>
+                    </div>
+                    <div class="work-content">
+                        <div class="work-category">Interactive Experience</div>
+                        <h3 class="work-title">3D Portfolio Showcase</h3>
+                        <p class="work-description">
+                            Three.jsを使用した3D音楽ビジュアライゼーション。
+                            没入感のある3D空間で作品を体験できます。
+                        </p>
+                        <div class="work-tech">
+                            <span class="tech-tag">Three.js</span>
+                            <span class="tech-tag">WebGL</span>
+                            <span class="tech-tag">3D Graphics</span>
+                            <span class="tech-tag">Interactive</span>
+                        </div>
+                        <div class="work-links">
+                            <a href="#" class="work-link">📦 開発中</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- インタラクティブ機能 - 3D Portfolio -->
-            <div class="work-card fade-in" data-category="portfolio" data-section="interactive">
-                <div class="work-image">
-                    <span class="work-icon">📦</span>
-                </div>
-                <div class="work-content">
-                    <div class="work-category">Interactive Experience</div>
-                    <h3 class="work-title">3D Portfolio Showcase</h3>
-                    <p class="work-description">
-                        Three.jsを使用した3Dインタラクティブポートフォリオ。
-                        没入感のある3D空間で作品を体験できる革新的なプレゼンテーション。
-                    </p>
-                    <div class="work-tech">
-                        <span class="tech-tag">Three.js</span>
-                        <span class="tech-tag">WebGL</span>
-                        <span class="tech-tag">3D Graphics</span>
-                        <span class="tech-tag">Interactive</span>
+                <!-- インタラクティブ機能 - Circuit Lab -->
+                <div class="work-card fade-in" data-category="simulation" data-section="interactive">
+                    <div class="work-image">
+                        <span class="work-icon">⚡</span>
                     </div>
-                    <div class="work-links">
-                        <a href="interactive/3d-portfolio/" class="work-link primary">体験する</a>
-                        <a href="#" class="work-link">技術解説</a>
+                    <div class="work-content">
+                        <div class="work-category">Circuit Simulation</div>
+                        <h3 class="work-title">エフェクター回路シミュレーター</h3>
+                        <p class="work-description">
+                            ブラウザ上でエフェクター回路の動作をシミュレーション。
+                            抵抗値やコンデンサ値を変更して、リアルタイムで音の変化を体験できます。
+                        </p>
+                        <div class="work-tech">
+                            <span class="tech-tag">Web Audio API</span>
+                            <span class="tech-tag">Circuit Simulation</span>
+                            <span class="tech-tag">Real-time</span>
+                            <span class="tech-tag">Educational</span>
+                        </div>
+                        <div class="work-links">
+                            <a href="#" class="work-link">⚡ 開発中</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- インタラクティブ機能 - Circuit Lab -->
-            <div class="work-card fade-in" data-category="simulation" data-section="interactive">
-                <div class="work-image">
-                    <span class="work-icon">⚡</span>
-                </div>
-                <div class="work-content">
-                    <div class="work-category">Circuit Simulation</div>
-                    <h3 class="work-title">エフェクター回路シミュレーター</h3>
-                    <p class="work-description">
-                        ブラウザ上でエフェクター回路の動作をシミュレーション。
-                        抵抗値やコンデンサ値を変更して、リアルタイムで音の変化を体験できます。
-                    </p>
-                    <div class="work-tech">
-                        <span class="tech-tag">Web Audio API</span>
-                        <span class="tech-tag">Circuit Simulation</span>
-                        <span class="tech-tag">Real-time</span>
-                        <span class="tech-tag">Educational</span>
+                <!-- インタラクティブ機能 - AI Diagnosis -->
+                <div class="work-card fade-in" data-category="ai" data-section="interactive">
+                    <div class="work-image">
+                        <span class="work-icon">🤖</span>
                     </div>
-                    <div class="work-links">
-                        <a href="interactive/circuit-lab/" class="work-link primary">シミュレート</a>
-                        <a href="#" class="work-link">回路解説</a>
+                    <div class="work-content">
+                        <div class="work-category">AI Application</div>
+                        <h3 class="work-title">日本茶AI診断システム</h3>
+                        <p class="work-description">
+                            簡単な質問に答えて、おすすめの茶葉を選定します！
+                        </p>
+                        <div class="work-tech">
+                            <span class="tech-tag">Machine Learning</span>
+                            <span class="tech-tag">Recommendation</span>
+                            <span class="tech-tag">Japanese Tea</span>
+                            <span class="tech-tag">Personalization</span>
+                        </div>
+                        <div class="work-links">
+                            <a href="#" class="work-link">🤖 開発中</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- インタラクティブ機能 - AI Diagnosis -->
-            <div class="work-card fade-in" data-category="ai" data-section="interactive">
-                <div class="work-image">
-                    <span class="work-icon">🤖</span>
-                </div>
-                <div class="work-content">
-                    <div class="work-category">AI Application</div>
-                    <h3 class="work-title">日本茶AI診断システム</h3>
-                    <p class="work-description">
-                        機械学習アルゴリズムを活用した個人向け茶葉推薦システム。
-                        味覚の嗜好や体調に合わせて最適な日本茶を提案します。
-                    </p>
-                    <div class="work-tech">
-                        <span class="tech-tag">Machine Learning</span>
-                        <span class="tech-tag">Recommendation</span>
-                        <span class="tech-tag">Japanese Tea</span>
-                        <span class="tech-tag">Personalization</span>
+                <!-- インタラクティブ機能 - Tea Wheel -->
+                <div class="work-card fade-in" data-category="visualization" data-section="interactive">
+                    <div class="work-image">
+                        <span class="work-icon">🎯</span>
                     </div>
-                    <div class="work-links">
-                        <a href="interactive/tea-ai-diagnosis/" class="work-link primary">診断を受ける</a>
-                        <a href="#" class="work-link">アルゴリズム解説</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- インタラクティブ機能 - Tea Wheel -->
-            <div class="work-card fade-in" data-category="visualization" data-section="interactive">
-                <div class="work-image">
-                    <span class="work-icon">🎯</span>
-                </div>
-                <div class="work-content">
-                    <div class="work-category">Data Visualization</div>
-                    <h3 class="work-title">日本茶フレーバーホイール</h3>
-                    <p class="work-description">
-                        インタラクティブな茶葉フレーバーホイールで日本茶の味わいを可視化。
-                        D3.jsを使用した美しいデータビジュアライゼーション。
-                    </p>
-                    <div class="work-tech">
-                        <span class="tech-tag">D3.js</span>
-                        <span class="tech-tag">Data Visualization</span>
-                        <span class="tech-tag">Interactive</span>
-                        <span class="tech-tag">Flavor Mapping</span>
-                    </div>
-                    <div class="work-links">
-                        <a href="interactive/tea-wheel/" class="work-link primary">ホイールを回す</a>
-                        <a href="#" class="work-link">データ解説</a>
+                    <div class="work-content">
+                        <div class="work-category">Data Visualization</div>
+                        <h3 class="work-title">日本茶フレーバーホイール</h3>
+                        <p class="work-description">
+                            フレーバーホイールを用いて、日本茶の風味を視覚化。
+                            D3.jsを使用した美しいデータビジュアライゼーション。
+                        </p>
+                        <div class="work-tech">
+                            <span class="tech-tag">D3.js</span>
+                            <span class="tech-tag">Data Visualization</span>
+                            <span class="tech-tag">Interactive</span>
+                            <span class="tech-tag">Flavor Mapping</span>
+                        </div>
+                        <div class="work-links">
+                            <a href="#" class="work-link">🎯 開発中</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -501,8 +582,7 @@
     </footer>
 
     <script src="../assets/js/main.js"></script>
-        <script>
-        document.addEventListener('DOMContentLoaded', () => {
+    <script>        document.addEventListener('DOMContentLoaded', () => {
             const workCards = document.querySelectorAll('.work-card');
 
             // ワークカードのホバーエフェクト
@@ -532,6 +612,20 @@
                     }, 2000);
                 }
             }, 8000);
+
+            // URLのハッシュからセクションへのスムーススクロール
+            const hash = window.location.hash;
+            if (hash) {
+                setTimeout(() => {
+                    const targetSection = document.querySelector(hash);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }, 500); // ページロード後の遅延
+            }
         });
 
         // アプリ読み込み完了時の処理
