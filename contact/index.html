@@ -838,17 +838,18 @@
             }
 
             async sendToGoogleAppsScript(formData, subjectText) {
-                const response = await fetch("https://script.google.com/macros/s/AKfycbwo23q3s7sxwDBJ3R1vq7-sfN7a5Bsupgp143xxDRv_0an1VRykwxqeugrpZnDNRI_1/exec", {
+                // FormDataを使用してCORSエラーを回避
+                const gasFormData = new FormData();
+                gasFormData.append('name', formData.get("name"));
+                gasFormData.append('email', formData.get("email"));
+                gasFormData.append('subject', subjectText);
+                gasFormData.append('company', formData.get("company") || "");
+                gasFormData.append('message', formData.get("message"));
+                gasFormData.append('timestamp', new Date().toISOString());
+
+                const response = await fetch("https://script.google.com/macros/s/AKfycbxGXuhGPVn24UOzypcKp230opeBfzItlZ9Y9cadCOvZlr89DUz4_iHThlXeb_4uktpZ/exec", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        name: formData.get("name"),
-                        email: formData.get("email"),
-                        subject: subjectText, // 表示テキスト（例：🍃 日本茶関連）
-                        company: formData.get("company") || "", // 空の場合の対応
-                        message: formData.get("message"),
-                        timestamp: new Date().toISOString()
-                    })
+                    body: gasFormData
                 });
 
                 if (!response.ok) {
