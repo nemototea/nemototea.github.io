@@ -468,10 +468,8 @@
                         <label class="form-label" for="subject">件名 *</label>
                         <select id="subject" name="subject" class="form-select" required>
                             <option value="">件名を選択してください</option>
-                            <option value="collaboration">🤝 コラボレーション提案</option>
-                            <option value="technical">💻 技術的な質問</option>
-                            <option value="music">🎵 音楽制作について</option>
-                            <option value="tea">🍃 日本茶プラットフォーム</option>
+                            <option value="collaboration">🤝 開発の依頼</option>
+                            <option value="tea">🍃 日本茶関連</option>
                             <option value="podcast">🎙️ ポッドキャスト出演依頼</option>
                             <option value="other">💬 その他</option>
                         </select>
@@ -820,7 +818,15 @@
                 this.setSubmitButtonState('loading');
                 
                 try {
-                    // デモ用の疑似送信
+                    // 件名の表示テキストを取得
+                    const subjectSelect = document.getElementById('subject');
+                    const selectedOption = subjectSelect.options[subjectSelect.selectedIndex];
+                    const subjectText = selectedOption.text;
+                    
+                    // Google Apps Scriptに送信
+                    await this.sendToGoogleAppsScript(formData, subjectText);
+                    
+                    // デモ用の疑似送信（実際の送信が成功した場合のUI表示）
                     await this.simulateFormSubmission(formData);
                     
                 } catch (error) {
@@ -831,13 +837,39 @@
                 }
             }
 
+            async sendToGoogleAppsScript(formData, subjectText) {
+                const response = await fetch("https://script.google.com/macros/s/AKfycbzKv70_l6584oL9Yi0CfXRNNCt-PNe-QmVXBdclxPjFXmkPHl1x0IwQl2hl6kTnWMTt/exec", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        name: formData.get("name"),
+                        email: formData.get("email"),
+                        subject: subjectText, // 表示テキスト（例：🍃 日本茶関連）
+                        company: formData.get("company") || "", // 空の場合の対応
+                        message: formData.get("message"),
+                        timestamp: new Date().toISOString()
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Google Apps Script error: ${response.status}`);
+                }
+
+                return response;
+            }
+
             async simulateFormSubmission(formData) {
                 // デモ用の2秒待機
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 
+                // 件名の表示テキストを取得
+                const subjectSelect = document.getElementById('subject');
+                const selectedOption = subjectSelect.options[subjectSelect.selectedIndex];
+                const subjectText = selectedOption.text;
+                
                 // 成功メッセージ表示
                 this.showResponseMessage(
-                    `✅ メッセージを送信しました！\n\n📋 送信内容:\n• 件名: ${formData.get('subject')}\n• お名前: ${formData.get('name')}\n• メールアドレス: ${formData.get('email')}\n\n48時間以内にお返事いたします。`, 
+                    `✅ メッセージを送信しました！\n\n📋 送信内容:\n• 件名: ${subjectText}\n• お名前: ${formData.get('name')}\n• メールアドレス: ${formData.get('email')}\n\n48時間以内にお返事いたします。`, 
                     'success'
                 );
                 
