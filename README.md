@@ -12,9 +12,7 @@
 - `profile/` : サイト・運営者情報
 - `contact/` : お問い合わせ
 - `podcast/` : ポッドキャスト
-- `special-features/` : スペシャルコンテンツ
-- `works/` : 制作物・アプリ・音楽など
-- `assets/` : CSS・JavaScript等のアセット
+- `works/` : 制作物
 
 ---
 
