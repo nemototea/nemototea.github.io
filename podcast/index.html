@@ -112,6 +112,7 @@
             border-radius: 12px;
             overflow: hidden;
             box-shadow: var(--shadow-glass);
+            text-align: center;
         }
 
         @media (max-width: 768px) {
@@ -163,51 +164,40 @@
             <h2 class="text-title text-center mb-md">🎧 最新エピソードを聴く</h2>
             
             <div class="spotify-embed">
-                <!-- ここに実際のSpotify埋め込みコードを配置 -->
-                <div class="glass-card text-center" style="padding: var(--space-2xl); min-height: 352px; display: flex; flex-direction: column; justify-content: center;">
-                    <span style="font-size: 4rem; margin-bottom: var(--space-md);">🎵</span>
-                    <h3 class="text-subtitle mb-md">Spotify Player</h3>
-                    <p class="text-body mb-lg">
-                        ここにSpotifyの埋め込みプレーヤーが表示されます。<br>
-                        番組が開始されたら、自動的に最新エピソードが反映されます。
-                    </p>
-                    <div class="glass-button" style="margin: 0 auto; padding: var(--space-md) var(--space-xl);">
-                        番組開始をお待ちください
-                    </div>
-                </div>
+                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/show/5atW1qbFRRo0KMamPAfZQN?utm_source=generator" width="75%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             </div>
         </section>
 
         <!-- 配信プラットフォーム -->
         <section class="platforms-section">
-            <h2 class="text-title text-center mb-md fade-in">📱 配信プラットフォーム</h2>
+            <h2 class="text-title text-center mb-md fade-in">📱 配信先</h2>
             <p class="text-body text-center mb-xl fade-in">
                 お好みのプラットフォームでフォロー・購読してください
             </p>
             
             <div class="platforms-grid">
-                <a href="https://open.spotify.com/show/YOUR_SHOW_ID" class="platform-card fade-in" target="_blank" rel="noopener">
+                <a href="https://open.spotify.com/show/5atW1qbFRRo0KMamPAfZQN?si=feb53909a9f14648" class="platform-card fade-in" target="_blank" rel="noopener">
                     <span class="platform-icon">🎵</span>
                     <div class="platform-name">Spotify</div>
                     <p class="text-small">音楽ストリーミング最大手</p>
                 </a>
                 
-                <a href="https://podcasts.apple.com/podcast/YOUR_PODCAST_ID" class="platform-card fade-in" target="_blank" rel="noopener">
+                <a href="https://podcasts.apple.com/us/podcast/%E3%81%AD%E3%82%82%E3%81%A8%E3%81%AE%E6%97%A5%E6%9C%AC%E8%8C%B6%E5%86%92%E9%99%BA%E3%83%A9%E3%82%B8%E3%82%AA/id1824109073" class="platform-card fade-in" target="_blank" rel="noopener">
                     <span class="platform-icon">🍎</span>
-                    <div class="platform-name">Apple Podcasts</div>
-                    <p class="text-small">iOS標準ポッドキャストアプリ</p>
+                    <div class="platform-name">Apple Podcast</div>
+                    <p class="text-small">iOS標準ポッドキャスト</p>
                 </a>
                 
-                <a href="https://podcasts.google.com/feed/YOUR_FEED_URL" class="platform-card fade-in" target="_blank" rel="noopener">
-                    <span class="platform-icon">🎧</span>
-                    <div class="platform-name">Google Podcasts</div>
-                    <p class="text-small">Googleのポッドキャストサービス</p>
-                </a>
-                
-                <a href="/podcast/feed.xml" class="platform-card fade-in" target="_blank" rel="noopener">
+                <a href="https://stand.fm/channels/67e66bf6ea64634e38e4d386" class="platform-card fade-in" target="_blank" rel="noopener">
                     <span class="platform-icon">📡</span>
                     <div class="platform-name">stand.fm</div>
-                    <p class="text-small">stand.fm</p>
+                    <p class="text-small">音声配信プラットフォーム</p>
+                </a>
+
+                <a href="https://listen.style/p/nemotea" class="platform-card fade-in" target="_blank" rel="noopener">
+                    <span class="platform-icon">🎧</span>
+                    <div class="platform-name">LISTEN</div>
+                    <p class="text-small">AIによる文字起こし</p>
                 </a>
             </div>
         </section>
