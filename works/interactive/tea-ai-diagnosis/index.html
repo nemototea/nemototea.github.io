@@ -315,6 +315,26 @@
             font-weight: 600;
         }
 
+        .professional-notes {
+            background: rgba(45, 80, 22, 0.05);
+            border-left: 4px solid #4a7c59;
+            border-radius: 8px;
+            padding: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+
+        .professional-notes h3 {
+            color: #2d5016;
+            margin-bottom: var(--space-md);
+            font-size: 1.2rem;
+        }
+
+        .professional-notes p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+
         .taste-profile {
             margin: var(--space-xl) 0;
         }
@@ -470,7 +490,7 @@
                 あなたにピッタリの日本茶をAIが診断
             </p>
             <p class="text-body fade-in" style="max-width: 600px; margin: 0 auto;">
-                5つの質問に答えるだけで、あなたの味覚傾向を分析し、<br>
+                7つの質問に答えるだけで、あなたの味覚傾向を分析し、<br>
                 最適な日本茶を推奨します。AIがあなたの好みを学習します。
             </p>
         </section>
@@ -479,7 +499,7 @@
         <div class="diagnosis-container">
             <!-- 進捗表示 -->
             <div class="progress-section fade-in">
-                <div class="progress-text">質問 <span id="current-question">1</span> / <span id="total-questions">5</span></div>
+                <div class="progress-text">質問 <span id="current-question">1</span> / <span id="total-questions">7</span></div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progress-fill"></div>
                 </div>
@@ -629,6 +649,56 @@
                 </div>
             </div>
 
+            <!-- 質問6: カフェインの好み -->
+            <div class="question-card" data-question="6">
+                <div class="question-header">
+                    <div class="question-number">6</div>
+                    <div class="question-text">カフェインの摂取についてはいかがですか？</div>
+                </div>
+                <div class="options-grid">
+                    <div class="option-card" data-value="high">
+                        <span class="option-icon">⚡</span>
+                        <div class="option-title">多め</div>
+                        <div class="option-description">集中力を高めたい</div>
+                    </div>
+                    <div class="option-card" data-value="medium">
+                        <span class="option-icon">⚖️</span>
+                        <div class="option-title">適度</div>
+                        <div class="option-description">バランスを重視</div>
+                    </div>
+                    <div class="option-card" data-value="low">
+                        <span class="option-icon">🌙</span>
+                        <div class="option-title">少なめ</div>
+                        <div class="option-description">夜も安心して飲みたい</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 質問7: 茶葉の品質への関心 -->
+            <div class="question-card" data-question="7">
+                <div class="question-header">
+                    <div class="question-number">7</div>
+                    <div class="question-text">茶葉の品質やグレードについて</div>
+                </div>
+                <div class="options-grid">
+                    <div class="option-card" data-value="premium">
+                        <span class="option-icon">💎</span>
+                        <div class="option-title">高級品</div>
+                        <div class="option-description">品質重視、特別な体験</div>
+                    </div>
+                    <div class="option-card" data-value="standard">
+                        <span class="option-icon">⭐</span>
+                        <div class="option-title">標準品</div>
+                        <div class="option-description">コスパ重視、日常使い</div>
+                    </div>
+                    <div class="option-card" data-value="either">
+                        <span class="option-icon">🤔</span>
+                        <div class="option-title">どちらでも</div>
+                        <div class="option-description">味が良ければ問題なし</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- ナビゲーションボタン -->
             <div class="navigation-buttons fade-in">
                 <button class="nav-button" id="prev-button" disabled>◀ 前の質問</button>
@@ -668,6 +738,29 @@
                     <div class="detail-label">おすすめ時間</div>
                     <div class="detail-value" id="best-time">朝・昼</div>
                 </div>
+                <div class="result-detail">
+                    <div class="detail-label">品質グレード</div>
+                    <div class="detail-value" id="tea-grade">標準</div>
+                </div>
+                <div class="result-detail">
+                    <div class="detail-label">カフェイン</div>
+                    <div class="detail-value" id="caffeine-level">中程度</div>
+                </div>
+                <div class="result-detail">
+                    <div class="detail-label">産地</div>
+                    <div class="detail-value" id="origin">静岡・鹿児島</div>
+                </div>
+                <div class="result-detail">
+                    <div class="detail-label">季節</div>
+                    <div class="detail-value" id="season">通年</div>
+                </div>
+            </div>
+
+            <div class="professional-notes">
+                <h3>🍃 専門家コメント</h3>
+                <p id="professional-comment">
+                    この診断結果は、あなたの味覚傾向と茶葉の特性を総合的に分析したものです。
+                </p>
             </div>
 
             <div class="taste-profile">
@@ -717,82 +810,170 @@
             sencha: {
                 name: "煎茶",
                 icon: "🍵",
-                description: "バランスの取れた味わいと清涼感のある香りが特徴の、日本を代表する緑茶です。朝の目覚めから午後のひとときまで、幅広いシーンで楽しめます。",
-                waterTemp: "70-80℃",
+                description: "日本茶の代表格。バランスの取れた味わいと清涼感のある香りが特徴。茶葉の品質と製法により、上級品では上品な甘味と旨味が楽しめます。",
+                waterTemp: "70-90℃",
                 steepTime: "1-2分",
                 bestTime: "朝・昼",
                 taste: { sweetness: 5, bitterness: 4, astringency: 6, umami: 7 },
-                keywords: ["バランス", "爽やか", "万能", "青草"]
+                keywords: ["バランス", "爽やか", "万能", "青草", "清涼感"],
+                grade: "standard",
+                caffeine: "medium",
+                origin: "静岡・鹿児島",
+                season: "通年"
             },
             gyokuro: {
                 name: "玉露",
                 icon: "💎",
-                description: "最高級の日本茶として知られる玉露は、甘味と旨味が際立つ上品な味わい。低温でじっくりと淹れることで、その真価を発揮します。",
+                description: "日本茶の最高峰。20日以上の覆い栽培により、クロロフィルとアミノ酸（テアニン）が豊富。甘味と旨味の調和が絶妙で、渋味は極めて少ない。",
                 waterTemp: "50-60℃",
                 steepTime: "2-3分",
                 bestTime: "午後・夕方",
                 taste: { sweetness: 9, bitterness: 2, astringency: 3, umami: 10 },
-                keywords: ["高級", "上品", "甘味", "旨味"]
+                keywords: ["高級", "上品", "甘味", "旨味", "覆い栽培", "テアニン"],
+                grade: "premium",
+                caffeine: "high",
+                origin: "京都宇治・福岡八女",
+                season: "春"
             },
             matcha: {
                 name: "抹茶",
                 icon: "🍃",
-                description: "石臼で挽いた茶葉の粉末。濃厚な味わいと鮮やかな色が特徴。茶道の精神性も感じられる、日本茶の代表格です。",
+                description: "覆い栽培された茶葉を石臼で挽いた粉末茶。濃厚な味わいと鮮やかな色が特徴。薄茶と濃茶で異なる味わいを楽しめる。",
                 waterTemp: "70-80℃",
                 steepTime: "撹拌",
                 bestTime: "いつでも",
                 taste: { sweetness: 7, bitterness: 8, astringency: 5, umami: 9 },
-                keywords: ["濃厚", "茶道", "石臼", "伝統"]
+                keywords: ["濃厚", "茶道", "石臼", "伝統", "カテキン"],
+                grade: "premium",
+                caffeine: "high",
+                origin: "京都宇治・愛知西尾",
+                season: "春"
             },
             hojicha: {
                 name: "ほうじ茶",
                 icon: "🔥",
-                description: "茶葉を焙煎した香ばしい香りが特徴のお茶。カフェインが少なく、夜でも安心して飲める優しい味わいです。",
+                description: "茶葉を高温で焙煎した香ばしい香りが特徴。焙煎によりカフェインとタンニンが減少し、夜でも安心して飲める優しい味わい。",
                 waterTemp: "90-100℃",
                 steepTime: "30秒-1分",
                 bestTime: "夜・リラックス",
                 taste: { sweetness: 6, bitterness: 3, astringency: 2, umami: 4 },
-                keywords: ["香ばしい", "焙煎", "夜", "リラックス"]
+                keywords: ["香ばしい", "焙煎", "夜", "リラックス", "低カフェイン"],
+                grade: "standard",
+                caffeine: "low",
+                origin: "京都・静岡",
+                season: "通年"
             },
             genmaicha: {
                 name: "玄米茶",
                 icon: "🌾",
-                description: "緑茶と炒った玄米をブレンドしたお茶。香ばしい玄米の香りとさっぱりとした味わいが特徴。食事との相性も抜群です。",
+                description: "緑茶と炒った玄米をブレンド。玄米の香ばしさと緑茶の爽やかさが調和。食事との相性が良く、胃に優しい。",
                 waterTemp: "90-100℃",
                 steepTime: "30秒",
                 bestTime: "食後",
                 taste: { sweetness: 5, bitterness: 2, astringency: 3, umami: 3 },
-                keywords: ["玄米", "香ばしい", "食事", "ブレンド"]
+                keywords: ["玄米", "香ばしい", "食事", "ブレンド", "胃に優しい"],
+                grade: "standard",
+                caffeine: "low",
+                origin: "全国",
+                season: "通年"
             },
             fukamushicha: {
                 name: "深蒸し茶",
                 icon: "💚",
-                description: "通常より長時間蒸した茶葉で作るお茶。濃厚でまろやかな味わいが特徴。色が濃く、コクのある風味を楽しめます。",
+                description: "通常の2-3倍の時間蒸した茶葉。蒸し時間が長いため茶葉が細かくなり、濃厚でまろやかな味わい。水色は濃い緑色。",
                 waterTemp: "70-80℃",
                 steepTime: "45秒",
                 bestTime: "朝・昼",
                 taste: { sweetness: 6, bitterness: 5, astringency: 7, umami: 8 },
-                keywords: ["濃厚", "コク", "深蒸し", "まろやか"]
+                keywords: ["濃厚", "コク", "深蒸し", "まろやか", "静岡"],
+                grade: "standard",
+                caffeine: "medium",
+                origin: "静岡",
+                season: "通年"
             },
             bancha: {
                 name: "番茶",
                 icon: "🌿",
-                description: "成長した茶葉を使用したお茶。すっきりとした味わいで飲みやすく、日常的に楽しめるお茶です。",
+                description: "三番茶以降の成長した茶葉や茎を使用。すっきりとした味わいで飲みやすく、日常茶として親しまれる。",
                 waterTemp: "80-90℃",
                 steepTime: "1分",
                 bestTime: "食事中",
                 taste: { sweetness: 3, bitterness: 3, astringency: 4, umami: 4 },
-                keywords: ["すっきり", "日常", "食事", "軽やか"]
+                keywords: ["すっきり", "日常", "食事", "軽やか", "経済的"],
+                grade: "standard",
+                caffeine: "low",
+                origin: "全国",
+                season: "夏・秋"
             },
             shincha: {
                 name: "新茶",
                 icon: "🌱",
-                description: "その年の最初に摘まれた一番茶。フレッシュな香りと甘味が特徴の季節限定のお茶です。",
+                description: "その年の最初に摘まれた一番茶。新芽の柔らかさと豊富な栄養素により、フレッシュな香りと甘味が楽しめる季節限定茶。",
                 waterTemp: "70℃",
                 steepTime: "1分",
                 bestTime: "午前中",
                 taste: { sweetness: 8, bitterness: 3, astringency: 5, umami: 7 },
-                keywords: ["フレッシュ", "季節", "一番茶", "甘味"]
+                keywords: ["フレッシュ", "季節", "一番茶", "甘味", "新芽"],
+                grade: "premium",
+                caffeine: "medium",
+                origin: "鹿児島・静岡",
+                season: "春"
+            },
+            kabusecha: {
+                name: "かぶせ茶",
+                icon: "🌙",
+                description: "摘採前に1-2週間覆いをかけた茶葉。玉露と煎茶の中間的な味わいで、上品な甘味と旨味を持つ。",
+                waterTemp: "65-75℃",
+                steepTime: "1-2分",
+                bestTime: "午後",
+                taste: { sweetness: 7, bitterness: 3, astringency: 4, umami: 8 },
+                keywords: ["上品", "甘味", "旨味", "覆い栽培", "中級"],
+                grade: "premium",
+                caffeine: "medium",
+                origin: "三重・京都",
+                season: "春"
+            },
+            kukicha: {
+                name: "茎茶（棒茶）",
+                icon: "🌾",
+                description: "茶葉の茎や芽の部分を使用。さっぱりとした味わいで、独特の甘い香りがある。カフェインが少なく飲みやすい。",
+                waterTemp: "80-90℃",
+                steepTime: "30秒-1分",
+                bestTime: "夜・リラックス",
+                taste: { sweetness: 6, bitterness: 2, astringency: 3, umami: 5 },
+                keywords: ["さっぱり", "甘い香り", "茎", "低カフェイン", "軽やか"],
+                grade: "standard",
+                caffeine: "low",
+                origin: "静岡・鹿児島",
+                season: "通年"
+            },
+            tamaryokucha: {
+                name: "玉緑茶",
+                icon: "🍃",
+                description: "勾玉状に丸まった形状が特徴。蒸し製と釜炒り製があり、特に釜炒り製は香ばしい香りと独特の風味を持つ。",
+                waterTemp: "75-85℃",
+                steepTime: "1-2分",
+                bestTime: "朝・昼",
+                taste: { sweetness: 5, bitterness: 4, astringency: 5, umami: 6 },
+                keywords: ["勾玉", "釜炒り", "香ばしい", "独特", "九州"],
+                grade: "standard",
+                caffeine: "medium",
+                origin: "佐賀・長崎",
+                season: "通年"
+            },
+            konacha: {
+                name: "粉茶",
+                icon: "💨",
+                description: "茶葉を細かく砕いた粉状の茶。濃厚で渋味が強く、寿司屋でよく使われる。短時間で抽出できる。",
+                waterTemp: "80-90℃",
+                steepTime: "15-30秒",
+                bestTime: "食事中",
+                taste: { sweetness: 3, bitterness: 7, astringency: 8, umami: 6 },
+                keywords: ["濃厚", "渋味", "寿司屋", "短時間", "粉状"],
+                grade: "standard",
+                caffeine: "high",
+                origin: "静岡・鹿児島",
+                season: "通年"
             }
         };
 
@@ -800,7 +981,7 @@
         class TeaAIDiagnosis {
             constructor() {
                 this.currentQuestion = 1;
-                this.totalQuestions = 5;
+                this.totalQuestions = 7;
                 this.answers = {};
                 this.isCompleted = false;
                 
@@ -985,28 +1166,47 @@
 
             calculateTeaScore(tea, answers) {
                 let score = 0;
-
-                // 時間帯による適合性
+                
+                // 基本適合度（60%）
+                // 時間帯による適合性（15%）
                 const timeScore = this.getTimeScore(tea, answers[1]);
-                score += timeScore * 20;
+                score += timeScore * 15;
 
-                // 味の好みによる適合性
+                // 味覚による適合性（20%）
                 const tasteScore = this.getTasteScore(tea, answers[2]);
-                score += tasteScore * 25;
+                score += tasteScore * 20;
 
-                // 香りの好みによる適合性
+                // 香りによる適合性（15%）
                 const aromaScore = this.getAromaScore(tea, answers[3]);
-                score += aromaScore * 20;
+                score += aromaScore * 15;
 
-                // 濃さの好みによる適合性
+                // 濃さの好みによる適合性（10%）
                 const strengthScore = this.getStrengthScore(tea, answers[4]);
-                score += strengthScore * 15;
+                score += strengthScore * 10;
 
-                // シーンによる適合性
+                // 専門的評価（40%）
+                // シーンによる適合性（15%）
                 const sceneScore = this.getSceneScore(tea, answers[5]);
-                score += sceneScore * 20;
+                score += sceneScore * 15;
 
-                return score;
+                // カフェインの好みによる適合性（10%）
+                const caffeineScore = this.getCaffeineScore(tea, answers[6]);
+                score += caffeineScore * 10;
+
+                // 品質グレードによる適合性（15%）
+                const gradeScore = this.getGradeScore(tea, answers[7]);
+                score += gradeScore * 15;
+
+                // 専門的ボーナス要因
+                // 季節性ボーナス（現在の季節に適した茶葉）
+                const seasonBonus = this.getSeasonBonus(tea);
+                score += seasonBonus;
+
+                // 味のバランス調和度
+                const harmonyBonus = this.getHarmonyBonus(tea, answers);
+                score += harmonyBonus;
+
+                return Math.round(Math.max(0, Math.min(100, score)));
             }
 
             getTimeScore(tea, timeAnswer) {
@@ -1018,7 +1218,18 @@
                 };
 
                 const preferredTimes = timeMapping[timeAnswer] || [];
-                return preferredTimes.some(time => tea.bestTime.includes(time)) ? 1 : 0.3;
+                
+                // 完全一致の場合
+                if (preferredTimes.some(time => tea.bestTime.includes(time))) return 1;
+                
+                // 部分一致の場合（例：「いつでも」）
+                if (tea.bestTime.includes('いつでも')) return 0.8;
+                
+                // 朝のお茶を昼に飲む場合など、近い時間帯の場合
+                if (timeAnswer === 'morning' && tea.bestTime.includes('昼')) return 0.6;
+                if (timeAnswer === 'afternoon' && (tea.bestTime.includes('朝') || tea.bestTime.includes('夕方'))) return 0.6;
+                
+                return 0.3;
             }
 
             getTasteScore(tea, tasteAnswer) {
@@ -1033,37 +1244,68 @@
                 if (!targetTaste) return 0.5;
 
                 const tasteValue = tea.taste[targetTaste];
-                return tasteValue / 10; // 0-1の範囲に正規化
+                
+                // 高い値（7-10）なら完全適合
+                if (tasteValue >= 7) return 1;
+                // 中程度（4-6）なら部分適合
+                if (tasteValue >= 4) return 0.7;
+                // 低い値（1-3）なら低適合
+                return 0.3;
             }
 
             getAromaScore(tea, aromaAnswer) {
                 const aromaMapping = {
-                    'fresh': ['青草', '爽やか', 'フレッシュ'],
+                    'fresh': ['青草', '爽やか', 'フレッシュ', '清涼感'],
                     'floral': ['花香', '上品', '華やか'],
                     'roasted': ['香ばしい', '焙煎', 'ロースト'],
-                    'marine': ['海苔', '海藻', '深み']
+                    'marine': ['海苔', '海藻', '深み', 'テアニン']
                 };
 
                 const aromaKeywords = aromaMapping[aromaAnswer] || [];
-                const hasMatchingAroma = aromaKeywords.some(keyword => 
+                
+                // 完全一致
+                const perfectMatch = aromaKeywords.some(keyword => 
                     tea.keywords.some(teaKeyword => teaKeyword.includes(keyword))
                 );
-
-                return hasMatchingAroma ? 1 : 0.3;
+                
+                if (perfectMatch) return 1;
+                
+                // 関連性チェック（例：高級茶は上品な香り）
+                if (aromaAnswer === 'floral' && tea.grade === 'premium') return 0.7;
+                if (aromaAnswer === 'roasted' && (tea.name.includes('ほうじ') || tea.name.includes('玄米'))) return 0.9;
+                if (aromaAnswer === 'fresh' && tea.name.includes('新茶')) return 0.8;
+                
+                return 0.3;
             }
 
             getStrengthScore(tea, strengthAnswer) {
-                // 茶葉の強度を推定（苦味+渋味の合計で判定）
-                const teaStrength = (tea.taste.bitterness + tea.taste.astringency) / 2;
+                // 茶葉の強度を推定（苦味+渋味+カフェインレベルで判定）
+                const tasteStrength = (tea.taste.bitterness + tea.taste.astringency) / 2;
+                
+                // カフェインレベルも考慮
+                let caffeineModifier = 0;
+                if (tea.caffeine === 'high') caffeineModifier = 2;
+                else if (tea.caffeine === 'medium') caffeineModifier = 1;
+                else caffeineModifier = 0;
+                
+                const totalStrength = tasteStrength + caffeineModifier;
                 
                 const strengthMapping = {
-                    'light': [0, 4],
-                    'medium': [3, 7],
-                    'strong': [6, 10]
+                    'light': [0, 5],
+                    'medium': [4, 8],
+                    'strong': [7, 12]
                 };
 
-                const [min, max] = strengthMapping[strengthAnswer] || [0, 10];
-                return (teaStrength >= min && teaStrength <= max) ? 1 : 0.3;
+                const [min, max] = strengthMapping[strengthAnswer] || [0, 12];
+                
+                // 範囲内なら高スコア
+                if (totalStrength >= min && totalStrength <= max) return 1;
+                
+                // 範囲に近い場合は中程度のスコア
+                const distance = Math.min(Math.abs(totalStrength - min), Math.abs(totalStrength - max));
+                if (distance <= 2) return 0.7;
+                
+                return 0.3;
             }
 
             getSceneScore(tea, sceneAnswer) {
@@ -1082,6 +1324,68 @@
                 return hasMatchingScene ? 1 : 0.5;
             }
 
+            // 新しい専門的スコアリング関数
+            getCaffeineScore(tea, caffeineAnswer) {
+                const caffeineMapping = {
+                    'high': 'high',
+                    'medium': 'medium',
+                    'low': 'low'
+                };
+
+                const preferredCaffeine = caffeineMapping[caffeineAnswer];
+                return tea.caffeine === preferredCaffeine ? 1 : 0.5;
+            }
+
+            getGradeScore(tea, gradeAnswer) {
+                const gradeMapping = {
+                    'premium': 'premium',
+                    'standard': 'standard',
+                    'either': 'any'
+                };
+
+                const preferredGrade = gradeMapping[gradeAnswer];
+                if (preferredGrade === 'any') return 1;
+                return tea.grade === preferredGrade ? 1 : 0.3;
+            }
+
+            getSeasonBonus(tea) {
+                const currentDate = new Date();
+                const month = currentDate.getMonth() + 1; // 1-12
+                
+                let currentSeason = '';
+                if (month >= 3 && month <= 5) currentSeason = '春';
+                else if (month >= 6 && month <= 8) currentSeason = '夏';
+                else if (month >= 9 && month <= 11) currentSeason = '秋';
+                else currentSeason = '冬';
+
+                if (tea.season === '通年') return 2;
+                if (tea.season.includes(currentSeason)) return 3;
+                return 0;
+            }
+
+            getHarmonyBonus(tea, answers) {
+                let bonus = 0;
+                
+                // 味のバランス評価
+                const tasteValues = Object.values(tea.taste);
+                const tasteRange = Math.max(...tasteValues) - Math.min(...tasteValues);
+                
+                // バランスの良い茶葉（味の差が小さい）にボーナス
+                if (tasteRange <= 4) bonus += 2;
+                
+                // 複数の要素で高スコアを取った場合のボーナス
+                let highScoreCount = 0;
+                if (this.getTimeScore(tea, answers[1]) > 0.8) highScoreCount++;
+                if (this.getTasteScore(tea, answers[2]) > 0.8) highScoreCount++;
+                if (this.getAromaScore(tea, answers[3]) > 0.8) highScoreCount++;
+                if (this.getSceneScore(tea, answers[5]) > 0.8) highScoreCount++;
+                
+                if (highScoreCount >= 3) bonus += 3;
+                else if (highScoreCount >= 2) bonus += 1;
+                
+                return bonus;
+            }
+
             displayResult(result) {
                 const resultSection = document.getElementById('result-section');
                 
@@ -1093,6 +1397,26 @@
                 document.getElementById('water-temp').textContent = result.tea.waterTemp;
                 document.getElementById('steep-time').textContent = result.tea.steepTime;
                 document.getElementById('best-time').textContent = result.tea.bestTime;
+                
+                // 新しい詳細情報を表示
+                const gradeMapping = {
+                    'premium': '高級',
+                    'standard': '標準'
+                };
+                const caffeineMapping = {
+                    'high': '高い',
+                    'medium': '中程度',
+                    'low': '低い'
+                };
+                
+                document.getElementById('tea-grade').textContent = gradeMapping[result.tea.grade] || result.tea.grade;
+                document.getElementById('caffeine-level').textContent = caffeineMapping[result.tea.caffeine] || result.tea.caffeine;
+                document.getElementById('origin').textContent = result.tea.origin;
+                document.getElementById('season').textContent = result.tea.season;
+                
+                // 専門家コメントを生成
+                const professionalComment = this.generateProfessionalComment(result.tea, result.score, this.answers);
+                document.getElementById('professional-comment').textContent = professionalComment;
 
                 // 味覚プロファイルを更新
                 Object.entries(result.tea.taste).forEach(([taste, value]) => {
@@ -1116,6 +1440,44 @@
                 }, 300);
 
                 this.isCompleted = true;
+            }
+
+            generateProfessionalComment(tea, score, answers) {
+                let comment = '';
+                
+                if (score >= 90) {
+                    comment = `この茶葉は、あなたの味覚傾向と非常によく合致しています。`;
+                } else if (score >= 80) {
+                    comment = `この茶葉は、あなたの好みによく合うと思われます。`;
+                } else if (score >= 70) {
+                    comment = `この茶葉は、あなたの好みに適していると考えられます。`;
+                } else {
+                    comment = `この茶葉は、新しい味覚体験を提供してくれるでしょう。`;
+                }
+                
+                // 茶葉の特徴に基づいたコメント追加
+                if (tea.grade === 'premium') {
+                    comment += ` 高級茶葉の繊細な風味をお楽しみください。`;
+                }
+                
+                if (tea.caffeine === 'low') {
+                    comment += ` カフェインが少ないので、夜間の飲用にも適しています。`;
+                }
+                
+                if (tea.season === '春') {
+                    comment += ` 春の新芽の爽やかな味わいが特徴です。`;
+                }
+                
+                // 製法による特徴
+                if (tea.name.includes('深蒸し')) {
+                    comment += ` 深蒸し製法により、濃厚でまろやかな味わいに仕上がっています。`;
+                } else if (tea.name.includes('玉露')) {
+                    comment += ` 覆い栽培により、甘味と旨味が最大限に引き出されています。`;
+                } else if (tea.name.includes('ほうじ')) {
+                    comment += ` 焙煎による香ばしさが、リラックス効果をもたらします。`;
+                }
+                
+                return comment;
             }
 
             restart() {
