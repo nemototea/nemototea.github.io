@@ -8,8 +8,8 @@
     
     <title>Tea AI Diagnosis - nemotea</title>
     
-    <link rel="stylesheet" href="../../assets/css/main.css">
-    <link rel="icon" type="image/x-icon" href="../../assets/images/favicon-16x16.png">
+    <link rel="stylesheet" href="../../../assets/css/main.css">
+    <link rel="icon" type="image/x-icon" href="../../../assets/images/favicon-16x16.png">
     
     <style>
         body {
@@ -73,11 +73,13 @@
             opacity: 0;
             transform: translateY(30px);
             transition: all 0.5s ease;
+            display: none;
         }
 
         .question-card.active {
             opacity: 1;
             transform: translateY(0);
+            display: block;
         }
 
         .question-card::before {
@@ -271,6 +273,7 @@
             margin-bottom: var(--space-md);
             background: linear-gradient(45deg, #2d5016, #4a7c59);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -442,13 +445,16 @@
         <!-- ヘッダーナビゲーション -->
         <header class="glass-header mt-md">
             <nav class="nav">
-                <a href="../../" class="nav-logo">nemotea.dev</a>
-                <ul class="nav-items">
-                    <li><a href="../../" class="nav-item">Home</a></li>
-                    <li><a href="../../profile/" class="nav-item">Profile</a></li>
-                    <li><a href="../../works/" class="nav-item active">Works</a></li>
-                    <li><a href="../../podcast/" class="nav-item">Podcast</a></li>
-                    <li><a href="../../contact/" class="nav-item">Contact</a></li>
+                <a href="../../../" class="nav-logo">nemotea.dev</a>
+                <button class="nav-toggle" id="nav-toggle" aria-label="メニューを開く" aria-expanded="false">
+                    ☰
+                </button>
+                <ul class="nav-items" id="nav-items">
+                    <li><a href="../../../" class="nav-item">Home</a></li>
+                    <li><a href="../../../profile/" class="nav-item">Profile</a></li>
+                    <li><a href="../../../works/" class="nav-item active">Works</a></li>
+                    <li><a href="../../../podcast/" class="nav-item">Podcast</a></li>
+                    <li><a href="../../../contact/" class="nav-item">Contact</a></li>
                 </ul>
             </nav>
         </header>
@@ -698,12 +704,12 @@
 
             <div class="action-buttons">
                 <a href="../tea-wheel/" class="action-button primary">🍃 フレーバーホイールで詳しく</a>
-                <a href="../../contact/" class="action-button">💌 茶葉について相談</a>
+                <a href="../../../contact/" class="action-button">💌 茶葉について相談</a>
                 <button class="action-button" id="restart-button">🔄 もう一度診断</button>
             </div>
         </div>
     </div>
-    <script src="../../assets/js/main.js"></script>
+    <script src="../../../assets/js/main.js"></script>
     
     <script>
         // 日本茶データベース
@@ -896,9 +902,7 @@
                 // 新しい質問を表示
                 const targetQuestion = document.querySelector(`[data-question="${questionNum}"]`);
                 if (targetQuestion) {
-                    setTimeout(() => {
-                        targetQuestion.classList.add('active');
-                    }, 300);
+                    targetQuestion.classList.add('active');
                 }
 
                 this.currentQuestion = questionNum;
@@ -1156,17 +1160,17 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <a href="../../" class="footer-logo">nemotea.dev</a>
+                    <a href="../../../" class="footer-logo">nemotea.dev</a>
                     <p class="footer-description">
                         Tea-Driven Development - Technology meets Creativity
                     </p>
                 </div>
                 
                 <div class="footer-links">
-                    <a href="../../" class="footer-link">Home</a>
-                    <a href="../../profile/" class="footer-link">Profile</a>
-                    <a href="../../works/" class="footer-link">Works</a>
-                    <a href="../../contact/" class="footer-link">Contact</a>
+                    <a href="../../../" class="footer-link">Home</a>
+                    <a href="../../../profile/" class="footer-link">Profile</a>
+                    <a href="../../../works/" class="footer-link">Works</a>
+                    <a href="../../../contact/" class="footer-link">Contact</a>
                 </div>
             </div>
             
