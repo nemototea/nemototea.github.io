@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="音楽精通ロードマップ - 12の切り口 × 5段階で音楽のあらゆる側面を体系的に極めるための完全ガイド">
+    <title>音楽精通ロードマップ - nemotea</title>
+    <link rel="stylesheet" href="../../../assets/css/main.css">
+    <link rel="icon" type="image/x-icon" href="../../../assets/images/favicon-16x16.png">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+        }
+        .roadmap-header {
+            text-align: center;
+            padding: var(--space-2xl) 0 var(--space-xl);
+        }
+        .roadmap-header .label {
+            font-size: 0.75rem;
+            letter-spacing: 6px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: var(--space-xs);
+        }
+        .roadmap-header h1 {
+            font-size: clamp(1.75rem, 5vw, 2.6rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffd700, #ff6b6b, #4ecdc4, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0 12px 0;
+            line-height: 1.3;
+        }
+        .roadmap-header .subtitle {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 var(--space-sm);
+        }
+        .category-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur-light);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            width: 100%;
+        }
+        .category-card:hover {
+            transform: translateY(-2px);
+            background: var(--glass-bg-hover);
+        }
+        .category-card .card-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .category-card .card-icon { font-size: 1.75rem; flex-shrink: 0; }
+        .category-card .card-title { font-size: 1.06rem; font-weight: 700; }
+        .category-card .card-subtitle { font-size: 0.69rem; color: var(--text-muted); letter-spacing: 1px; }
+        .category-card .card-desc { font-size: 0.81rem; color: var(--text-secondary); margin: 0; line-height: 1.6; }
+        .category-card .card-num {
+            position: absolute; top: 12px; right: 16px;
+            font-size: 0.69rem; color: var(--text-muted); font-weight: 500; opacity: 0.5;
+        }
+        .detail-view {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 var(--space-sm);
+        }
+        .back-btn {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.15);
+            color: var(--text-secondary);
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.81rem;
+            margin-bottom: var(--space-md);
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .back-btn:hover {
+            border-color: rgba(255,255,255,0.35);
+            color: var(--text-primary);
+        }
+        .detail-header {
+            display: flex; align-items: center; gap: 16px; margin-bottom: 8px;
+        }
+        .detail-header .icon { font-size: 2.5rem; }
+        .detail-header h2 { margin: 0; font-size: 1.75rem; font-weight: 900; }
+        .detail-header .sub { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 2px; }
+        .detail-desc { color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 28px; line-height: 1.7; }
+        .progress-bar { display: flex; gap: 4px; margin-bottom: 28px; }
+        .progress-bar .seg { flex: 1; height: 4px; border-radius: 2px; opacity: 0.6; }
+        .levels-list { display: flex; flex-direction: column; gap: 12px; }
+        .level-toggle {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between;
+            transition: all 0.2s;
+            font-family: inherit; color: inherit;
+        }
+        .level-toggle:hover { background: rgba(255,255,255,0.06); }
+        .level-toggle.expanded { border-radius: 12px 12px 0 0; }
+        .level-toggle .left { display: flex; align-items: center; gap: 12px; }
+        .level-tag {
+            font-size: 0.69rem; font-weight: 700; padding: 3px 10px;
+            border-radius: 10px; border: 1px solid; white-space: nowrap;
+        }
+        .level-name { font-size: 1rem; font-weight: 600; }
+        .level-arrow {
+            font-size: 0.875rem; color: var(--text-muted); transition: transform 0.2s;
+        }
+        .level-toggle.expanded .level-arrow { transform: rotate(180deg); }
+        .level-content {
+            border: 1px solid rgba(255,255,255,0.06);
+            border-top: none; border-radius: 0 0 12px 12px;
+            padding: 16px 20px; display: none;
+        }
+        .level-content.open { display: block; }
+        .level-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; }
+        .level-item:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .level-item .dot { font-size: 0.5rem; margin-top: 6px; flex-shrink: 0; }
+        .level-item .text { font-size: 0.875rem; line-height: 1.6; color: #ccc; }
+        .level-toggle.is-max {
+            background: linear-gradient(135deg, #1a1a2e, #2d1b4e);
+            border-color: rgba(255,215,0,0.27);
+        }
+        .level-toggle.is-max .level-name { font-weight: 900; color: #ffd700; }
+        .level-content.is-max {
+            background: linear-gradient(180deg, #2d1b4e, #1a1a2e);
+            border-color: rgba(255,215,0,0.27);
+        }
+        .level-content.is-max .dot { color: #ffd700; }
+        .level-content.is-max .text { color: #e0d0a0; }
+        .roadmap-footer {
+            text-align: center; margin-top: var(--space-2xl); padding: var(--space-md);
+            border-top: 1px solid rgba(255,255,255,0.03);
+            color: var(--text-muted); font-size: 0.75rem; line-height: 1.8;
+        }
+        .category-grid, .detail-view { animation: fadeUp 0.35s ease; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 640px) {
+            .category-grid { grid-template-columns: 1fr; }
+            .detail-header h2 { font-size: 1.35rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="glass-header mt-md">
+            <nav class="nav">
+                <a href="../../../" class="nav-logo">nemotea.dev</a>
+                <button class="nav-toggle" id="nav-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+                <ul class="nav-items" id="nav-items">
+                    <li><a href="../../../" class="nav-item">Home</a></li>
+                    <li><a href="../../../profile/" class="nav-item">Profile</a></li>
+                    <li><a href="../../../works/" class="nav-item active">Works</a></li>
+                    <li><a href="../../../podcast/" class="nav-item">Podcast</a></li>
+                    <li><a href="../../../contact/" class="nav-item">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="roadmap-header">
+            <div class="label">Complete Music Mastery</div>
+            <h1>音楽精通ロードマップ</h1>
+            <p class="subtitle">12の切り口 × 5段階 ── 音楽のあらゆる側面を体系的に極めるための完全ガイド</p>
+        </div>
+
+        <div id="app"></div>
+
+        <div class="roadmap-footer">
+            <div>全12カテゴリ × 5段階 = 60ステップの音楽精通への道</div>
+            <div style="margin-top:4px;">各レベルを順番に進める必要はありません。興味のある場所から始めましょう。</div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="../../../" class="footer-logo">nemotea.dev</a>
+                    <p class="footer-description">Tea-Driven Development - Technology meets Creativity</p>
+                </div>
+                <div class="footer-links">
+                    <a href="../../../" class="footer-link">Home</a>
+                    <a href="../../../profile/" class="footer-link">Profile</a>
+                    <a href="../../../podcast/" class="footer-link">Podcast</a>
+                    <a href="../../../contact/" class="footer-link">Contact</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">&copy; 2025 nemotea. Built with passion for technology and creativity.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../../assets/js/main.js"></script>
+    <script>
+    (function() {
+        'use strict';
+
+        var CATEGORIES = [
+            {id:"theory",icon:"\u{1F3BC}",title:"音楽理論",subtitle:"Music Theory",color:"#E8B4B8",accent:"#8B2252",description:"音楽の「なぜ」を理解する。作曲・編曲・分析のすべての土台。",levels:[{level:"入門",tag:"Lv.1",items:["音名（ドレミ / CDEFGAB）と音程の理解","拍子・リズムの基礎（4/4, 3/4, 6/8）","長音階・短音階の構造","主要三和音（I, IV, V）の理解","楽譜の読み書き（ト音記号・ヘ音記号）"]},{level:"初級",tag:"Lv.2",items:["ダイアトニックコード（7つのコード）の完全理解","コード進行の基本パターン（II-V-I, I-VI-IV-V等）","転回形とヴォイシング","調号・近親調の関係","基本的な対位法（2声）"]},{level:"中級",tag:"Lv.3",items:["セカンダリードミナント・裏コード","モーダルインターチェンジ（借用和音）","テンションコード（9th, 11th, 13th）","転調のテクニック（ピボットコード等）","楽式論（ソナタ形式、ロンド形式等）"]},{level:"上級",tag:"Lv.4",items:["対位法の高度な技法（フーガ、カノン）","無調音楽・12音技法","スペクトル音楽の理論","微分音・非西洋音律体系","現代の音楽理論（ネオリーマン理論等）"]},{level:"極",tag:"Lv.MAX",items:["独自の理論体系を構築し論文執筆できる","あらゆるジャンルの楽曲を瞬時に分析できる","理論と感覚を自在に行き来して作曲できる"]}]},
+            {id:"history",icon:"\u{1F4DC}",title:"音楽史",subtitle:"Music History",color:"#D4C5A9",accent:"#6B4226",description:"音楽がどのように発展してきたかを知る。文化・社会との関係を理解する。",levels:[{level:"入門",tag:"Lv.1",items:["西洋音楽の大きな時代区分を知る","バロック→古典派→ロマン派の流れ","主要な作曲家10人を聴く","日本の音楽の歴史（雅楽〜J-POP）の概観","ポピュラー音楽の誕生と発展の概要"]},{level:"初級",tag:"Lv.2",items:["各時代の様式的特徴を聴き分けられる","ブルース→ジャズ→ロック→ヒップホップの系譜","楽器の発展史（ピアノ、ギター、電子楽器等）","レコード産業・音楽ビジネスの歴史","世界各地域の伝統音楽の概要"]},{level:"中級",tag:"Lv.3",items:["音楽と社会運動の関係（公民権運動、パンク等）","テクノロジーと音楽の相互影響","各ジャンルのサブジャンル分岐を詳細に理解","非西洋音楽の深い理解（インド、アラブ、アフリカ等）","音楽美学・哲学の基礎"]},{level:"上級",tag:"Lv.4",items:["原典資料（楽譜、手紙、論文）を読み解ける","音楽社会学・民族音楽学の方法論理解","グローバルな音楽の相互影響を体系的に把握","現代音楽シーンのトレンドを歴史的文脈で語れる","音楽批評を歴史的根拠をもって書ける"]},{level:"極",tag:"Lv.MAX",items:["あらゆる時代・地域の音楽を文脈込みで語れる","音楽史研究に新たな視点を提供できる"]}]},
+            {id:"composition",icon:"\u270D\uFE0F",title:"作曲・編曲",subtitle:"Composition & Arrangement",color:"#B8D4E3",accent:"#1B4965",description:"音楽を「創る」技術。メロディ、ハーモニー、リズムを組み合わせて作品にする。",levels:[{level:"入門",tag:"Lv.1",items:["8小節のメロディを作れる","コード進行に合わせたメロディ作成","AメロBメロサビの構成で1曲作れる","DAW（Logic, Ableton等）の基本操作","既存曲のコピー・アレンジ"]},{level:"初級",tag:"Lv.2",items:["歌詞とメロディの関係を意識した作曲","4パート以上のアレンジ（バンド編成）","コード進行の引き出しが50パターン以上","リファレンス曲を分析して自作に活かせる","MIDIプログラミングの基礎"]},{level:"中級",tag:"Lv.3",items:["ストリングス・ブラスの基本的なオーケストレーション","ジャンルを横断した作曲ができる","映像に合わせた劇伴作曲","リハーモナイゼーションの技術","プロレベルのデモ制作"]},{level:"上級",tag:"Lv.4",items:["フルオーケストラのスコア作成","電子音楽と生演奏のハイブリッド作曲","独自の作曲語法・スタイルの確立","商業作品のクオリティで量産できる","他者のビジョンを汲み取って作曲できる"]},{level:"極",tag:"Lv.MAX",items:["あらゆるジャンル・編成で最高品質の作品を生み出せる","音楽史に残るような革新的な作品を創造できる"]}]},
+            {id:"production",icon:"\u{1F39B}\uFE0F",title:"音楽制作・DTM",subtitle:"Music Production",color:"#C5B8D4",accent:"#4A2472",description:"現代の音楽制作技術。録音・ミックス・マスタリングの全工程。",levels:[{level:"入門",tag:"Lv.1",items:["DAWの基本操作（録音・再生・編集）","オーディオとMIDIの違いの理解","基本的なソフト音源の使い方","簡単なビートメイキング","音量バランスの基礎"]},{level:"初級",tag:"Lv.2",items:["EQ・コンプレッサーの基本操作と目的理解","リバーブ・ディレイの効果的な使用","マイキングの基礎（ボーカル・楽器）","サンプリング・ループの活用","基本的なミックスが完成できる"]},{level:"中級",tag:"Lv.3",items:["サイドチェイン・パラレル処理等の応用テクニック","ステレオイメージの構築","バスコンプ・グルーピングの戦略","シンセサイザーの音作り（サブトラクティブ、FM、ウェーブテーブル）","基本的なマスタリング"]},{level:"上級",tag:"Lv.4",items:["アナログ機材とデジタルの融合","Dolby Atmos等のイマーシブオーディオ制作","マスタリングエンジニアレベルの仕上げ","大規模セッションの効率的な管理","ハードウェアシンセ・モジュラーシンセの活用"]},{level:"極",tag:"Lv.MAX",items:["どんな音でも頭の中で鳴っている通りに再現できる","新しいサウンドデザインの手法を開拓できる"]}]},
+            {id:"instrument",icon:"\u{1F3B9}",title:"楽器演奏",subtitle:"Instrumental Performance",color:"#B8E3C8",accent:"#1B6535",description:"楽器を通じて音楽を体感する。表現力と技術の両輪。",levels:[{level:"入門",tag:"Lv.1",items:["1つの楽器を選び基礎練習を始める","正しいフォーム・姿勢の習得","簡単な曲を1曲通して弾ける","メトロノームに合わせて演奏できる","基本的なスケール練習"]},{level:"初級",tag:"Lv.2",items:["中級曲のレパートリーが10曲以上","初見演奏の基礎力","基本的なダイナミクス表現","アンサンブル（合奏）の経験","2つ目の楽器に挑戦"]},{level:"中級",tag:"Lv.3",items:["難曲に挑戦できる技術力","即興演奏の基礎（コードトーン中心）","音色のコントロール","ステージでの演奏経験","複数ジャンルの奏法理解"]},{level:"上級",tag:"Lv.4",items:["プロレベルの技術と表現力","高度な即興演奏","自分のスタイルの確立","他楽器の特性を深く理解","指導できるレベルの理解度"]},{level:"極",tag:"Lv.MAX",items:["楽器が身体の延長として完全に一体化","聴く人の心を動かす唯一無二の演奏ができる"]}]},
+            {id:"ear",icon:"\u{1F442}",title:"聴音・耳の訓練",subtitle:"Ear Training & Listening",color:"#E3D4B8",accent:"#7A5C2E",description:"音楽を「聴く力」を鍛える。すべての音楽能力の根幹。",levels:[{level:"入門",tag:"Lv.1",items:["音の高低・長短を正確に聞き分ける","メジャーとマイナーの響きの違い","基本的なリズムパターンの聞き取り","楽曲のセクション（Aメロ・サビ等）を聞き分ける","主要な楽器の音色を識別"]},{level:"初級",tag:"Lv.2",items:["全ての音程（2度〜オクターブ）の聞き取り","基本的な和音（メジャー、マイナー、7th）の聞き分け","メロディの聴音書き取り（単旋律）","ベースラインの聞き取り","テンポの変化を感知"]},{level:"中級",tag:"Lv.3",items:["複雑な和音（テンション含む）の聞き分け","コード進行の耳コピ","相対音感の確立","多声部の聞き分け（4声以上）","ミックスの周波数バランスを耳で判断"]},{level:"上級",tag:"Lv.4",items:["楽曲全体の瞬時採譜（フルスコア）","微分音やイントネーションの違いを感知","録音の品質・技術的問題を聴き分ける","異なる音律体系の違いを認識","絶対音感に近い精度の相対音感"]},{level:"極",tag:"Lv.MAX",items:["一度聴いた音楽を完全に再現・分析できる","音響空間全体を立体的に把握できる"]}]},
+            {id:"genre",icon:"\u{1F30D}",title:"ジャンル横断知識",subtitle:"Genre Expertise",color:"#D4B8B8",accent:"#722222",description:"クラシックからヒップホップまで、あらゆるジャンルの文法を理解する。",levels:[{level:"入門",tag:"Lv.1",items:["主要ジャンル（ロック、ポップ、ジャズ、クラシック、ヒップホップ、EDM）の特徴","各ジャンルの代表的アーティスト5組ずつ","ジャンルごとの典型的な楽器編成","好みのジャンル以外も積極的に聴く習慣","サブスクのプレイリストで幅広く探索"]},{level:"初級",tag:"Lv.2",items:["各ジャンルのサブジャンルを10以上知る","ジャンル特有のリズムパターン理解","ジャンル間の影響関係の把握","日本固有のジャンル（演歌、シティポップ、ボカロ等）","各ジャンルの名盤を50枚以上聴破"]},{level:"中級",tag:"Lv.3",items:["ジャンル融合の歴史と方法論","地域ごとの音楽シーンの特色（UK、US、ブラジル、韓国等）","各ジャンルの制作技法の違い","マイナージャンル（ノイズ、アンビエント、ワールド等）の深掘り","ジャンルのコンテクストを語れる"]},{level:"上級",tag:"Lv.4",items:["あらゆるジャンルの文法で作曲・編曲できる","未知のジャンルも短時間で本質を把握","ジャンルの政治性・社会性を深く理解","新しいジャンルの萌芽を察知できる","ジャンルを超えた普遍的な音楽原理を語れる"]},{level:"極",tag:"Lv.MAX",items:["全ジャンルを自在に横断し新たな音楽を創造できる","音楽評論家・キュレーターとして信頼される見識"]}]},
+            {id:"acoustics",icon:"\u{1F52C}",title:"音響学・音の科学",subtitle:"Acoustics & Psychoacoustics",color:"#B8D8E3",accent:"#1B4D65",description:"音の物理と知覚を科学的に理解する。エンジニアリングの基盤。",levels:[{level:"入門",tag:"Lv.1",items:["音波の基本（周波数、振幅、波形）","倍音とは何か","デシベル（dB）の概念","人間の可聴範囲と聴覚特性","アナログとデジタルの違い"]},{level:"初級",tag:"Lv.2",items:["フーリエ変換の概念理解","室内音響の基礎（残響、定在波）","マスキング効果","サンプリングレートとビット深度","スピーカー・マイクの動作原理"]},{level:"中級",tag:"Lv.3",items:["心理音響学（ラウドネス、ピッチ知覚、臨界帯域）","部屋の音響設計の基礎","音声コーデック（MP3, AAC, FLAC）の仕組み","DSPの基礎（フィルタ設計等）","測定と分析ツールの使用"]},{level:"上級",tag:"Lv.4",items:["音響シミュレーション","空間音響（HRTF、バイノーラル）","楽器の音響学（弦・管・膜の振動）","音声合成・音声認識の原理","高度なDSPアルゴリズム設計"]},{level:"極",tag:"Lv.MAX",items:["音響設計の第一人者レベルの知見","音の物理と知覚を完全に統合して活用できる"]}]},
+            {id:"business",icon:"\u{1F4BC}",title:"音楽ビジネス・著作権",subtitle:"Music Business & Copyright",color:"#D4D4B8",accent:"#5C5C1B",description:"音楽産業の構造と法律。クリエイターとして生きるための知識。",levels:[{level:"入門",tag:"Lv.1",items:["著作権の基本概念（著作権と著作隣接権）","JASRACとNexToneの役割","ストリーミングサービスの仕組み","レコード会社・音楽出版社の役割","音楽の収益源の種類"]},{level:"初級",tag:"Lv.2",items:["原盤権と出版権の違い","アーティスト契約の基本構造","サブスクリプションの収益分配モデル","音楽配信プラットフォームへの楽曲登録","SNSマーケティングの基礎"]},{level:"中級",tag:"Lv.3",items:["国際的な著作権法の比較","サンプリングクリアランスの実務","ライブ興行のビジネスモデル","マネジメント・エージェントの役割","音楽テック企業のビジネスモデル"]},{level:"上級",tag:"Lv.4",items:["契約交渉の実務能力","AI生成音楽の法的課題","グローバルな音楽市場の分析","音楽スタートアップの立ち上げ","政策提言レベルの著作権法理解"]},{level:"極",tag:"Lv.MAX",items:["音楽業界の変革を主導できる","次世代の音楽ビジネスモデルを設計できる"]}]},
+            {id:"vocal",icon:"\u{1F3A4}",title:"歌唱・ボーカル",subtitle:"Vocal Training",color:"#E3C5D4",accent:"#722252",description:"最も原始的な楽器＝声を極める。表現と技術の究極の融合。",levels:[{level:"入門",tag:"Lv.1",items:["正しい呼吸法（腹式呼吸）","音程を正確に取る訓練","自分の声域の把握","簡単な曲を正確に歌える","リズムに合わせて歌える"]},{level:"初級",tag:"Lv.2",items:["発声練習のルーティン確立","ミックスボイスの基礎","ビブラートのコントロール","歌詞の表現力","マイクの使い方"]},{level:"中級",tag:"Lv.3",items:["ベルティング・ファルセットの使い分け","ジャンル別の発声テクニック","ハモリ・コーラスワーク","即興スキャット","声の健康管理"]},{level:"上級",tag:"Lv.4",items:["高度なメリスマ・装飾音","オペラ・ミュージカルの発声法","ボイスパーカッション・ビートボックス","多言語での歌唱","ボーカルディレクション能力"]},{level:"極",tag:"Lv.MAX",items:["声だけで聴衆を完全に支配できる","あらゆる声楽技法を自在に操れる"]}]},
+            {id:"tech",icon:"\u{1F4BB}",title:"音楽×テクノロジー",subtitle:"Music Tech & Programming",color:"#B8C8E3",accent:"#1B2D65",description:"プログラミングで音楽を拡張する。新しい音楽体験を創る。",levels:[{level:"入門",tag:"Lv.1",items:["Sonic Pi / Scratch等で音を出してみる","MIDIプロトコルの基礎理解","Web Audio APIの概要","音楽系ライブラリの調査","簡単なビジュアライザー作成"]},{level:"初級",tag:"Lv.2",items:["Web Audio APIでシンセサイザー制作","Tone.js等のライブラリ活用","Max/MSP or Pure Dataの基礎","音楽データの解析（BPM検出等）","インタラクティブな音楽アプリ開発"]},{level:"中級",tag:"Lv.3",items:["VSTプラグイン開発（JUCE等）","機械学習×音楽（音源分離、自動採譜等）","リアルタイム音声処理","音楽情報検索（MIR）技術","ライブコーディング演奏"]},{level:"上級",tag:"Lv.4",items:["AI作曲システムの構築","カスタムDSPアルゴリズム実装","音楽プラットフォーム開発","XR（VR/AR）音楽体験の設計","大規模音楽データ分析基盤の構築"]},{level:"極",tag:"Lv.MAX",items:["音楽とテクノロジーの未来を切り拓く","前例のない音楽体験を技術で実現できる"]}]},
+            {id:"education",icon:"\u{1F393}",title:"音楽教育・指導",subtitle:"Music Education & Pedagogy",color:"#C8E3B8",accent:"#2D651B",description:"音楽を教え、伝える技術。学ぶことと教えることは表裏一体。",levels:[{level:"入門",tag:"Lv.1",items:["コダーイ、オルフ、ダルクローズ等の教育法概要","子供と大人の音楽学習の違い","効果的な練習方法の理解","音楽教育の歴史と目的","身近な人に教えてみる"]},{level:"初級",tag:"Lv.2",items:["レッスンプランの設計","初心者への段階的な指導法","モチベーション維持の技術","アンサンブル指導の基礎","教材・カリキュラムの選定"]},{level:"中級",tag:"Lv.3",items:["生徒の個性に合わせた指導","テクノロジーを活用した音楽教育","グループレッスンのファシリテーション","演奏不安・ステージ恐怖への対処","音楽コンクール・発表会の運営"]},{level:"上級",tag:"Lv.4",items:["独自の教育メソッドの開発","音楽教育研究への貢献","多文化・インクルーシブな音楽教育","プロ育成レベルの指導","教育プログラムの設計・評価"]},{level:"極",tag:"Lv.MAX",items:["次世代の音楽家を輩出する教育者","音楽教育の新しいパラダイムを創造できる"]}]}
+        ];
+
+        var LEVEL_COLORS = {
+            "入門": {bg:"#f0f0f0",text:"#555",border:"#ccc"},
+            "初級": {bg:"#e8f5e9",text:"#2e7d32",border:"#a5d6a7"},
+            "中級": {bg:"#fff3e0",text:"#e65100",border:"#ffcc80"},
+            "上級": {bg:"#fce4ec",text:"#c62828",border:"#ef9a9a"},
+            "極":   {bg:"#1a1a2e",text:"#ffd700",border:"#ffd700"}
+        };
+
+        var selectedCategoryId = null;
+        var expandedLevelIndex = null;
+        var appEl = document.getElementById('app');
+
+        function escapeHtml(str) {
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.textContent;
+        }
+
+        function render() {
+            if (selectedCategoryId) {
+                renderDetail();
+            } else {
+                renderGrid();
+            }
+        }
+
+        function renderGrid() {
+            var container = document.createElement('div');
+            container.className = 'category-grid';
+
+            CATEGORIES.forEach(function(cat, i) {
+                var btn = document.createElement('button');
+                btn.className = 'category-card';
+                btn.dataset.id = cat.id;
+                btn.style.borderColor = cat.accent + '44';
+
+                btn.addEventListener('mouseenter', function() {
+                    btn.style.borderColor = cat.accent + '88';
+                    btn.style.boxShadow = '0 8px 24px ' + cat.accent + '22';
+                });
+                btn.addEventListener('mouseleave', function() {
+                    btn.style.borderColor = cat.accent + '44';
+                    btn.style.boxShadow = 'none';
+                });
+                btn.addEventListener('click', function() {
+                    selectedCategoryId = cat.id;
+                    expandedLevelIndex = null;
+                    render();
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                });
+
+                var topDiv = document.createElement('div');
+                topDiv.className = 'card-top';
+
+                var iconSpan = document.createElement('span');
+                iconSpan.className = 'card-icon';
+                iconSpan.textContent = cat.icon;
+
+                var infoDiv = document.createElement('div');
+                var titleDiv = document.createElement('div');
+                titleDiv.className = 'card-title';
+                titleDiv.style.color = cat.color;
+                titleDiv.textContent = cat.title;
+                var subDiv = document.createElement('div');
+                subDiv.className = 'card-subtitle';
+                subDiv.textContent = cat.subtitle;
+                infoDiv.appendChild(titleDiv);
+                infoDiv.appendChild(subDiv);
+
+                topDiv.appendChild(iconSpan);
+                topDiv.appendChild(infoDiv);
+
+                var descP = document.createElement('p');
+                descP.className = 'card-desc';
+                descP.textContent = cat.description;
+
+                var numDiv = document.createElement('div');
+                numDiv.className = 'card-num';
+                numDiv.textContent = String(i + 1).padStart(2, '0');
+
+                btn.appendChild(topDiv);
+                btn.appendChild(descP);
+                btn.appendChild(numDiv);
+                container.appendChild(btn);
+            });
+
+            appEl.textContent = '';
+            appEl.appendChild(container);
+        }
+
+        function renderDetail() {
+            var cat = CATEGORIES.find(function(c) { return c.id === selectedCategoryId; });
+            if (!cat) return;
+
+            var wrapper = document.createElement('div');
+            wrapper.className = 'detail-view';
+
+            // Back button
+            var backBtn = document.createElement('button');
+            backBtn.className = 'back-btn';
+            backBtn.textContent = '\u2190 \u4E00\u89A7\u306B\u623B\u308B';
+            backBtn.addEventListener('click', function() {
+                selectedCategoryId = null;
+                expandedLevelIndex = null;
+                render();
+            });
+            wrapper.appendChild(backBtn);
+
+            // Header
+            var header = document.createElement('div');
+            header.className = 'detail-header';
+            var hIcon = document.createElement('span');
+            hIcon.className = 'icon';
+            hIcon.textContent = cat.icon;
+            var hInfo = document.createElement('div');
+            var hTitle = document.createElement('h2');
+            hTitle.style.color = cat.color;
+            hTitle.textContent = cat.title;
+            var hSub = document.createElement('div');
+            hSub.className = 'sub';
+            hSub.textContent = cat.subtitle;
+            hInfo.appendChild(hTitle);
+            hInfo.appendChild(hSub);
+            header.appendChild(hIcon);
+            header.appendChild(hInfo);
+            wrapper.appendChild(header);
+
+            // Description
+            var desc = document.createElement('p');
+            desc.className = 'detail-desc';
+            desc.textContent = cat.description;
+            wrapper.appendChild(desc);
+
+            // Progress bar
+            var progBar = document.createElement('div');
+            progBar.className = 'progress-bar';
+            cat.levels.forEach(function(lvl) {
+                var seg = document.createElement('div');
+                seg.className = 'seg';
+                seg.style.background = LEVEL_COLORS[lvl.level].border;
+                progBar.appendChild(seg);
+            });
+            wrapper.appendChild(progBar);
+
+            // Levels
+            var levelsList = document.createElement('div');
+            levelsList.className = 'levels-list';
+
+            cat.levels.forEach(function(lvl, i) {
+                var lc = LEVEL_COLORS[lvl.level];
+                var isMax = lvl.level === '\u6975';
+                var isExpanded = expandedLevelIndex === i;
+
+                var block = document.createElement('div');
+                block.className = 'level-block';
+
+                // Toggle button
+                var toggle = document.createElement('button');
+                toggle.className = 'level-toggle' + (isExpanded ? ' expanded' : '') + (isMax ? ' is-max' : '');
+                if (isExpanded && !isMax) {
+                    toggle.style.background = cat.accent + '18';
+                    toggle.style.borderColor = cat.accent + '44';
+                }
+
+                var left = document.createElement('div');
+                left.className = 'left';
+                var tag = document.createElement('span');
+                tag.className = 'level-tag';
+                tag.style.background = isMax ? '#ffd70022' : lc.bg;
+                tag.style.color = isMax ? '#ffd700' : lc.text;
+                tag.style.borderColor = isMax ? '#ffd70044' : lc.border;
+                tag.textContent = lvl.tag;
+                var name = document.createElement('span');
+                name.className = 'level-name';
+                if (!isMax) name.style.color = '#ddd';
+                name.textContent = lvl.level;
+                left.appendChild(tag);
+                left.appendChild(name);
+
+                var arrow = document.createElement('span');
+                arrow.className = 'level-arrow';
+                arrow.textContent = '\u25BC';
+
+                toggle.appendChild(left);
+                toggle.appendChild(arrow);
+
+                toggle.addEventListener('click', function() {
+                    expandedLevelIndex = expandedLevelIndex === i ? null : i;
+                    render();
+                });
+
+                block.appendChild(toggle);
+
+                // Content
+                var content = document.createElement('div');
+                content.className = 'level-content' + (isExpanded ? ' open' : '') + (isMax ? ' is-max' : '');
+                if (!isMax && isExpanded) {
+                    content.style.background = cat.accent + '08';
+                    content.style.borderColor = cat.accent + '44';
+                }
+
+                lvl.items.forEach(function(item, j) {
+                    var row = document.createElement('div');
+                    row.className = 'level-item';
+                    var dot = document.createElement('span');
+                    dot.className = 'dot';
+                    dot.style.color = isMax ? '#ffd700' : cat.color;
+                    dot.textContent = '\u25CF';
+                    var text = document.createElement('span');
+                    text.className = 'text';
+                    text.textContent = item;
+                    row.appendChild(dot);
+                    row.appendChild(text);
+                    content.appendChild(row);
+                });
+
+                block.appendChild(content);
+                levelsList.appendChild(block);
+            });
+
+            wrapper.appendChild(levelsList);
+
+            appEl.textContent = '';
+            appEl.appendChild(wrapper);
+        }
+
+        render();
+    })();
+    </script>
+</body>
+</html>
