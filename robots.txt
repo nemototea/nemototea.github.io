@@ -1,9 +1,6 @@
 # robots.txt
 
 User-agent: *
-Disallow: /works/interactive/3d-portfolio/
-Disallow: /works/interactive/circuit-lab/
-Disallow: /works/interactive/tea-ai-diagnosis/
-Disallow: /works/interactive/tea-wheel/
+Allow: /
 
 Sitemap: https://nemototea.github.io/sitemap.xml

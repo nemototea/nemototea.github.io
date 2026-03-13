@@ -1,694 +1,1109 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="nemotea - Tea-Driven Development">
-    <meta name="keywords" content="Web開発, アプリ開発, 日本茶, エフェクター, ポッドキャスト, PHP, Kotlin">
-    <meta name="author" content="nemotea">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://nemototea.github.io/">
-    <meta property="og:title" content="nemotea - Tea-Driven Development">
-    <meta property="og:description" content="技術とクリエイティビティが交差する場所">
-    <meta property="og:image" content="https://nemototea.github.io/assets/images/og-image.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="description" content="nemotea - Tea-Driven Development. 技術とクリエイティビティが交差する場所">
+<meta name="keywords" content="Web開発, アプリ開発, 日本茶, エフェクター, ポッドキャスト, PHP, Kotlin">
+<meta name="author" content="nemotea">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nemototea.github.io/">
+<meta property="og:title" content="nemotea - Tea-Driven Development">
+<meta property="og:description" content="技術とクリエイティビティが交差する場所">
+<meta property="og:image" content="https://nemototea.github.io/assets/images/og-image.png">
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://nemototea.github.io/">
+<meta property="twitter:title" content="nemotea - Tea-Driven Development">
+<meta property="twitter:description" content="技術とクリエイティビティが交差する場所">
+<meta property="twitter:image" content="https://nemototea.github.io/assets/images/og-image.png">
+<title>nemotea - Tea-Driven Development</title>
+<link rel="icon" type="image/x-icon" href="assets/images/favicon-16x16.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   DESIGN SYSTEM — nemotea v2
+   Tea-Driven Development
+   ══════════════════════════════════════════ */
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://nemototea.github.io/">
-    <meta property="twitter:title" content="nemotea - Tea-Driven Development">
-    <meta property="twitter:description" content="技術とクリエイティビティが交差する場所">
-    <meta property="twitter:image" content="https://nemototea.github.io/assets/images/og-image.png">
+:root {
+  --matcha:  #00c97a;
+  --amber:   #d4956a;
+  --teal:    #5ce0d8;
+  --rose:    #e86c8a;
+  --bg:      #06080e;
+  --surface: rgba(8, 16, 28, 0.75);
+  --border:  rgba(0, 201, 122, 0.15);
+  --border-h:rgba(0, 201, 122, 0.4);
+  --text:    #d8e4ee;
+  --text-dim:rgba(216, 228, 238, 0.5);
+  --text-mut:rgba(216, 228, 238, 0.25);
+  --mono:    'JetBrains Mono', monospace;
+  --sans:    'Zen Kaku Gothic New', -apple-system, sans-serif;
+}
 
-    <title>nemotea - Tea-Driven Development</title>
-    
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/images/favicon-16x16.png">
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="assets/js/main.js" as="script">
-      <style>
-        /* ページ固有のスタイル */
-        body {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-        
-        /* 背景要素の確実なz-index設定 */
-        .bg-cyber-grid,
-        .bg-floating-particles {
-            pointer-events: none !important;
-            z-index: 1 !important;
-        }
-        
-        .hero-section {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            padding: var(--space-xl) 0;
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-        }
-          .hero-title {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 800;
-            line-height: 0.9;
-            margin-bottom: var(--space-md);
-            background: linear-gradient(45deg, #ffffff, var(--cyber-green), var(--cyber-blue));
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradientShift 4s ease-in-out infinite;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
-            text-shadow: 0 0 30px rgba(0, 255, 157, 0.3);
-            will-change: transform;
-        }
-          @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-          /* ヒーロータイトルのアニメーション */
-        .hero-title.scroll-active {
-            animation: gradientShift 3s ease-in-out infinite, scrollFloat 3s ease-in-out infinite;
-        }
-        
-        /* スクロール連動アニメーション */
-        @keyframes scrollFloat {
-            0%, 100% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-10px) scale(1.02); }
-        }
-        
-        /* 初期表示アニメーション */
-        @keyframes fadeInScale {
-            0% {
-                opacity: 0;
-                transform: scale(0.8) translateY(30px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0px);
-            }
-        }
-          .hero-subtitle {
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
-            color: var(--text-secondary);
-            margin-bottom: var(--space-xl);
-            line-height: 1.4;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .hero-subtitle.changing {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        
-        .hero-subtitle.fade-in {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .hero-cta {
-            display: flex;
-            gap: var(--space-md);
-            flex-wrap: wrap;
-            margin-bottom: var(--space-2xl);
-        }
-    
-        .activities-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--space-lg);
-            margin: var(--space-2xl) 0;
-            position: relative;
-            z-index: 3;
-        }        .activity-card {
-            background: var(--glass-bg);
-            backdrop-filter: var(--blur-medium);
-            border: 1px solid var(--glass-border);
-            transition: all var(--transition-normal);
-            border-radius: 20px;
-            padding: var(--space-lg);
-            box-shadow: var(--shadow-glass);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            z-index: 5;
-            isolation: isolate;
-        }
-        
-        .activity-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-            z-index: 15;
-        }
-        
-        .activity-icon {
-            font-size: 4rem;
-            margin-bottom: var(--space-md);
-            display: block;
-            filter: drop-shadow(0 0 20px rgba(0, 255, 157, 0.5));
-        }
-        
-        .activity-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: var(--space-sm);
-            color: var(--cyber-green);
-        }
-        
-        .activity-description {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: var(--space-md);
-        }
-        
-        .activity-link {
-            background: var(--glass-bg);
-            backdrop-filter: var(--blur-medium);
-            border: 1px solid var(--glass-border);
-            transition: all var(--transition-normal);
-            border-radius: 12px;
-            padding: var(--space-sm) var(--space-md);
-            cursor: pointer;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-xs);
-            text-decoration: none;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-            margin-top: auto;
-            position: relative;
-            z-index: 20;
-            pointer-events: auto !important;
-            isolation: isolate;
-            touch-action: manipulation;
-        }
-          .activity-link:hover {
-            background: rgba(0, 255, 157, 0.1);
-            border-color: var(--glass-border-hover);
-            box-shadow: var(--glow-cyber);
-            transform: translateY(-2px);
-        }
-        
-        /* CTAセクションのスタイル調整 */
-        .cta-section {
-            margin: var(--space-2xl) 0;
-        }
-        
-        .cta-section .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: var(--blur-medium);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: var(--space-2xl);
-            box-shadow: var(--shadow-glass);
-            text-align: center;
-            transition: all var(--transition-normal);
-        }
-        
-        .cta-section .glass-card:hover {
-            background: var(--glass-bg-hover);
-            border-color: var(--glass-border-hover);
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
-        
-        .cta-section .text-title {
-            text-align: center;
-            margin-bottom: var(--space-lg);
-        }
-        
-        .cta-section .text-body {
-            text-align: center;
-            margin-bottom: var(--space-2xl);
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .cta-section .flex {
-            justify-content: center;
-            gap: var(--space-lg);
-            flex-wrap: wrap;
-            margin-top: var(--space-xl);
-        }
-        
-        /* cyber-glowエフェクトの調整 */
-        .cyber-glow::before,
-        .cyber-glow::after {
-            z-index: -1;
-        }
-        
-        .cyber-glow::after {
-            top: -25%;
-            left: -25%;
-            width: 150%;
-            height: 150%;
-            border-radius: 20px;
-        }
-        
-        /* レスポンシブ対応 */
-        @media (max-width: 768px) {
-            /* ヒーローセクション全体を中央配置 */
-            .hero-section {
-                justify-content: center;
-                text-align: center;
-                padding: var(--space-lg) var(--space-md);
-            }
-            
-            /* ヒーローコンテンツ全体を中央寄せ */
-            .hero-content {
-                text-align: center;
-                max-width: 100%;
-                margin: 0 auto;
-            }
-            
-            .hero-cta {
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-                gap: var(--space-sm);
-            }
-              /* CTAボタンを小さめに調整 */            .cta-primary,
-            .cta-secondary {
-                font-size: 0.9rem;
-                padding: var(--space-sm) var(--space-md);
-                min-width: auto;
-                flex: 1;
-                max-width: 140px;
-                text-align: center;
-                white-space: nowrap;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            
-            /* モバイルでのタイトルアニメーション調整 */
-            .hero-title {
-                font-size: clamp(2.5rem, 10vw, 4rem);
-                text-shadow: 0 0 20px rgba(0, 255, 157, 0.4);
-                text-align: center;
-            }
-            
-            .hero-title.scroll-active {
-                animation: gradientShift 4s ease-in-out infinite, scrollFloat 4s ease-in-out infinite;
-            }
-            
-            .hero-subtitle {
-                font-size: clamp(1rem, 4vw, 1.4rem);
-                text-align: center;
-                padding: var(--space-xs) var(--space-sm);
-                border-radius: 8px;
-                background: rgba(0, 255, 157, 0.05);
-                border: 1px solid rgba(0, 255, 157, 0.1);
-                max-width: 90vw;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            
-            .hero-subtitle:hover {
-                background: rgba(0, 255, 157, 0.1);
-                border-color: rgba(0, 255, 157, 0.2);
-                transform: translateY(-2px);
-            }
-              /* 音楽ビジュアライザーも中央寄せ */
-            .wave-visualizer {
-                justify-content: center;
-            }
-        }
-          /* 極小デバイス対応 */
-        @media (max-width: 480px) {
-            .hero-section {
-                min-height: 90vh;
-                padding: var(--space-md) var(--space-sm);
-            }
-            
-            .hero-content {
-                padding: 0 var(--space-xs);
-            }
-            
-            .hero-title {
-                font-size: clamp(2rem, 12vw, 3.5rem);
-                line-height: 1;
-                margin-bottom: var(--space-sm);
-            }
-            
-            .hero-subtitle {
-                font-size: clamp(0.9rem, 5vw, 1.2rem);
-                padding: var(--space-xs);
-                margin-bottom: var(--space-lg);
-            }
-            
-            .hero-cta {
-                gap: var(--space-xs);
-                margin-bottom: var(--space-lg);
-            }
-              .cta-primary,
-            .cta-secondary {
-                font-size: 0.85rem;
-                padding: 10px 16px;
-                max-width: 120px;
-                border-radius: 8px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                text-align: center;
-            }
-            
-            .wave-visualizer {
-                transform: scale(0.8);
-                margin-top: var(--space-sm);
-            }
-        }
-    </style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; background: var(--bg); }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ── WebGL Canvas ── */
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── Scroll Progress ── */
+#scroll-track {
+  position: fixed;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100vh;
+  z-index: 50;
+}
+#scroll-bar {
+  width: 100%;
+  background: linear-gradient(180deg, var(--matcha), var(--amber));
+  height: 0%;
+  transition: height 0.08s;
+  box-shadow: 0 0 8px var(--matcha);
+}
+
+/* ── Navigation ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 40px;
+  background: linear-gradient(180deg, rgba(6,8,14,0.92) 0%, transparent 100%);
+  backdrop-filter: blur(6px);
+}
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--matcha);
+  text-shadow: 0 0 12px rgba(0,201,122,0.5);
+  text-decoration: none;
+}
+.nav-links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.2s, text-shadow 0.2s;
+  padding: 4px 0;
+}
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--matcha);
+  text-shadow: 0 0 8px rgba(0,201,122,0.5);
+}
+.nav-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--matcha);
+  font-size: 18px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-family: var(--mono);
+  border-radius: 2px;
+}
+
+@media(max-width:720px){
+  nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  .nav-toggle { display: block; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 20px;
+    background: rgba(6,8,14,0.95);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    padding: 16px 24px;
+    gap: 16px;
+    border-radius: 2px;
+  }
+}
+
+/* ── Content Layer ── */
+main {
+  position: relative;
+  z-index: 10;
+}
+
+/* ── Section Base ── */
+section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 40px 80px;
+  position: relative;
+}
+
+/* ── Glass Panel ── */
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(0,201,122,0.06);
+  border-radius: 2px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.glass:hover {
+  border-color: var(--border-h);
+  box-shadow: 0 0 50px rgba(0,0,0,0.5), 0 0 20px rgba(0,201,122,0.08);
+}
+
+/* ── Section Headers ── */
+.sec-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-shadow: 0 0 10px;
+  margin-bottom: 12px;
+}
+.sec-title {
+  font-size: clamp(32px, 6vw, 56px);
+  font-weight: 900;
+  letter-spacing: -2px;
+}
+
+/* ══════════════════════════════════════════
+   HERO
+   ══════════════════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  flex-direction: column;
+  text-align: center;
+  gap: 0;
+}
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: var(--matcha);
+  text-shadow: 0 0 14px rgba(0,201,122,0.5);
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.2s forwards;
+}
+.hero-title {
+  font-size: clamp(48px, 11vw, 120px);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -3px;
+  margin-bottom: 8px;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.4s forwards;
+}
+.hero-title .line1 { color: var(--text); }
+.hero-title .line2 {
+  background: linear-gradient(90deg, var(--matcha), var(--teal), var(--amber));
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradShift 6s ease-in-out infinite;
+}
+@keyframes gradShift {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.hero-sub {
+  font-family: var(--mono);
+  font-size: clamp(11px, 2vw, 13px);
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  margin-top: 32px;
+  margin-bottom: 48px;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.6s forwards;
+  max-width: 500px;
+  cursor: pointer;
+  transition: color 0.3s;
+  min-height: 1.6em;
+}
+.hero-sub:hover { color: var(--matcha); }
+.hero-sub.changing {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s;
+}
+.hero-sub.in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.4s;
+}
+.hero-cta {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.8s forwards;
+}
+
+/* Buttons */
+.btn-primary {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  padding: 14px 32px;
+  background: var(--matcha);
+  color: #000;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 700;
+  border-radius: 2px;
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+.btn-primary:hover {
+  box-shadow: 0 0 28px rgba(0,201,122,0.5);
+  transform: translateY(-2px);
+}
+.btn-ghost {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  padding: 13px 32px;
+  border: 1px solid rgba(0,201,122,0.35);
+  color: var(--matcha);
+  cursor: pointer;
+  text-decoration: none;
+  background: transparent;
+  border-radius: 2px;
+  transition: background 0.25s, transform 0.25s;
+}
+.btn-ghost:hover {
+  background: rgba(0,201,122,0.08);
+  transform: translateY(-2px);
+}
+
+/* Wave visualizer */
+.wave-vis {
+  display: flex;
+  align-items: end;
+  gap: 4px;
+  height: 40px;
+  justify-content: center;
+  margin-top: 48px;
+  opacity: 0;
+  animation: fadeUp 0.7s 1s forwards;
+}
+.wave-bar {
+  width: 3px;
+  background: linear-gradient(to top, var(--matcha), var(--teal));
+  border-radius: 2px;
+  animation: waveAnim 2s ease-in-out infinite;
+  opacity: 0.6;
+}
+@keyframes waveAnim {
+  0%,100% { transform: scaleY(0.4); opacity:0.4; }
+  50% { transform: scaleY(1.2); opacity:0.8; }
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--text-mut);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: bounce 2.5s infinite;
+}
+.scroll-hint::after {
+  content: '';
+  width: 1px;
+  height: 32px;
+  background: linear-gradient(180deg, var(--text-mut), transparent);
+}
+
+/* ══════════════════════════════════════════
+   ABOUT
+   ══════════════════════════════════════════ */
+#about {
+  flex-direction: column;
+  align-items: center;
+}
+.about-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  max-width: 900px;
+  width: 100%;
+}
+.about-card {
+  padding: 36px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.about-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+}
+.about-card:nth-child(1)::before { background: linear-gradient(180deg, var(--matcha), transparent); }
+.about-card:nth-child(2)::before { background: linear-gradient(180deg, var(--amber), transparent); }
+.about-card:nth-child(3)::before { background: linear-gradient(180deg, var(--teal), transparent); }
+.about-card:nth-child(4)::before { background: linear-gradient(180deg, var(--rose), transparent); }
+.card-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  margin-bottom: 14px;
+  opacity: 0.5;
+}
+.about-card:nth-child(1) .card-num { color: var(--matcha); }
+.about-card:nth-child(2) .card-num { color: var(--amber); }
+.about-card:nth-child(3) .card-num { color: var(--teal); }
+.about-card:nth-child(4) .card-num { color: var(--rose); }
+.card-title {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+}
+.card-body {
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.9;
+  color: var(--text-dim);
+}
+
+@media(max-width:700px){
+  .about-grid { grid-template-columns: 1fr; }
+}
+
+/* ══════════════════════════════════════════
+   WORKS
+   ══════════════════════════════════════════ */
+#works {
+  flex-direction: column;
+  align-items: center;
+}
+.works-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2px;
+  max-width: 920px;
+  width: 100%;
+}
+.work-card {
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.work-thumb {
+  width: 100%;
+  height: 160px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+.work-thumb.grad-apps   { background: linear-gradient(135deg, #0a2540, #1a4a6e); }
+.work-thumb.grad-tea    { background: linear-gradient(135deg, #1a3520, #2d5a3a); }
+.work-thumb.grad-effect { background: linear-gradient(135deg, #2a1a3a, #4a2d5e); }
+.work-thumb.grad-music  { background: linear-gradient(135deg, #3a1a1a, #5e2d2d); }
+.work-thumb.grad-podcast{ background: linear-gradient(135deg, #1a2a3a, #2d4a5e); }
+.work-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.work-info { padding: 20px 24px; }
+.work-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--amber);
+  margin-bottom: 6px;
+}
+.work-name {
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+}
+.work-desc {
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--text-dim);
+}
+.work-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  transition: border-color 0.3s;
+  pointer-events: none;
+  border-radius: 2px;
+}
+.work-card:hover::after {
+  border-color: var(--border-h);
+}
+.works-more {
+  margin-top: 40px;
+  text-align: center;
+}
+.works-more a {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--matcha);
+  text-decoration: none;
+  transition: text-shadow 0.2s;
+}
+.works-more a:hover {
+  text-shadow: 0 0 12px rgba(0,201,122,0.5);
+}
+
+/* ══════════════════════════════════════════
+   CONTACT CTA
+   ══════════════════════════════════════════ */
+#contact {
+  flex-direction: column;
+  text-align: center;
+}
+
+/* ══════════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════════ */
+.site-footer {
+  position: relative;
+  z-index: 10;
+  border-top: 1px solid rgba(0,201,122,0.06);
+  padding: 48px 40px;
+}
+.footer-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+.footer-brand { flex: 1; min-width: 200px; }
+.footer-logo {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--matcha);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 8px;
+}
+.footer-description {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-mut);
+  letter-spacing: 1px;
+}
+.footer-links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.footer-link {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 8px;
+  transition: color 0.2s;
+}
+.footer-link:hover { color: var(--matcha); }
+.footer-bottom {
+  max-width: 1100px;
+  margin: 32px auto 0;
+  text-align: center;
+  padding-top: 32px;
+  border-top: 1px solid rgba(0,201,122,0.04);
+}
+.footer-copyright {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text-mut);
+}
+
+/* ══════════════════════════════════════════
+   MOBILE NAV
+   ══════════════════════════════════════════ */
+#mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 45;
+  gap: 8px;
+  background: rgba(6,8,14,0.88);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+  padding: 10px 18px;
+  border-radius: 32px;
+}
+@media(max-width:720px){ #mobile-nav { display: flex; } }
+.mnav-btn {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 16px;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.mnav-btn .ico { font-size: 15px; }
+.mnav-btn.active,
+.mnav-btn:active {
+  background: rgba(0,201,122,0.12);
+  color: var(--matcha);
+}
+
+/* ══════════════════════════════════════════
+   ANIMATIONS
+   ══════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes bounce {
+  0%,100% { transform:translateX(-50%) translateY(0); }
+  50%     { transform:translateX(-50%) translateY(5px); }
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════ */
+@media(max-width:720px){
+  section { padding: 80px 20px 60px; }
+  .hero-title { letter-spacing: -1px; }
+  .site-footer { padding: 36px 20px; padding-bottom: 90px; }
+  .footer-content { flex-direction: column; text-align: center; }
+  .footer-links { justify-content: center; }
+}
+
+/* Reduced motion */
+@media(prefers-reduced-motion: reduce){
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- ヘッダーナビゲーション -->
-        <header class="glass-header mt-md">
-            <nav class="nav">
-                <a href="/" class="nav-logo">nemotea.dev</a>
-                <button class="nav-toggle" id="nav-toggle" aria-label="メニューを開く" aria-expanded="false">
-                    ☰
-                </button>
-                <ul class="nav-items" id="nav-items">
-                    <li><a href="/" class="nav-item active">Home</a></li>
-                    <li><a href="profile/" class="nav-item">Profile</a></li>
-                    <li><a href="works/" class="nav-item">Works</a></li>
-                    <li><a href="podcast/" class="nav-item">Podcast</a></li>
-                    <li><a href="contact/" class="nav-item">Contact</a></li>
-                </ul>
-            </nav>
-        </header>
 
-        <!-- ヒーローセクション -->
-        <section class="hero-section">
-            <div class="hero-content fade-in"> 
-                <h1 class="hero-title">
-                    Tea-Driven<br>
-                    Development
-                </h1>
-                <p class="hero-subtitle" id="hero-subtitle">
-                    キーボードにお茶こぼすな
-                </p>
-                
-                <div class="hero-cta">
-                    <a href="works/" class="cta-primary">作品を見る</a>
-                    <a href="profile/" class="cta-secondary">プロフィール</a>
-                </div>
-                
-                <!-- 音楽ビジュアライザー -->
-                <div class="wave-visualizer fade-in" id="hero-visualizer">
-                    <div class="wave-bar" style="height: 25px; animation-delay: 0s;"></div>
-                    <div class="wave-bar" style="height: 45px; animation-delay: 0.1s;"></div>
-                    <div class="wave-bar" style="height: 35px; animation-delay: 0.2s;"></div>
-                    <div class="wave-bar" style="height: 60px; animation-delay: 0.3s;"></div>
-                    <div class="wave-bar" style="height: 40px; animation-delay: 0.4s;"></div>
-                    <div class="wave-bar" style="height: 55px; animation-delay: 0.5s;"></div>
-                    <div class="wave-bar" style="height: 30px; animation-delay: 0.6s;"></div>
-                    <div class="wave-bar" style="height: 50px; animation-delay: 0.7s;"></div>
-                    <div class="wave-bar" style="height: 35px; animation-delay: 0.8s;"></div>
-                    <div class="wave-bar" style="height: 45px; animation-delay: 0.9s;"></div>
-                </div>
-            </div>
-        </section>
+<!-- ═══ WebGL Background ═══ -->
+<canvas id="bg-canvas"></canvas>
 
-        <!-- 活動紹介セクション -->
-        <section id="profile" class="activities-section">
-            <h2 class="text-title text-center mb-xl fade-in">🎯 活動領域</h2>
-            
-            <div class="activities-grid">
-                <div class="activity-card fade-in cyber-glow">
-                    <span class="activity-icon">📱</span>
-                    <h3 class="activity-title">アプリ・Web開発</h3>
-                    <p class="activity-description">
-                        Kotlin/Swiftでモバイルアプリ開発、PHPでWebアプリケーション開発を行っています。
-                    </p>
-                    <a href="works/#apps" class="activity-link">アプリを見る</a>
-                </div>
+<!-- ═══ Scroll Progress ═══ -->
+<div id="scroll-track"><div id="scroll-bar"></div></div>
 
-                <div class="activity-card fade-in cyber-glow">
-                    <span class="activity-icon">🎙️</span>
-                    <h3 class="activity-title">ポッドキャスト</h3>
-                    <p class="activity-description">
-                        日本茶について語るポッドキャスト。定期的にエピソードを配信中。
-                    </p>
-                    <a href="podcast/" class="activity-link">聴いてみる</a>
-                </div>
-                
-                <div class="activity-card fade-in cyber-glow">
-                    <span class="activity-icon">🍃</span>
-                    <h3 class="activity-title">日本茶事業</h3>
-                    <p class="activity-description">
-                        2025年に個人事業主として開業。日本茶製品の小売・卸売の準備中。
-                    </p>
-                    <a href="works/#tea" class="activity-link">詳細を見る</a>
-                </div>
-                
-                <div class="activity-card fade-in cyber-glow">
-                    <span class="activity-icon">⚡</span>
-                    <h3 class="activity-title">エフェクター制作</h3>
-                    <p class="activity-description">
-                        エフェクターのモディファイや、レプリカの制作。
-                    </p>
-                    <a href="works/#effects" class="activity-link">エフェクターを見る</a>
-                </div>
+<!-- ═══ Navigation ═══ -->
+<nav>
+  <a href="/" class="nav-logo">// nemotea</a>
+  <button class="nav-toggle" id="navToggle" aria-label="メニュー">///</button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/" class="active">HOME</a></li>
+    <li><a href="profile/">PROFILE</a></li>
+    <li><a href="works/">WORKS</a></li>
+    <li><a href="podcast/">CAST</a></li>
+    <li><a href="contact/">CONTACT</a></li>
+  </ul>
+</nav>
 
-                <div class="activity-card fade-in cyber-glow">
-                    <span class="activity-icon">🎵</span>
-                    <h3 class="activity-title">音楽制作</h3>
-                    <p class="activity-description">
-                        バイノーラルマイクで収録した音をサンプリングして適当にポチポチするだけ。
-                    </p>
-                    <a href="works/#music" class="activity-link">音楽作品を見る</a>
-                </div>
-                
-                <div class="activity-card fade-in cyber-glow">
-                    <span class="activity-icon">🌟</span>
-                    <h3 class="activity-title">特別機能</h3>
-                    <p class="activity-description">
-                        日本茶AI診断、3Dポートフォリオ、音楽ビジュアライザーなどのインタラクティブ体験。
-                    </p>
-                    <a href="works/#interactive" class="activity-link">体験してみる</a>                </div>
-            </div>
-        </section>
+<main>
 
-        <!-- CTA セクション -->
-        <section class="cta-section">
-            <div class="glass-card fade-in">
-                <h2 class="text-title">🚀 一緒に創造しませんか？</h2>
-                <p class="text-body">
-                    新しいプロジェクトやコラボレーションを探求しています。
-                    スポット開発の依頼、日本茶関連の依頼など、どの分野でもお気軽にご連絡ください。
-                </p>
-                
-                <div class="flex">
-                    <a href="contact/" class="cta-primary">お問い合わせ</a>
-                    <a href="https://github.com/nemototea" class="glass-button" target="_blank" rel="noopener">GitHub</a>
-                </div>
-            </div>
-        </section>
+  <!-- ═══ HERO ═══ -->
+  <section id="hero">
+    <h1 class="hero-title">
+      <span class="line1">Tea-Driven</span><br>
+      <span class="line2">Development</span>
+    </h1>
+    <p class="hero-sub" id="heroSub">キーボードにお茶こぼすな</p>
+    <div class="hero-cta">
+      <a href="works/" class="btn-primary">EXPLORE WORKS</a>
+      <a href="profile/" class="btn-ghost">PROFILE</a>
     </div>
+    <div class="scroll-hint">SCROLL</div>
+  </section>
 
-    <!-- フッター -->
-    <footer class="glass mt-2xl" style="padding: var(--space-xl) 0; border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
-        <div class="container">
-            <div class="flex-between" style="flex-wrap: wrap; gap: var(--space-md);">
-                <div>
-                    <div class="nav-logo mb-sm">nemotea.dev</div>
-                    <p class="text-small">Tea-Driven Development - Technology meets Creativity</p>
-                </div>
-                
-                <div class="flex" style="gap: var(--space-md); flex-wrap: wrap;">
-                    <a href="works/" class="footer-link">Works</a>
-                    <a href="podcast/" class="footer-link">Podcast</a>
-                    <a href="contact/" class="footer-link">Contact</a>
-                    <a href="/sitemap.xml" class="footer-link">Sitemap</a>
-                </div>
-            </div>
-            
-            <div class="text-center mt-lg">
-                <p class="text-small" style="color: var(--text-muted);">
-                    © 2025 nemotea. Built with passion for technology and creativity.
-                </p>
-            </div>
+  <!-- ═══ ABOUT ═══ -->
+  <section id="about">
+    <div class="about-header reveal">
+      <div class="sec-label" style="color:var(--matcha)">// ABOUT</div>
+      <h2 class="sec-title">活動領域</h2>
+    </div>
+    <div class="about-grid reveal">
+      <div class="about-card glass">
+        <div class="card-num">01 / DEVELOPMENT</div>
+        <div class="card-title">アプリ・Web開発</div>
+        <div class="card-body">
+          本業で音楽関連の自社サービスの開発を担当。
+          PHP / Kotlin / Swift を中心に、
+          バックエンドからモバイルアプリまで。
         </div>
-    </footer>    <!-- JavaScript -->
-    <script src="assets/js/main.js"></script>
-    
-    <script>
-        // ページ固有のJavaScript
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            // ランダムサブタイトル機能
-            const heroSubtitleMessages = [
-                'キーボードにお茶こぼすな',
-                '5分休憩が、1時間の休憩を呼ぶ',
-                'console.log("お茶をこぼしました");',
-                'リファクタリングは茶道の心',
-                'sudo brew install motivation',
-            ];
-            
-            const heroSubtitle = document.getElementById('hero-subtitle');
-              // ランダムメッセージを選択・表示する関数
-            function changeHeroSubtitle() {
-                if (!heroSubtitle) return;
-                
-                const lastMessage = localStorage.getItem('nemotea-last-subtitle');
-                let availableMessages = heroSubtitleMessages.filter(msg => msg !== lastMessage);
-                
-                // もし全て使い切ったら、リセット
-                if (availableMessages.length === 0) {
-                    availableMessages = heroSubtitleMessages;
-                }
-                
-                const newMessage = availableMessages[Math.floor(Math.random() * availableMessages.length)];
-                
-                // フェードアウト
-                heroSubtitle.classList.add('changing');
-                
-                setTimeout(() => {
-                    heroSubtitle.textContent = newMessage;
-                    localStorage.setItem('nemotea-last-subtitle', newMessage);
-                    heroSubtitle.classList.remove('changing');
-                    heroSubtitle.classList.add('fade-in');
-                    
-                    setTimeout(() => {
-                        heroSubtitle.classList.remove('fade-in');
-                    }, 600);
-                }, 300);
-            }
-            
-            // 初回読み込み時の処理
-            function initializeSubtitle() {
-                if (!heroSubtitle) return;
-                
-                const lastMessage = localStorage.getItem('nemotea-last-subtitle');
-                
-                if (lastMessage) {
-                    // 前回と違うメッセージを表示
-                    changeHeroSubtitle();
-                } else {
-                    // 初回訪問の場合、最初のメッセージを保存
-                    const currentMessage = heroSubtitle.textContent.trim();
-                    localStorage.setItem('nemotea-last-subtitle', currentMessage);
-                }
-            }
-              // 初回読み込み時にランダムメッセージを設定
-            initializeSubtitle();
-            
-            // クリックでメッセージ変更
-            if (heroSubtitle) {
-                heroSubtitle.addEventListener('click', () => {
-                    changeHeroSubtitle();
-                });
-                
-                // ホバー時にカーソルを変更
-                heroSubtitle.style.cursor = 'pointer';
-                heroSubtitle.title = 'クリックでメッセージを変更';
-            }
-            
-            // 定期的にメッセージを変更（オプション）
-            // setInterval(changeHeroSubtitle, 10000); // 10秒ごと
-              // ヒーローセクションのエフェクト（スクロール連動のみ）
-            const heroTitle = document.querySelector('.hero-title');
-            if (heroTitle) {
-                // デバイス判定
-                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
-                
-                // スクロール連動エフェクト
-                let scrollActive = false;
-                
-                window.addEventListener('scroll', Utils.throttle(() => {
-                    const scrolled = window.pageYOffset;
-                    const heroSection = document.querySelector('.hero-section');
-                    const heroContent = document.querySelector('.hero-content');
-                    
-                    if (heroSection && heroContent) {
-                        const sectionRect = heroSection.getBoundingClientRect();
-                        const isInView = sectionRect.bottom > 0 && sectionRect.top < window.innerHeight;
-                        
-                        if (isInView) {
-                            // ヒーローセクションが表示されている間
-                            const scrollProgress = Math.min(1, scrolled / (heroSection.offsetHeight * 0.5));
-                            
-                            if (!scrollActive && scrollProgress > 0.1) {
-                                scrollActive = true;
-                                heroTitle.classList.add('scroll-active');
-                            } else if (scrollActive && scrollProgress <= 0.1) {
-                                scrollActive = false;
-                                heroTitle.classList.remove('scroll-active');
-                            }
-                            
-                            // パララックス効果
-                            const parallaxIntensity = isMobile ? 0.05 : 0.1;
-                            heroContent.style.transform = `translateY(${scrolled * parallaxIntensity}px)`;
-                        } else if (scrollActive) {
-                            scrollActive = false;
-                            heroTitle.classList.remove('scroll-active');
-                        }
-                    }
-                }, 16));
-                
-                // Intersection Observer for performance
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            // ビューポートに入った時の初期アニメーション
-                            setTimeout(() => {
-                                heroTitle.style.animation = `${heroTitle.style.animation}, fadeInScale 1s ease-out`;
-                            }, 300);
-                        }
-                    });
-                }, { threshold: 0.1 });
-                
-                observer.observe(heroTitle);            }
-  
-        });// アプリ読み込み完了時の処理
-        document.addEventListener('app:loaded', () => {
-            console.log('🎉 nemotea.dev ホームページが正常に読み込まれました！');
-            
-            // Google Analytics等の外部スクリプトをここで読み込み
-            // 例: loadGoogleAnalytics();
-        });
-    </script>
-    
-    <!-- Structured Data for SEO -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "nemotea",
-        "url": "https://nemototea.github.io/",
-        "description": "Tea-Driven Development - 音楽制作、アプリ開発、日本茶への情熱を通じて、デジタルとアナログの境界を探求",
-        "sameAs": [
-            "https://github.com/nemototea"
-        ],
-        "knowsProfile": [
-            "アプリ開発", 
-            "PHP",
-            "Kotlin",
-            "Swift",
-            "日本茶",
-            "エフェクター制作"
-        ]
+      </div>
+      <div class="about-card glass">
+        <div class="card-num">02 / JAPANESE TEA</div>
+        <div class="card-title">日本茶事業</div>
+        <div class="card-body">
+          日本茶インストラクター資格を取得。
+          2025年に個人事業主として開業。
+          日本茶製品の小売・卸売を準備中。
+        </div>
+      </div>
+      <div class="about-card glass">
+        <div class="card-num">03 / MUSIC</div>
+        <div class="card-title">音楽制作</div>
+        <div class="card-body">
+          バイノーラルマイクで収録した音を
+          サンプリングして曲にする。
+          Ambient / Lo-Fi / フィールドレコーディング。
+        </div>
+      </div>
+      <div class="about-card glass">
+        <div class="card-num">04 / HARDWARE</div>
+        <div class="card-title">エフェクター制作</div>
+        <div class="card-body">
+          ギターエフェクターの自作・モディファイ。
+          回路設計からラッカー塗装まで
+          全工程をハンドメイドで。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ WORKS ═══ -->
+  <section id="works">
+    <div class="reveal" style="text-align:center; margin-bottom:48px; width:100%">
+      <div class="sec-label" style="color:var(--amber)">// WORKS</div>
+      <h2 class="sec-title">制作物</h2>
+    </div>
+    <div class="works-grid reveal">
+      <a href="works/apps/oneline" class="work-card glass">
+        <div class="work-thumb grad-apps">📒</div>
+        <div class="work-info">
+          <div class="work-tag">MOBILE APP</div>
+          <div class="work-name">OneLine</div>
+          <div class="work-desc">1行日記アプリ。Kotlinで開発、KMP+CMPでiOS対応予定</div>
+        </div>
+      </a>
+      <div class="work-card glass">
+        <div class="work-thumb grad-effect">
+          <img src="assets/images/works/ochadrive2.jpeg" alt="OCHA DRIVE">
+        </div>
+        <div class="work-info">
+          <div class="work-tag">CIRCUIT DESIGN</div>
+          <div class="work-name">OCHA DRIVE</div>
+          <div class="work-desc">ブティック系ファズのレプリカ。お茶を淹れるようにツマミを操作</div>
+        </div>
+      </div>
+      <a href="https://chaskey.net/" class="work-card glass" target="_blank" rel="noopener">
+        <div class="work-thumb grad-tea">🍃</div>
+        <div class="work-info">
+          <div class="work-tag">SNS PLATFORM</div>
+          <div class="work-name">ちゃすきー</div>
+          <div class="work-desc">Misskeyベースのお茶専門SNS。Fediverseで繋がるコミュニティ</div>
+        </div>
+      </a>
+    </div>
+    <div class="works-more reveal">
+      <a href="works/">ALL WORKS →</a>
+    </div>
+  </section>
+
+
+</main>
+
+<!-- ═══ Footer ═══ -->
+<footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <a href="/" class="footer-logo">// nemotea</a>
+      <p class="footer-description">Tea-Driven Development</p>
+    </div>
+    <div class="footer-links">
+      <a href="/" class="footer-link">HOME</a>
+      <a href="profile/" class="footer-link">PROFILE</a>
+      <a href="works/" class="footer-link">WORKS</a>
+      <a href="podcast/" class="footer-link">CAST</a>
+      <a href="contact/" class="footer-link">CONTACT</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copyright">&copy; 2025-2026 nemotea. Built with tea and code.</p>
+  </div>
+</footer>
+
+<!-- ═══ Mobile Nav ═══ -->
+<div id="mobile-nav">
+  <a href="/" class="mnav-btn active"><span class="ico">&#9750;</span><span>HOME</span></a>
+  <a href="profile/" class="mnav-btn"><span class="ico">&#9672;</span><span>PROFILE</span></a>
+  <a href="works/" class="mnav-btn"><span class="ico">&#9673;</span><span>WORKS</span></a>
+  <a href="podcast/" class="mnav-btn"><span class="ico">&#9834;</span><span>CAST</span></a>
+  <a href="contact/" class="mnav-btn"><span class="ico">&#9678;</span><span>CONTACT</span></a>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  WebGL BACKGROUND — Flowing Tea × Digital
+// ══════════════════════════════════════════
+const canvas = document.getElementById('bg-canvas');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+const gl = canvas.getContext('webgl');
+
+function mkShader(gl, type, src) {
+  const s = gl.createShader(type);
+  gl.shaderSource(s, src);
+  gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+    console.error(gl.getShaderInfoLog(s));
+  }
+  return s;
+}
+function mkProg(gl, vs, fs) {
+  const p = gl.createProgram();
+  gl.attachShader(p, mkShader(gl, gl.VERTEX_SHADER, vs));
+  gl.attachShader(p, mkShader(gl, gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(p);
+  return p;
+}
+function quadBuf(gl) {
+  const b = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, b);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+  return b;
+}
+
+const VS = `attribute vec2 p; void main(){ gl_Position=vec4(p,0,1); }`;
+const FS = `
+precision highp float;
+uniform vec2  res;
+uniform float t;
+uniform float scroll;
+uniform vec2  pointer;
+
+vec3 mod289(vec3 x){ return x - floor(x*(1./289.))*289.; }
+vec2 mod289(vec2 x){ return x - floor(x*(1./289.))*289.; }
+vec3 permute(vec3 x){ return mod289((x*34.+1.)*x); }
+
+float snoise(vec2 v){
+  const vec4 C=vec4(0.211324865,0.366025404,-0.577350269,0.024390244);
+  vec2 i=floor(v+dot(v,C.yy));
+  vec2 x0=v-i+dot(i,C.xx);
+  vec2 i1=x0.x>x0.y?vec2(1,0):vec2(0,1);
+  vec4 x12=x0.xyxy+C.xxzz;
+  x12.xy-=i1;
+  i=mod289(i);
+  vec3 p=permute(permute(i.y+vec3(0,i1.y,1))+i.x+vec3(0,i1.x,1));
+  vec3 m=max(.5-vec3(dot(x0,x0),dot(x12.xy,x12.xy),dot(x12.zw,x12.zw)),0.);
+  m=m*m; m=m*m;
+  vec3 x=2.*fract(p*C.www)-1.;
+  vec3 h=abs(x)-.5;
+  vec3 ox=floor(x+.5);
+  vec3 a0=x-ox;
+  m*=1.79284291-.85373472*(a0*a0+h*h);
+  vec3 g;
+  g.x=a0.x*x0.x+h.x*x0.y;
+  g.yz=a0.yz*x12.xz+h.yz*x12.yw;
+  return 130.*dot(m,g);
+}
+
+float fbm(vec2 p){
+  float v=0., a=.5;
+  mat2 rot=mat2(cos(.5),sin(.5),-sin(.5),cos(.5));
+  for(int i=0;i<4;i++){
+    v+=a*snoise(p);
+    p=rot*p*2.+vec2(100.);
+    a*=.5;
+  }
+  return v;
+}
+
+void main(){
+  vec2 uv=gl_FragCoord.xy/res;
+  vec2 st=uv*2.-1.;
+  st.x*=res.x/res.y;
+  st+=pointer*.06;
+
+  float flow=scroll*3.;
+
+  float n1=fbm(st*1.2+vec2(t*.04,flow*.3));
+  float n2=fbm(st*2.8+vec2(-t*.06,flow*.5+80.));
+  float n3=fbm(st*5.+vec2(t*.025,-flow*.2+160.));
+  float pat=n1*.55+n2*.3+n3*.15;
+
+  vec3 matcha=vec3(0.,.79,.48);
+  vec3 amber=vec3(.83,.58,.38);
+  vec3 dark=vec3(.02,.03,.055);
+  vec3 teal=vec3(.36,.88,.84);
+
+  float warmCool=mix(.65,.3,scroll);
+  vec3 warm=mix(dark,amber,smoothstep(-.3,.6,pat)*.2);
+  vec3 cool=mix(dark,matcha,smoothstep(-.2,.7,pat)*.18);
+  vec3 col=mix(warm,cool,warmCool);
+  col+=teal*pow(max(0.,pat),4.)*.12;
+
+  float gridS=scroll*.035;
+  float gx=smoothstep(.96,1.,fract(uv.x*25.));
+  float gy=smoothstep(.96,1.,fract(uv.y*25.));
+  col+=matcha*max(gx,gy)*gridS;
+
+  float vig=1.-length(st*.4)*.45;
+  col*=max(vig,0.);
+
+  col+=fract(sin(dot(gl_FragCoord.xy+t*100.,vec2(12.9898,78.233)))*43758.5)*.04-.02;
+  col*=.98+.02*sin(gl_FragCoord.y*1.5+t*1.5);
+
+  gl_FragColor=vec4(max(col,0.),1.);
+}`;
+
+const prog = mkProg(gl, VS, FS);
+gl.useProgram(prog);
+const buf = quadBuf(gl);
+const aP = gl.getAttribLocation(prog, 'p');
+gl.enableVertexAttribArray(aP);
+gl.vertexAttribPointer(aP, 2, gl.FLOAT, false, 0, 0);
+
+const uRes    = gl.getUniformLocation(prog, 'res');
+const uT      = gl.getUniformLocation(prog, 't');
+const uScroll = gl.getUniformLocation(prog, 'scroll');
+const uPtr    = gl.getUniformLocation(prog, 'pointer');
+
+gl.viewport(0, 0, canvas.width, canvas.height);
+gl.uniform2f(uRes, canvas.width, canvas.height);
+
+window.addEventListener('resize', () => {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  gl.viewport(0, 0, canvas.width, canvas.height);
+  gl.uniform2f(uRes, canvas.width, canvas.height);
+});
+
+// ══════════════════════════════════════════
+//  SCROLL
+// ══════════════════════════════════════════
+let scrollProgress = 0;
+window.addEventListener('scroll', () => {
+  const max = document.body.scrollHeight - window.innerHeight;
+  scrollProgress = max > 0 ? window.scrollY / max : 0;
+  document.getElementById('scroll-bar').style.height = (scrollProgress * 100) + '%';
+});
+
+// ══════════════════════════════════════════
+//  MOUSE / GYRO
+// ══════════════════════════════════════════
+let ptrX = 0, ptrY = 0;
+let gyroEnabled = false;
+
+document.addEventListener('mousemove', e => {
+  if (!gyroEnabled) {
+    ptrX = (e.clientX / window.innerWidth  - 0.5) * 0.5;
+    ptrY = (e.clientY / window.innerHeight - 0.5) * 0.3;
+  }
+});
+
+if (/Mobi|Android/i.test(navigator.userAgent)) {
+  const tryGyro = () => {
+    if (typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission().then(s => {
+        if (s === 'granted') enableGyro();
+      });
+    } else {
+      enableGyro();
     }
-    </script>
+  };
+  function enableGyro() {
+    gyroEnabled = true;
+    window.addEventListener('deviceorientation', e => {
+      ptrX =  (e.gamma || 0) / 45;
+      ptrY = -(e.beta  || 0) / 45;
+    });
+  }
+  setTimeout(tryGyro, 500);
+}
+
+// Desktop nav toggle (mobile hamburger)
+const navToggle = document.getElementById('navToggle');
+const navLinks  = document.getElementById('navLinks');
+navToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+  navToggle.textContent = navLinks.classList.contains('open') ? '✕' : '///';
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest('nav')) navLinks.classList.remove('open');
+});
+
+// ══════════════════════════════════════════
+//  SCROLL REVEAL
+// ══════════════════════════════════════════
+const revealEls = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => revealObs.observe(el));
+
+// ══════════════════════════════════════════
+//  HERO SUBTITLE ROTATION
+// ══════════════════════════════════════════
+const subtitles = [
+  'キーボードにお茶こぼすな',
+  '5分休憩が、1時間の休憩を呼ぶ',
+  'console.log("お茶をこぼしました");',
+  'リファクタリングは茶道の心',
+  'sudo brew install motivation',
+];
+const heroSub = document.getElementById('heroSub');
+let currentSubIdx = 0;
+
+function rotateSubtitle() {
+  heroSub.classList.add('changing');
+  heroSub.classList.remove('in');
+  setTimeout(() => {
+    currentSubIdx = (currentSubIdx + 1) % subtitles.length;
+    heroSub.textContent = subtitles[currentSubIdx];
+    heroSub.classList.remove('changing');
+    heroSub.classList.add('in');
+  }, 300);
+}
+
+// Random initial subtitle
+currentSubIdx = Math.floor(Math.random() * subtitles.length);
+heroSub.textContent = subtitles[currentSubIdx];
+
+heroSub.addEventListener('click', rotateSubtitle);
+setInterval(rotateSubtitle, 8000);
+
+// ══════════════════════════════════════════
+//  RENDER LOOP
+// ══════════════════════════════════════════
+let smoothScroll = 0;
+let smoothPtrX = 0, smoothPtrY = 0;
+let lastT = 0;
+
+function loop(ts) {
+  requestAnimationFrame(loop);
+  const dt = (ts - lastT) / 1000;
+  lastT = ts;
+
+  const ease = 1 - Math.exp(-dt * 3);
+  smoothScroll += (scrollProgress - smoothScroll) * ease;
+  smoothPtrX += (ptrX - smoothPtrX) * ease;
+  smoothPtrY += (ptrY - smoothPtrY) * ease;
+
+  gl.useProgram(prog);
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.vertexAttribPointer(aP, 2, gl.FLOAT, false, 0, 0);
+  gl.uniform1f(uT, ts * 0.001);
+  gl.uniform1f(uScroll, smoothScroll);
+  gl.uniform2f(uPtr, smoothPtrX, smoothPtrY);
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+}
+requestAnimationFrame(loop);
+
+// ══════════════════════════════════════════
+//  WebGL FALLBACK
+// ══════════════════════════════════════════
+if (!gl) {
+  canvas.style.background = 'radial-gradient(ellipse at 30% 50%, rgba(0,201,122,0.08) 0%, transparent 60%), var(--bg)';
+}
+</script>
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "nemotea",
+  "url": "https://nemototea.github.io/",
+  "description": "Tea-Driven Development - 技術とクリエイティビティが交差する場所",
+  "sameAs": [
+    "https://github.com/nemototea",
+    "https://x.com/nemototea",
+    "https://instagram.com/nemoteacher",
+    "https://soundcloud.com/spcmsc"
+  ],
+  "knowsAbout": [
+    "アプリ開発", "PHP", "Kotlin", "Swift",
+    "日本茶", "エフェクター制作", "音楽制作"
+  ]
+}
+</script>
 </body>
 </html>

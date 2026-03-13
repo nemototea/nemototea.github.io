@@ -1,606 +1,322 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="nemotea 作品集 - 音楽制作、アプリ開発、エフェクター制作、日本茶プラットフォームなどの創作活動">
-    <meta name="keywords" content="ポートフォリオ, 音楽制作, アプリ開発, エフェクター, 日本茶, 作品集">
-    
-    <title>Works - nemotea</title>
-    
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="icon" type="image/x-icon" href="../assets/images/favicon-16x16.png">
-    
-    <style>
-        body {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }        .works-hero {
-            padding: var(--space-2xl) 0;
-            text-align: center;
-            position: relative;
-        }        .works-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: var(--space-xl);
-            margin: var(--space-xl) 0;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="nemotea 作品集 - アプリ開発、日本茶事業、エフェクター制作、音楽制作">
+<meta name="keywords" content="ポートフォリオ, 音楽制作, アプリ開発, エフェクター, 日本茶, 作品集">
+<title>Works - nemotea</title>
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="icon" type="image/x-icon" href="../assets/images/favicon-16x16.png">
+<style>
+.works-hero {
+  padding: var(--space-2xl) 0;
+  text-align: center;
+}
+.work-section {
+  margin: var(--space-2xl) 0;
+}
+.works-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: var(--space-lg);
+  margin: var(--space-xl) 0;
+}
+.work-card {
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 380px;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.work-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 24px rgba(0,201,122,0.08);
+}
+.work-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--matcha), var(--teal), var(--amber));
+}
+.work-image {
+  width: 100%;
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+}
+.work-image.apps   { background: linear-gradient(135deg, #0a2540, #1a4a6e); }
+.work-image.tea    { background: linear-gradient(135deg, #1a3520, #2d5a3a); }
+.work-image.effect { background: linear-gradient(135deg, #2a1a3a, #4a2d5e); }
+.work-image.music  { background: linear-gradient(135deg, #3a1a1a, #5e2d2d); }
+.work-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.work-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-lg);
+}
+.work-category {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--amber);
+  margin-bottom: var(--space-xs);
+}
+.work-title {
+  font-size: 1.3rem;
+  font-weight: 900;
+  margin-bottom: var(--space-sm);
+  letter-spacing: -0.3px;
+}
+.work-description {
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--text-dim);
+  margin-bottom: var(--space-md);
+  flex: 1;
+}
+.work-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+.work-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  padding: 12px;
+  background: var(--matcha);
+  color: #000;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: box-shadow 0.25s, transform 0.25s;
+  margin-top: auto;
+}
+.work-link:hover {
+  box-shadow: 0 0 20px rgba(0,201,122,0.4);
+  transform: translateY(-2px);
+}
+.work-link.ghost {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}
 
-        .work-section {
-            margin: var(--space-2xl) 0;
-            padding: var(--space-xl) 0;
-        }
-
-        .work-section:first-child {
-            margin-top: 0;
-        }.work-card {
-            background: var(--glass-bg);
-            backdrop-filter: var(--blur-medium);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: var(--space-lg);
-            box-shadow: var(--shadow-glass);
-            overflow: hidden;
-            transition: all var(--transition-normal);
-            position: relative;
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .work-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--cyber-green), var(--cyber-blue), var(--cyber-purple));
-        }
-
-        .work-card:hover {
-            background: var(--glass-bg-hover);
-            border-color: var(--glass-border-hover);
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .work-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, var(--cyber-green), var(--cyber-blue));
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            margin-bottom: var(--space-md);
-            border-radius: 12px;
-        }
-
-        .work-image::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
-        }
-
-        .work-card:hover .work-image::before {
-            transform: translateX(100%);
-        }        .work-icon {
-            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
-            z-index: 2;
-            position: relative;
-        }
-
-        .work-actual-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .work-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .work-category {
-            font-size: 0.8rem;
-            color: var(--cyber-green);
-            font-weight: 600;
-            margin-bottom: var(--space-xs);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .work-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: var(--space-sm);
-            color: var(--text-primary);
-        }
-
-        .work-description {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: var(--space-md);
-            flex: 1;
-        }
-
-        .work-tech {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-xs);
-            margin-bottom: var(--space-md);
-        }
-
-        .tech-tag {
-            background: rgba(0, 255, 157, 0.1);
-            color: var(--cyber-green);
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }        .work-links {
-            display: flex;
-            margin-top: auto;
-        }
-
-        .work-link {
-            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
-            border: none;
-            border-radius: 16px;
-            padding: var(--space-md) var(--space-lg);
-            color: #000;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all var(--transition-normal);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-xs);
-            text-decoration: none;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(0, 255, 157, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .work-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .work-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 255, 157, 0.5);
-        }
-
-        .work-link:hover::before {
-            left: 100%;
-        }
-
-        .work-link:active {
-            transform: translateY(0);
-        }
-
-        /* カテゴリ別の色分け */
-        .work-card[data-category="music"] .work-image {
-            background: linear-gradient(135deg, #ff6b6b, #feca57);
-        }
-
-        .work-card[data-category="apps"] .work-image {
-            background: linear-gradient(135deg, #48dbfb, #0abde3);
-        }
-
-        .work-card[data-category="tea"] .work-image {
-            background: linear-gradient(135deg, #2d5016, #4a7c59);
-        }
-
-        .work-card[data-category="effects"] .work-image {
-            background: linear-gradient(135deg, #9c88ff, #8c7ae6);
-        }
-
-        @media (max-width: 768px) {
-            .works-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+@media (max-width: 768px) {
+  .works-grid { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- ヘッダーナビゲーション -->
-        <header class="glass-header mt-md">
-            <nav class="nav">
-                <a href="../" class="nav-logo">nemotea.dev</a>
-                <button class="nav-toggle" id="nav-toggle" aria-label="メニューを開く" aria-expanded="false">
-                    ☰
-                </button>
-                <ul class="nav-items" id="nav-items">
-                    <li><a href="../" class="nav-item">Home</a></li>
-                    <li><a href="../profile/" class="nav-item">Profile</a></li>
-                    <li><a href="../works/" class="nav-item active">Works</a></li>
-                    <li><a href="../podcast/" class="nav-item">Podcast</a></li>
-                    <li><a href="../contact/" class="nav-item">Contact</a></li>
-                </ul>
-            </nav>
-        </header> 
-               
-        <!-- 作品ヒーロー -->
-        <section class="works-hero">
-            <h1 class="text-hero fade-in">Works & Interactive</h1>
-            <p class="text-subtitle fade-in mb-lg">
-                作ったものなど
-            </p>
-            <p class="text-body fade-in" style="max-width: 600px; margin: 0 auto;">
-                制作したアプリ、Webサイト、エフェクター、音楽や<br>
-                インタラクティブ体験ページの紹介
-            </p>
-        </section>
-        
-        <!-- 作品グリッド -->
-        <!-- アプリ・Web開発セクション -->
-        <section id="apps" class="work-section">
-            <h2 class="text-title text-center mb-xl fade-in">📱 アプリ・Web開発</h2>
-            
-            <div class="works-grid">
-                <!-- アプリ開発 -->
-                <div class="work-card fade-in" data-category="apps">
-                    <div class="work-image">
-                        <span class="work-icon">📒</span>
-                    </div>
-                    <div class="work-content">
-                        <div class="work-category">Mobile Development</div>
-                        <h3 class="work-title">OneLine</h3>
-                        <p class="work-description">
-                            １行日記を手軽に記録するアプリ。
-                            Kotlinで開発し、現在Android版のみ。KMP+CMPでiOSにも対応予定。
-                            ウィジェット機能で、ホーム画面から簡単に日記を追加できます。
-                        </p>
-                        <div class="work-tech">
-                            <span class="tech-tag">Kotlin</span>
-                            <span class="tech-tag">KMP</span>
-                            <span class="tech-tag">iOS</span>
-                            <span class="tech-tag">Android</span>
-                        </div>
-                        <div class="work-links">
-                            <a href="apps/oneline" class="work-link">📱 詳細を見る</a>
-                        </div>
-                    </div>
-                </div>
+<!-- Navigation -->
+<nav>
+  <a href="../" class="nav-logo">// nemotea</a>
+  <button class="nav-toggle" id="navToggle" aria-label="メニュー">///</button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="../">HOME</a></li>
+    <li><a href="../profile/">PROFILE</a></li>
+    <li><a href="../works/" class="active">WORKS</a></li>
+    <li><a href="../podcast/">CAST</a></li>
+    <li><a href="../contact/">CONTACT</a></li>
+  </ul>
+</nav>
 
-                <!-- アプリ開発2 -->
-                <div class="work-card fade-in" data-category="apps">
-                    <div class="work-image">
-                        <span class="work-icon">🔊</span>
-                    </div>
-                    <div class="work-content">
-                        <div class="work-category">Mobile Development</div>
-                        <h3 class="work-title">Musicalc</h3>
-                        <p class="work-description">
-                            サンプラーのように音を鳴らしながら計算する電卓アプリ。
-                            ギター・ベース・ピアノ・ドラムの音色を切り替えて、
-                            Fmスケール・Emスケールをなぞりながら計算しよう。
-                            現在ストア非公開。
-                        </p>
-                        <div class="work-tech">
-                            <span class="tech-tag">Kotlin</span>
-                            <span class="tech-tag">Android</span>
-                        </div>
-                        <div class="work-links">
-                            <a href="https://github.com/nemototea/Musicalc" class="work-link">🔊 GitHub</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+<div class="container">
 
-        <!-- 日本茶事業セクション -->
-        <section id="tea" class="work-section">
-            <h2 class="text-title text-center mb-xl fade-in">🍃 日本茶関連</h2>
-            
-            <div class="works-grid">
-                <!-- 日本茶プラットフォームプレースホルダー -->
-                <div class="work-card fade-in" data-category="tea">
-                    <div class="work-image">
-                        <span class="work-icon">🍃</span>
-                    </div>
-                    <div class="work-content">
-                        <div class="work-category">Business Platform</div>
-                        <h3 class="work-title">日本茶販売</h3>
-                        <p class="work-description">
-                            2025年開業予定の個人事業。厳選した日本茶の小売・卸売をスモールスタートして、
-                            将来的には法人化を目指します。準備中。
-                        </p>
-                        <div class="work-tech">
-                            <span class="tech-tag">E-Commerce</span>
-                            <span class="tech-tag">Japanese Tea</span>
-                            <span class="tech-tag">Individual Business</span>
-                            <span class="tech-tag">Coming Soon</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="work-card fade-in" data-category="tea">
-                    <div class="work-image">
-                        <span class="work-icon">🍃</span>
-                    </div>
-                    <div class="work-content">
-                        <div class="work-category">SNS</div>
-                        <h3 class="work-title">ちゃすきー</h3>
-                        <p class="work-description">
-                            Misskeyサーバーを利用した、お茶専門のSNS。
-                            Fediverseの一部として、茶葉や茶器の情報交換を行うことができます。
-                        </p>
-                        <div class="work-tech">
-                            <span class="tech-tag">SNS</span>
-                            <span class="tech-tag">Japanese Tea</span>
-                            <span class="tech-tag">Web</span>
-                        </div>
-                        <div class="work-links">
-                            <a href="https://chaskey.net/" class="work-link">🍃 登録はこちら</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <section class="works-hero">
+    <h1 class="text-hero fade-in">Works</h1>
+    <p class="text-label text-amber fade-in" style="margin-top:var(--space-sm)">// 作ったものなど</p>
+    <p class="text-body fade-in mt-md" style="max-width:500px; margin-left:auto; margin-right:auto">
+      制作したアプリ、Webサイト、エフェクター、音楽の紹介
+    </p>
+  </section>
 
-        <!-- エフェクター制作セクション -->
-        <section id="effects" class="work-section">
-            <h2 class="text-title text-center mb-xl fade-in">⚡ エフェクター制作</h2>
-            
-            <div class="works-grid">
-                <!-- エフェクター -->
-                <div class="work-card fade-in" data-category="effects">
-                    <div class="work-image">
-                        <img src="../assets/images/works/ochadrive2.jpeg" alt="OCHA DRIVE エフェクター" class="work-actual-image">
-                    </div>
-                    <div class="work-content">
-                        <div class="work-category">Circuit Design</div>
-                        <h3 class="work-title">OCHA DRIVE</h3>
-                        <p class="work-description">
-                            中身はブティック系のファズの回路を再現したレプリカ。
-                            LEDの配色・ツマミ・筐体のデザインにこだわり、ラッカー塗装を施しました。
-                            ちょっと音がこもっているが見た目には楽しめるエフェクター。
-                            友人と義父に譲渡済み。
-
-                            ボリューム=お湯の量、ゲイン=茶葉の量、トーン=お湯の温度で、お茶を淹れるように音色を変えよう。非常にわかりづらい。
-                        </p>
-                    </div>
-                </div>
-                <div class="work-card fade-in" data-category="effects">
-                    <div class="work-image">
-                        <img src="../assets/images/works/od-3.jpg" alt="BOSS OD-3 MOD" class="work-actual-image">
-                    </div>
-                    <div class="work-content">
-                        <div class="work-category">Circuit Design</div>
-                        <h3 class="work-title">BOSS OD-3 MOD</h3>
-                        <p class="work-description">
-                            OD-3をモディファイ。中低域に抜け感がないと言われているこの機種。
-                            凛として時雨のTKがこれをMODしているという噂から、ジャキジャキ感のあるサウンドに変更。
-                            回路については義父が調べてくれてパーツもくれたので、中古の筐体を自分で買って改造。
-                            新品の方はそのまま使っているので音の違いは明らか。
-                            友人に譲渡済み。
-                        </p>
-                    </div>
-                </div>
-                <div class="work-card fade-in" data-category="effects">
-                    <div class="work-image">
-                        <img src="../assets/images/works/mxrdistortion+.jpg" alt="BOSS OD-3 MOD" class="work-actual-image">
-                    </div>
-                    <div class="work-content">
-                        <div class="work-category">Circuit Design</div>
-                        <h3 class="work-title">MXR Distortion+</h3>
-                        <p class="work-description">
-                            某エフェクターDIYショップで、プリント基板で回路を再現した制作キットから。
-                            はんだ付けと配線と組み立ての練習用で貰いました。
-                            塗装は義父がやってくれたそうなんですが、完成度高すぎん？
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- 音楽制作セクション -->
-        <section id="music" class="work-section">
-            <h2 class="text-title text-center mb-xl fade-in">🎵 音楽制作</h2>
-            
-            <div class="works-grid">
-                <!-- 音楽作品 -->
-                <div class="work-card fade-in" data-category="music">
-                    <div class="work-image">
-                        <span class="work-icon">☁</span>
-                    </div>
-                    <div class="work-content">
-                        <div class="work-category">Music Production</div>
-                        <h3 class="work-title">音楽作品</h3>
-                        <p class="work-description">
-                            TASCAMのバイノーラルマイクや、スマートフォンのマイクから収録した音をサンプリングして
-                            曲っぽくしたりしています。
-                            フットワークが重すぎて数年に一度くらいしかやる気になりません。気が向いたらサンクラに上げます。
-                        </p>
-                        <div class="work-tech">
-                            <span class="tech-tag">フィールドレコーディング</span>
-                            <span class="tech-tag">自作エフェクター</span>
-                            <span class="tech-tag">Ambient</span>
-                            <span class="tech-tag">Lo-Fi</span>
-                        </div>
-                        <div class="work-links">
-                            <a href="https://soundcloud.com/spcmsc" class="work-link">🎵 SoundCloudで聴く</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- インタラクティブ体験セクション -->
-        <section id="interactive" class="work-section">
-            <h2 class="text-title text-center mb-xl fade-in">🌟 インタラクティブ体験</h2>
-            
-            <div class="works-grid">
-
-                <!-- 音楽精通ロードマップ -->
-                <div class="work-card fade-in" data-category="music" data-section="interactive">
-                    <div class="work-image">
-                        <span class="work-icon">🎼</span>
-                    </div>
-                    <div class="work-content">
-                        <div class="work-category">Interactive Guide</div>
-                        <h3 class="work-title">音楽精通ロードマップ</h3>
-                        <p class="work-description">
-                            12の切り口 × 5段階で音楽のあらゆる側面を体系的に極めるための完全ガイド。
-                            音楽理論、作曲、DTM、楽器演奏からビジネスまで網羅。
-                        </p>
-                        <div class="work-tech">
-                            <span class="tech-tag">Music</span>
-                            <span class="tech-tag">Roadmap</span>
-                            <span class="tech-tag">Interactive</span>
-                            <span class="tech-tag">Education</span>
-                        </div>
-                        <div class="work-links">
-                            <a href="interactive/music-roadmap/" class="work-link">🎼 ロードマップを見る</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3D Portfolio -->
-                <div class="work-card fade-in" data-category="portfolio" data-section="interactive">
-                    <div class="work-image">
-                        <span class="work-icon">📦</span>
-                    </div>
-                    <div class="work-content">
-                        <div class="work-category">Interactive Experience</div>
-                        <h3 class="work-title">3D Portfolio Showcase</h3>
-                        <p class="work-description">
-                            Three.jsを使用した3D音楽ビジュアライゼーション。
-                            没入感のある3D空間で作品を体験できます。
-                        </p>
-                        <div class="work-tech">
-                            <span class="tech-tag">Three.js</span>
-                            <span class="tech-tag">WebGL</span>
-                            <span class="tech-tag">3D Graphics</span>
-                            <span class="tech-tag">Interactive</span>
-                        </div>
-                        <div class="work-links">
-                            <a href="#" class="work-link">開発中</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- 共通フッター -->
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <a href="../" class="footer-logo">nemotea.dev</a>
-                    <p class="footer-description">
-                        Tea-Driven Development - Technology meets Creativity
-                    </p>
-                </div>
-                
-                <div class="footer-links">
-                    <a href="../" class="footer-link">Home</a>
-                    <a href="../profile/" class="footer-link">Profile</a>
-                    <a href="../podcast/" class="footer-link">Podcast</a>
-                    <a href="../contact/" class="footer-link">Contact</a>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p class="footer-copyright">
-                    © 2025 nemotea. Built with passion for technology and creativity.
-                </p>
-            </div>
+  <!-- Apps -->
+  <section id="apps" class="work-section">
+    <h2 class="text-title text-center mb-xl fade-in">App / Web Development</h2>
+    <div class="works-grid">
+      <div class="work-card glass fade-in">
+        <div class="work-image apps">&#x1F4D2;</div>
+        <div class="work-content">
+          <div class="work-category">MOBILE APP</div>
+          <h3 class="work-title">OneLine</h3>
+          <p class="work-description">1行日記を手軽に記録するアプリ。Kotlinで開発し、現在Android版のみ。KMP+CMPでiOSにも対応予定。ウィジェット機能で、ホーム画面から簡単に日記を追加。</p>
+          <div class="work-tech">
+            <span class="tech-tag">Kotlin</span><span class="tech-tag">KMP</span><span class="tech-tag">iOS</span><span class="tech-tag">Android</span>
+          </div>
+          <a href="apps/oneline" class="work-link">DETAILS</a>
         </div>
-    </footer>
+      </div>
+      <div class="work-card glass fade-in">
+        <div class="work-image apps">&#x1F50A;</div>
+        <div class="work-content">
+          <div class="work-category">MOBILE APP</div>
+          <h3 class="work-title">Musicalc</h3>
+          <p class="work-description">サンプラーのように音を鳴らしながら計算する電卓アプリ。ギター・ベース・ピアノ・ドラムの音色を切り替えて計算。現在ストア非公開。</p>
+          <div class="work-tech">
+            <span class="tech-tag">Kotlin</span><span class="tech-tag">Android</span>
+          </div>
+          <a href="https://github.com/nemototea/Musicalc" class="work-link" target="_blank" rel="noopener">GITHUB</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <script src="../assets/js/main.js"></script>
-    <script>        document.addEventListener('DOMContentLoaded', () => {
-            const workCards = document.querySelectorAll('.work-card');
+  <!-- Tea -->
+  <section id="tea" class="work-section">
+    <h2 class="text-title text-center mb-xl fade-in">Japanese Tea</h2>
+    <div class="works-grid">
+      <div class="work-card glass fade-in">
+        <div class="work-image tea">&#x1F343;</div>
+        <div class="work-content">
+          <div class="work-category">BUSINESS</div>
+          <h3 class="work-title">日本茶販売</h3>
+          <p class="work-description">2025年開業の個人事業。厳選した日本茶の小売・卸売をスモールスタートして、将来的には法人化を目指します。</p>
+          <div class="work-tech">
+            <span class="tech-tag">E-Commerce</span><span class="tech-tag">Japanese Tea</span><span class="tech-tag">Coming Soon</span>
+          </div>
+        </div>
+      </div>
+      <div class="work-card glass fade-in">
+        <div class="work-image tea">&#x1F343;</div>
+        <div class="work-content">
+          <div class="work-category">SNS PLATFORM</div>
+          <h3 class="work-title">ちゃすきー</h3>
+          <p class="work-description">Misskeyサーバーを利用した、お茶専門のSNS。Fediverseの一部として、茶葉や茶器の情報交換を行うことができます。</p>
+          <div class="work-tech">
+            <span class="tech-tag">SNS</span><span class="tech-tag">Misskey</span><span class="tech-tag">Fediverse</span>
+          </div>
+          <a href="https://chaskey.net/" class="work-link" target="_blank" rel="noopener">VISIT</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            // ワークカードのホバーエフェクト
-            workCards.forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    const icon = card.querySelector('.work-icon');
-                    icon.style.transform = 'scale(1.2) rotate(10deg)';
-                    icon.style.filter = 'drop-shadow(0 0 30px rgba(0, 255, 157, 0.8))';
-                });
-                
-                card.addEventListener('mouseleave', () => {
-                    const icon = card.querySelector('.work-icon');
-                    icon.style.transform = 'scale(1) rotate(0deg)';
-                    icon.style.filter = 'drop-shadow(0 0 10px rgba(0, 0, 0, 0.3))';
-                });
-            });
+  <!-- Effects -->
+  <section id="effects" class="work-section">
+    <h2 class="text-title text-center mb-xl fade-in">Effects Pedals</h2>
+    <div class="works-grid">
+      <div class="work-card glass fade-in">
+        <div class="work-image effect">
+          <img src="../assets/images/works/ochadrive2.jpeg" alt="OCHA DRIVE">
+        </div>
+        <div class="work-content">
+          <div class="work-category">CIRCUIT DESIGN</div>
+          <h3 class="work-title">OCHA DRIVE</h3>
+          <p class="work-description">ブティック系ファズの回路を再現したレプリカ。LED・ツマミ・筐体のデザインにこだわり、ラッカー塗装を施しました。ボリューム=お湯の量、ゲイン=茶葉の量、トーン=お湯の温度。</p>
+        </div>
+      </div>
+      <div class="work-card glass fade-in">
+        <div class="work-image effect">
+          <img src="../assets/images/works/od-3.jpg" alt="BOSS OD-3 MOD">
+        </div>
+        <div class="work-content">
+          <div class="work-category">CIRCUIT DESIGN</div>
+          <h3 class="work-title">BOSS OD-3 MOD</h3>
+          <p class="work-description">OD-3をモディファイ。中低域の抜け感を改善し、ジャキジャキ感のあるサウンドに変更。回路は義父が調べてくれてパーツもくれた。</p>
+        </div>
+      </div>
+      <div class="work-card glass fade-in">
+        <div class="work-image effect">
+          <img src="../assets/images/works/mxrdistortion+.jpg" alt="MXR Distortion+">
+        </div>
+        <div class="work-content">
+          <div class="work-category">CIRCUIT DESIGN</div>
+          <h3 class="work-title">MXR Distortion+</h3>
+          <p class="work-description">プリント基板の制作キットからはんだ付けと配線と組み立ての練習用。塗装は義父がやってくれた。完成度高すぎん？</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            // ランダムなワークカードのグロー効果
-            setInterval(() => {
-                const allCards = document.querySelectorAll('.work-card');
-                if (allCards.length > 0) {
-                    const randomCard = allCards[Math.floor(Math.random() * allCards.length)];
-                    randomCard.style.boxShadow = '0 0 40px rgba(0, 255, 157, 0.4)';
-                    
-                    setTimeout(() => {
-                        randomCard.style.boxShadow = '';
-                    }, 2000);
-                }
-            }, 8000);
+  <!-- Music -->
+  <section id="music" class="work-section">
+    <h2 class="text-title text-center mb-xl fade-in">Music</h2>
+    <div class="works-grid">
+      <div class="work-card glass fade-in">
+        <div class="work-image music">&#x2601;</div>
+        <div class="work-content">
+          <div class="work-category">MUSIC PRODUCTION</div>
+          <h3 class="work-title">音楽作品</h3>
+          <p class="work-description">TASCAMのバイノーラルマイクやスマートフォンのマイクから収録した音をサンプリングして曲っぽくしたりしています。数年に一度くらいしかやる気になりません。</p>
+          <div class="work-tech">
+            <span class="tech-tag">Field Recording</span><span class="tech-tag">Ambient</span><span class="tech-tag">Lo-Fi</span>
+          </div>
+          <a href="https://soundcloud.com/spcmsc" class="work-link" target="_blank" rel="noopener">SOUNDCLOUD</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
 
-            // URLのハッシュからセクションへのスムーススクロール
-            const hash = window.location.hash;
-            if (hash) {
-                setTimeout(() => {
-                    const targetSection = document.querySelector(hash);
-                    if (targetSection) {
-                        targetSection.scrollIntoView({ 
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                }, 500); // ページロード後の遅延
-            }
-        });
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="../" class="footer-logo">// nemotea</a>
+        <p class="footer-description">Tea-Driven Development</p>
+      </div>
+      <div class="footer-links">
+        <a href="../" class="footer-link">HOME</a>
+        <a href="../profile/" class="footer-link">PROFILE</a>
+        <a href="../works/" class="footer-link">WORKS</a>
+        <a href="../podcast/" class="footer-link">CAST</a>
+        <a href="../contact/" class="footer-link">CONTACT</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2025-2026 nemotea. Built with tea and code.</p>
+    </div>
+  </div>
+</footer>
 
-        // アプリ読み込み完了時の処理
-        document.addEventListener('app:loaded', () => {
-            console.log('🎨 作品ページが正常に読み込まれました！');
-        });
-    </script>
-    
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "CreativeWork",
-        "name": "nemotea Creative Works",
-        "creator": {
-            "@type": "Person",
-            "name": "nemotea"
-        },
-        "description": "音楽制作、アプリ開発、エフェクター制作、日本茶プラットフォームなどの創作活動",
-        "url": "https://nemototea.github.io/works/"
-    }
-    </script>
+<!-- Mobile Nav -->
+<div id="mobile-nav">
+  <a href="../" class="mnav-btn"><span class="ico">&#9750;</span><span>HOME</span></a>
+  <a href="../profile/" class="mnav-btn"><span class="ico">&#9672;</span><span>PROFILE</span></a>
+  <a href="../works/" class="mnav-btn active"><span class="ico">&#9673;</span><span>WORKS</span></a>
+  <a href="../podcast/" class="mnav-btn"><span class="ico">&#9834;</span><span>CAST</span></a>
+  <a href="../contact/" class="mnav-btn"><span class="ico">&#9678;</span><span>CONTACT</span></a>
+</div>
+
+<script src="../assets/js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash;
+  if (hash) {
+    setTimeout(() => {
+      const target = document.querySelector(hash);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 400);
+  }
+});
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "nemotea Creative Works",
+  "creator": { "@type": "Person", "name": "nemotea" },
+  "url": "https://nemototea.github.io/works/"
+}
+</script>
 </body>
 </html>

@@ -1,1086 +1,518 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="nemotea へのお問い合わせ - プロジェクトの相談、技術的な質問、コラボレーションのご提案をお気軽にどうぞ">
-    <meta name="keywords" content="お問い合わせ, コンタクト, 相談, コラボレーション, 技術相談">
-    
-    <title>Contact - nemotea</title>
-    
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="icon" type="image/x-icon" href="../assets/images/favicon-16x16.png">
-    
-    <style>
-        body {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="nemotea へのお問い合わせ - プロジェクトの相談、コラボレーションのご提案">
+<meta name="keywords" content="お問い合わせ, コンタクト, 相談, コラボレーション">
+<title>Contact - nemotea</title>
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="icon" type="image/x-icon" href="../assets/images/favicon-16x16.png">
+<style>
+.contact-hero {
+  padding: var(--space-2xl) 0;
+  text-align: center;
+}
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+  margin: var(--space-2xl) 0;
+  align-items: start;
+}
+/* ── Form ── */
+.form-section {
+  padding: var(--space-2xl);
+  position: relative;
+}
+.form-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--matcha), var(--teal), var(--amber));
+}
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+.form-group { position: relative; }
+.form-label {
+  display: block;
+  margin-bottom: var(--space-xs);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--matcha);
+  font-weight: 700;
+}
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: var(--space-md);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--matcha);
+  box-shadow: 0 0 16px rgba(0,201,122,0.2);
+  background: rgba(255,255,255,0.05);
+}
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--text-mut);
+}
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+.form-select option {
+  background: #0a0e18;
+  color: var(--text);
+}
+.char-count {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-mut);
+  text-align: right;
+  margin-top: 4px;
+  letter-spacing: 1px;
+}
+.char-count.warn { color: var(--amber); }
+.char-count.danger { color: var(--rose); }
 
-        .contact-hero {
-            padding: var(--space-2xl) 0;
-            text-align: center;
-            position: relative;
-        }
+.submit-btn {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 3px;
+  font-weight: 700;
+  padding: 16px;
+  background: var(--matcha);
+  color: #000;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  margin-top: var(--space-sm);
+}
+.submit-btn:hover {
+  box-shadow: 0 0 28px rgba(0,201,122,0.5);
+  transform: translateY(-2px);
+}
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+.response-msg {
+  padding: var(--space-lg);
+  border-radius: 2px;
+  text-align: center;
+  margin-top: var(--space-md);
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 0.3s;
+  white-space: pre-line;
+}
+.response-msg.show { opacity: 1; transform: translateY(0); }
+.response-msg.success { background: rgba(0,201,122,0.06); border: 1px solid rgba(0,201,122,0.2); color: var(--matcha); }
+.response-msg.error { background: rgba(232,108,138,0.06); border: 1px solid rgba(232,108,138,0.2); color: var(--rose); }
 
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--space-2xl);
-            margin: var(--space-2xl) 0;
-            align-items: start;
-        }
+/* ── Info Cards ── */
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+.info-card {
+  padding: var(--space-lg);
+  transition: all 0.2s;
+}
+.info-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.info-icon { font-size: 2rem; margin-bottom: var(--space-md); display: block; }
+.info-title {
+  font-weight: 900;
+  font-size: 1.05rem;
+  color: var(--matcha);
+  margin-bottom: var(--space-xs);
+}
+.info-desc {
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--text-dim);
+  margin-bottom: var(--space-md);
+}
+.info-action {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  text-decoration: none;
+  border-radius: 2px;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.info-action:hover {
+  color: var(--matcha);
+  border-color: var(--border-h);
+  background: rgba(0,201,122,0.04);
+}
 
-        .contact-form-section {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: var(--space-2xl);
-            position: relative;
-            overflow: hidden;
-        }
+/* ── Social ── */
+.social-section { margin: var(--space-2xl) 0; }
+.social-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 2px;
+  margin-top: var(--space-xl);
+}
+.social-card {
+  padding: var(--space-lg);
+  text-align: center;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.2s;
+}
+.social-card:hover {
+  border-color: var(--border-h);
+  transform: translateY(-3px);
+}
+.social-icon { font-size: 1.8rem; margin-bottom: var(--space-sm); display: block; }
+.social-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 2px; }
+.social-handle {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-mut);
+  letter-spacing: 1px;
+}
 
-        .contact-form-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--cyber-green), var(--cyber-blue), var(--cyber-purple));
-        }
+/* ── FAQ ── */
+.faq-section { margin: var(--space-2xl) 0; }
+.faq-grid { display: flex; flex-direction: column; gap: 2px; margin-top: var(--space-xl); }
+.faq-item {
+  padding: var(--space-lg);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.faq-item:hover { border-color: var(--border-h); }
+.faq-q {
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.faq-toggle {
+  color: var(--matcha);
+  font-size: 1rem;
+  transition: transform 0.3s;
+}
+.faq-item.active .faq-toggle { transform: rotate(180deg); }
+.faq-a {
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--text-dim);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s;
+}
+.faq-item.active .faq-a {
+  max-height: 200px;
+  margin-top: var(--space-sm);
+}
 
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-lg);
-        }
-
-        .form-group {
-            position: relative;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: var(--space-xs);
-            color: var(--cyber-green);
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .form-input,
-        .form-textarea,
-        .form-select {
-            width: 100%;
-            padding: var(--space-md);
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 1rem;
-            transition: all var(--transition-normal);
-            backdrop-filter: blur(10px);
-        }
-
-        .form-input:focus,
-        .form-textarea:focus,
-        .form-select:focus {
-            outline: none;
-            border-color: var(--cyber-green);
-            box-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .form-input::placeholder,
-        .form-textarea::placeholder {
-            color: var(--text-muted);
-        }
-
-        .form-textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--space-md);
-        }
-
-        .submit-button {
-            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
-            border: none;
-            padding: var(--space-lg) var(--space-xl);
-            border-radius: 50px;
-            color: #000;
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all var(--transition-normal);
-            position: relative;
-            overflow: hidden;
-            margin-top: var(--space-md);
-        }
-
-        .submit-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 255, 157, 0.4);
-        }
-
-        .submit-button:active {
-            transform: translateY(0);
-        }
-
-        .submit-button.loading {
-            pointer-events: none;
-        }
-
-        .submit-button.loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            margin: -10px 0 0 -10px;
-            border: 2px solid rgba(0, 0, 0, 0.3);
-            border-top: 2px solid #000;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-lg);
-        }
-
-        .info-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: var(--space-lg);
-            transition: all var(--transition-normal);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .info-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0, 255, 157, 0.15);
-        }
-
-        .info-icon {
-            font-size: 2.5rem;
-            margin-bottom: var(--space-md);
-            display: block;
-            filter: drop-shadow(0 0 20px rgba(0, 255, 157, 0.5));
-        }
-
-        .info-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: var(--space-sm);
-            color: var(--cyber-green);
-        }
-
-        .info-description {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: var(--space-md);
-        }
-
-        .info-action {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: var(--space-sm) var(--space-md);
-            text-decoration: none;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-xs);
-            color: var(--text-primary);
-            transition: all var(--transition-normal);
-        }
-
-        .info-action:hover {
-            background: rgba(0, 255, 157, 0.1);
-            border-color: rgba(0, 255, 157, 0.3);
-            box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
-        }
-
-        .social-links {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: var(--space-md);
-            margin: var(--space-xl) 0;
-        }
-
-        .social-link {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: var(--space-lg);
-            text-align: center;
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: all var(--transition-normal);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .social-link:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 255, 157, 0.2);
-            border-color: rgba(0, 255, 157, 0.3);
-        }
-
-        .social-icon {
-            font-size: 2rem;
-            margin-bottom: var(--space-sm);
-            display: block;
-        }
-
-        .social-name {
-            font-weight: 600;
-            margin-bottom: var(--space-xs);
-        }
-
-        .social-handle {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .faq-section {
-            margin: var(--space-2xl) 0;
-        }
-
-        .faq-grid {
-            display: grid;
-            gap: var(--space-md);
-            margin-top: var(--space-xl);
-        }
-
-        .faq-item {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: var(--space-lg);
-            cursor: pointer;
-            transition: all var(--transition-normal);
-        }
-
-        .faq-item:hover {
-            border-color: rgba(0, 255, 157, 0.3);
-        }
-
-        .faq-question {
-            font-weight: 600;
-            margin-bottom: var(--space-sm);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .faq-toggle {
-            color: var(--cyber-green);
-            font-size: 1.2rem;
-            transition: transform var(--transition-normal);
-        }
-
-        .faq-item.active .faq-toggle {
-            transform: rotate(180deg);
-        }
-
-        .faq-answer {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height var(--transition-normal);
-        }
-
-        .faq-item.active .faq-answer {
-            max-height: 200px;
-            margin-top: var(--space-sm);
-        }
-
-        .response-message {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: var(--space-lg);
-            margin-top: var(--space-md);
-            text-align: center;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all var(--transition-normal);
-        }
-
-        .response-message.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .response-message.success {
-            border-color: rgba(0, 255, 0, 0.3);
-            background: rgba(0, 255, 0, 0.05);
-        }
-
-        .response-message.error {
-            border-color: rgba(255, 0, 0, 0.3);
-            background: rgba(255, 0, 0, 0.05);
-        }
-
-        .floating-contact-button {
-            position: fixed;
-            bottom: var(--space-lg);
-            right: var(--space-lg);
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: #000;
-            box-shadow: 0 4px 20px rgba(0, 255, 157, 0.4);
-            cursor: pointer;
-            transition: all var(--transition-normal);
-            z-index: 999;
-            animation: floatingPulse 3s ease-in-out infinite;
-        }
-
-        @keyframes floatingPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .floating-contact-button:hover {
-            transform: scale(1.2);
-            box-shadow: 0 6px 30px rgba(0, 255, 157, 0.6);
-        }
-
-        .character-count {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            text-align: right;
-            margin-top: var(--space-xs);
-        }
-
-        .character-count.warning {
-            color: #feca57;
-        }
-
-        .character-count.danger {
-            color: #ff6b6b;
-        }
-
-        @media (max-width: 768px) {
-            .contact-grid {
-                grid-template-columns: 1fr;
-                gap: var(--space-lg);
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .social-links {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .floating-contact-button {
-                bottom: var(--space-md);
-                right: var(--space-md);
-                width: 50px;
-                height: 50px;
-                font-size: 1.2rem;
-            }
-        }
-    </style>
+@media (max-width: 768px) {
+  .contact-grid { grid-template-columns: 1fr; gap: var(--space-lg); }
+  .form-row { grid-template-columns: 1fr; }
+  .social-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- ヘッダーナビゲーション -->
-        <header class="glass-header mt-md">
-            <nav class="nav">
-                <a href="../" class="nav-logo">nemotea.dev</a>
-                <button class="nav-toggle" id="nav-toggle" aria-label="メニューを開く" aria-expanded="false">
-                    ☰
-                </button>
-                <ul class="nav-items" id="nav-items">
-                    <li><a href="../" class="nav-item">Home</a></li>
-                    <li><a href="../profile/" class="nav-item">Profile</a></li>
-                    <li><a href="../works/" class="nav-item">Works</a></li>
-                    <li><a href="../podcast/" class="nav-item">Podcast</a></li>
-                    <li><a href="../contact/" class="nav-item active">Contact</a></li>
-                </ul>
-            </nav>
-        </header>
+<!-- Navigation -->
+<nav>
+  <a href="../" class="nav-logo">// nemotea</a>
+  <button class="nav-toggle" id="navToggle" aria-label="メニュー">///</button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="../">HOME</a></li>
+    <li><a href="../profile/">PROFILE</a></li>
+    <li><a href="../works/">WORKS</a></li>
+    <li><a href="../podcast/">CAST</a></li>
+    <li><a href="../contact/" class="active">CONTACT</a></li>
+  </ul>
+</nav>
 
-        <!-- コンタクトヒーロー -->
-        <section class="contact-hero">
-            <h1 class="text-hero fade-in">Get In Touch</h1>
-            <p class="text-subtitle fade-in mb-lg">
-                質問やお仕事のご依頼
-            </p>
-            <p class="text-body fade-in" style="max-width: 600px; margin: 0 auto;">
-                技術的な質問、コラボレーションの提案など、<br>
-                どんなことでもお気軽にご連絡ください。48時間以内にお返事いたします。
-            </p>
-        </section>
+<div class="container">
 
-        <!-- メインコンタクトセクション -->
-        <section class="contact-grid">
-            <!-- コンタクトフォーム -->
-            <div class="contact-form-section slide-in-left">
-                <h2 class="text-subtitle mb-lg">📝 メッセージを送る</h2>
-                
-                <form class="contact-form" id="contactForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="name">お名前 *</label>
-                            <input type="text" id="name" name="name" class="form-input" placeholder="山田太郎" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="email">メールアドレス *</label>
-                            <input type="email" id="email" name="email" class="form-input" placeholder="example@domain.com" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="subject">件名 *</label>
-                        <select id="subject" name="subject" class="form-select" required>
-                            <option value="">件名を選択してください</option>
-                            <option value="collaboration">🤝 開発の依頼</option>
-                            <option value="tea">🍃 日本茶関連</option>
-                            <option value="podcast">🎙️ ポッドキャスト出演依頼</option>
-                            <option value="other">💬 その他</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="company">会社名・組織名</label>
-                        <input type="text" id="company" name="company" class="form-input" placeholder="株式会社サンプル（任意）">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="message">メッセージ *</label>
-                        <textarea id="message" name="message" class="form-textarea" placeholder="プロジェクトの詳細、ご質問、ご提案などをお聞かせください..." required maxlength="2000"></textarea>
-                        <div class="character-count" id="characterCount">0 / 2000 文字</div>
-                    </div>
-                    
-                    <button type="submit" class="submit-button" id="submitButton">
-                        <span class="button-text">メッセージを送信</span>
-                    </button>
-                </form>
-                
-                <div class="response-message" id="responseMessage"></div>
-            </div>
+  <section class="contact-hero">
+    <h1 class="text-hero fade-in">Get In Touch</h1>
+    <p class="text-label text-rose fade-in" style="margin-top:var(--space-sm)">// 質問やお仕事のご依頼</p>
+    <p class="text-body fade-in mt-md" style="max-width:500px; margin-left:auto; margin-right:auto">
+      技術的な質問、コラボレーションの提案など、<br>お気軽にご連絡ください。48時間以内にお返事いたします。
+    </p>
+  </section>
 
-            <!-- コンタクト情報 -->
-            <div class="contact-info slide-in-right">
-                <div class="info-card">
-                    <span class="info-icon">⚡</span>
-                    <h3 class="info-title">迅速なレスポンス</h3>
-                    <p class="info-description">
-                        48時間以内にお返事いたします。緊急の場合は、InstagramのDMもご利用ください。
-                    </p>
-                    <a href="https://instagram.com/nemoteacher" class="info-action" target="_blank" rel="noopener">
-                        📸 Instagram DM
-                    </a>
-                </div>
-                
-                <div class="info-card">
-                    <span class="info-icon">💼</span>
-                    <h3 class="info-title">お仕事のご依頼</h3>
-                    <p class="info-description">
-                        アプリ開発、Web開発、日本茶の販売、ワークショップ開催など、様々なご要望にご対応いたします。
-                    </p>
-                    <a href="../works/" class="info-action">
-                        🎨 作品実績を見る
-                    </a>
-                </div>
-                
-                <div class="info-card">
-                    <span class="info-icon">🎙️</span>
-                    <h3 class="info-title">ポッドキャスト出演</h3>
-                    <p class="info-description">
-                        日本茶、技術、音楽など気になるトピックでの対談やゲスト出演をお受けしています。
-                    </p>
-                    <a href="../podcast/" class="info-action">
-                        🎧 番組を聴く
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- ソーシャルリンク -->
-        <section class="mt-2xl">
-            <h2 class="text-title text-center mb-xl fade-in">🌐 Connect With Me</h2>
-            
-            <div class="social-links">
-                <a href="https://github.com/nemototea" class="social-link fade-in" target="_blank" rel="noopener">
-                    <span class="social-icon">💻</span>
-                    <div class="social-name">GitHub</div>
-                    <div class="social-handle">@nemototea</div>
-                </a>
-                
-                <a href="https://soundcloud.com/spcmsc" class="social-link fade-in" target="_blank" rel="noopener">
-                    <span class="social-icon">🎵</span>
-                    <div class="social-name">SoundCloud</div>
-                    <div class="social-handle">@spcmsc</div>
-                </a>
-                
-                <a href="https://x.com/nemototea" class="social-link fade-in" target="_blank" rel="noopener">
-                    <span class="social-icon">🐦</span>
-                    <div class="social-name">X</div>
-                    <div class="social-handle">@nemototea</div>
-                </a>
-                
-                <a href="https://instagram.com/nemoteacher" class="social-link fade-in" target="_blank" rel="noopener">
-                    <span class="social-icon">📸</span>
-                    <div class="social-name">Instagram</div>
-                    <div class="social-handle">@nemoteacher</div>
-                </a>
-                
-                <a href="../podcast/" class="social-link fade-in">
-                    <span class="social-icon">🎙️</span>
-                    <div class="social-name">Podcast</div>
-                    <div class="social-handle">日本茶冒険ラジオ</div>
-                </a>
-            </div>
-        </section>
-
-        <!-- FAQ セクション -->
-        <section class="faq-section">
-            <h2 class="text-title text-center mb-xl fade-in">❓ よくある質問</h2>
-            
-            <div class="faq-grid">
-                <div class="faq-item fade-in" data-faq="0">
-                    <div class="faq-question">
-                        <span>プロジェクトの予算はどのくらいから対応していますか？</span>
-                        <span class="faq-toggle">▼</span>
-                    </div>
-                    <div class="faq-answer">
-                        スクラッチ開発では、小規模なアプリ開発で5万円〜、Webフロント・バックエンド・データベースを必要とするような規模で10万円〜が目安です。
-                        本業優先でフルコミットできないため、GitHubのコラボレーターとしてスポット案件のみの対応も可能です。
-                        まずはお気軽にご相談ください。
-                    </div>
-                </div>
-                
-                <div class="faq-item fade-in" data-faq="1">
-                    <div class="faq-question">
-                        <span>どのような技術スタックで開発していますか？</span>
-                        <span class="faq-toggle">▼</span>
-                    </div>
-                    <div class="faq-answer">
-                        バックエンドはPHP、モバイルアプリはKotlin/Swift（KMP/CMP対応）がメインですが、プロジェクトの要件に応じて相談下さい。
-                    </div>
-                </div>
-                
-                <div class="faq-item fade-in" data-faq="3">
-                    <div class="faq-question">
-                        <span>ポッドキャストのゲスト出演は可能ですか？</span>
-                        <span class="faq-toggle">▼</span>
-                    </div>
-                    <div class="faq-answer">
-                        はい、お茶の話題や、音楽、技術と関連したトピックでもゲスト出演をお受けしています。匿名出演・リモート収録にも対応しますので、お気軽にお声がけください。
-                    </div>
-                </div>
-                
-                <div class="faq-item fade-in" data-faq="4">
-                    <div class="faq-question">
-                        <span>レスポンス時間はどのくらいですか？</span>
-                        <span class="faq-toggle">▼</span>
-                    </div>
-                    <div class="faq-answer">
-                        通常48時間以内にお返事いたします。プロジェクトの進行中は、定期的な進捗報告も行います。
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- 共通フッター -->
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <a href="../" class="footer-logo">nemotea.dev</a>
-                    <p class="footer-description">
-                        Tea-Driven Development - Technology meets Creativity
-                    </p>
-                </div>
-                
-                <div class="footer-links">
-                    <a href="../" class="footer-link">Home</a>
-                    <a href="../profile/" class="footer-link">Profile</a>
-                    <a href="../works/" class="footer-link">Works</a>
-                    <a href="../podcast/" class="footer-link">Podcast</a>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p class="footer-copyright">
-                    © 2025 nemotea. Built with passion for technology and creativity.
-                </p>
-            </div>
+  <section class="contact-grid">
+    <!-- Form -->
+    <div class="form-section glass slide-in-left">
+      <h2 class="text-subtitle mb-lg">Message</h2>
+      <form class="contact-form" id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="name">NAME *</label>
+            <input type="text" id="name" name="name" class="form-input" placeholder="山田太郎" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">EMAIL *</label>
+            <input type="email" id="email" name="email" class="form-input" placeholder="example@domain.com" required>
+          </div>
         </div>
-    </footer>
-
-    <!-- フローティングコンタクトボタン -->
-    <div class="floating-contact-button" id="floatingContact" title="お問い合わせ">
-        💌
+        <div class="form-group">
+          <label class="form-label" for="subject">SUBJECT *</label>
+          <select id="subject" name="subject" class="form-select" required>
+            <option value="">件名を選択してください</option>
+            <option value="collaboration">開発の依頼</option>
+            <option value="tea">日本茶関連</option>
+            <option value="podcast">ポッドキャスト出演依頼</option>
+            <option value="other">その他</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="company">COMPANY</label>
+          <input type="text" id="company" name="company" class="form-input" placeholder="株式会社サンプル（任意）">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="message">MESSAGE *</label>
+          <textarea id="message" name="message" class="form-textarea" placeholder="プロジェクトの詳細、ご質問、ご提案などをお聞かせください..." required maxlength="2000"></textarea>
+          <div class="char-count" id="charCount">0 / 2000</div>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">SEND MESSAGE</button>
+      </form>
+      <div class="response-msg" id="responseMsg"></div>
     </div>
 
-    <script src="../assets/js/main.js"></script>
-    
-    <script>
-        // コンタクトフォーム管理クラス
-        class ContactManager {
-            constructor() {
-                this.form = document.getElementById('contactForm');
-                this.submitButton = document.getElementById('submitButton');
-                this.responseMessage = document.getElementById('responseMessage');
-                this.characterCount = document.getElementById('characterCount');
-                this.messageTextarea = document.getElementById('message');
-                this.init();
-            }
+    <!-- Info -->
+    <div class="contact-info slide-in-right">
+      <div class="info-card glass">
+        <span class="info-icon">&#x26A1;</span>
+        <h3 class="info-title">迅速なレスポンス</h3>
+        <p class="info-desc">48時間以内にお返事いたします。緊急の場合は、InstagramのDMもご利用ください。</p>
+        <a href="https://instagram.com/nemoteacher" class="info-action" target="_blank" rel="noopener">INSTAGRAM DM</a>
+      </div>
+      <div class="info-card glass">
+        <span class="info-icon">&#x1F4BC;</span>
+        <h3 class="info-title">お仕事のご依頼</h3>
+        <p class="info-desc">アプリ開発、Web開発、日本茶の販売、ワークショップ開催など。</p>
+        <a href="../works/" class="info-action">VIEW WORKS</a>
+      </div>
+      <div class="info-card glass">
+        <span class="info-icon">&#x1F399;</span>
+        <h3 class="info-title">ポッドキャスト出演</h3>
+        <p class="info-desc">日本茶、技術、音楽など気になるトピックでの対談やゲスト出演をお受けしています。</p>
+        <a href="../podcast/" class="info-action">LISTEN</a>
+      </div>
+    </div>
+  </section>
 
-            init() {
-                this.setupFormValidation();
-                this.setupCharacterCounter();
-                this.setupFormSubmission();
-                this.setupFAQ();
-                this.setupFloatingButton();
-            }
+  <!-- Social -->
+  <section class="social-section">
+    <h2 class="text-title text-center mb-md fade-in">Connect</h2>
+    <div class="social-grid">
+      <a href="https://github.com/nemototea" class="social-card glass fade-in" target="_blank" rel="noopener">
+        <span class="social-icon">&#x1F4BB;</span>
+        <div class="social-name">GitHub</div>
+        <div class="social-handle">@nemototea</div>
+      </a>
+      <a href="https://soundcloud.com/spcmsc" class="social-card glass fade-in" target="_blank" rel="noopener">
+        <span class="social-icon">&#x1F3B5;</span>
+        <div class="social-name">SoundCloud</div>
+        <div class="social-handle">@spcmsc</div>
+      </a>
+      <a href="https://x.com/nemototea" class="social-card glass fade-in" target="_blank" rel="noopener">
+        <span class="social-icon">&#x1F426;</span>
+        <div class="social-name">X</div>
+        <div class="social-handle">@nemototea</div>
+      </a>
+      <a href="https://instagram.com/nemoteacher" class="social-card glass fade-in" target="_blank" rel="noopener">
+        <span class="social-icon">&#x1F4F8;</span>
+        <div class="social-name">Instagram</div>
+        <div class="social-handle">@nemoteacher</div>
+      </a>
+      <a href="../podcast/" class="social-card glass fade-in">
+        <span class="social-icon">&#x1F399;</span>
+        <div class="social-name">Podcast</div>
+        <div class="social-handle">日本茶冒険ラジオ</div>
+      </a>
+    </div>
+  </section>
 
-            setupFormValidation() {
-                const inputs = this.form.querySelectorAll('input, textarea, select');
-                
-                inputs.forEach(input => {
-                    input.addEventListener('blur', (e) => {
-                        this.validateField(e.target);
-                    });
-                    
-                    input.addEventListener('input', (e) => {
-                        this.clearFieldError(e.target);
-                    });
-                });
-            }
+  <!-- FAQ -->
+  <section class="faq-section">
+    <h2 class="text-title text-center mb-md fade-in">FAQ</h2>
+    <div class="faq-grid">
+      <div class="faq-item glass fade-in">
+        <div class="faq-q"><span>プロジェクトの予算はどのくらいから対応していますか？</span><span class="faq-toggle">&#x25BC;</span></div>
+        <div class="faq-a">小規模なアプリ開発で5万円〜、Web+DB規模で10万円〜が目安です。本業優先のため、GitHubコラボレーターとしてスポット案件のみの対応も可能。まずはお気軽にご相談ください。</div>
+      </div>
+      <div class="faq-item glass fade-in">
+        <div class="faq-q"><span>どのような技術スタックで開発していますか？</span><span class="faq-toggle">&#x25BC;</span></div>
+        <div class="faq-a">バックエンドはPHP、モバイルアプリはKotlin/Swift（KMP/CMP対応）がメインですが、プロジェクトの要件に応じて相談下さい。</div>
+      </div>
+      <div class="faq-item glass fade-in">
+        <div class="faq-q"><span>ポッドキャストのゲスト出演は可能ですか？</span><span class="faq-toggle">&#x25BC;</span></div>
+        <div class="faq-a">はい。お茶、音楽、技術と関連したトピックでゲスト出演をお受けしています。匿名出演・リモート収録にも対応します。</div>
+      </div>
+      <div class="faq-item glass fade-in">
+        <div class="faq-q"><span>レスポンス時間はどのくらいですか？</span><span class="faq-toggle">&#x25BC;</span></div>
+        <div class="faq-a">通常48時間以内にお返事いたします。プロジェクト進行中は定期的な進捗報告も行います。</div>
+      </div>
+    </div>
+  </section>
+</div>
 
-            validateField(field) {
-                const value = field.value.trim();
-                let isValid = true;
-                let errorMessage = '';
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="../" class="footer-logo">// nemotea</a>
+        <p class="footer-description">Tea-Driven Development</p>
+      </div>
+      <div class="footer-links">
+        <a href="../" class="footer-link">HOME</a>
+        <a href="../profile/" class="footer-link">PROFILE</a>
+        <a href="../works/" class="footer-link">WORKS</a>
+        <a href="../podcast/" class="footer-link">CAST</a>
+        <a href="../contact/" class="footer-link">CONTACT</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2025-2026 nemotea. Built with tea and code.</p>
+    </div>
+  </div>
+</footer>
 
-                switch (field.type || field.tagName.toLowerCase()) {
-                    case 'email':
-                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                        if (value && !emailRegex.test(value)) {
-                            isValid = false;
-                            errorMessage = '有効なメールアドレスを入力してください';
-                        }
-                        break;
-                    case 'text':
-                        if (field.required && !value) {
-                            isValid = false;
-                            errorMessage = 'この項目は必須です';
-                        }
-                        break;
-                    case 'textarea':
-                        if (field.required && !value) {
-                            isValid = false;
-                            errorMessage = 'メッセージを入力してください';
-                        } else if (value.length > 2000) {
-                            isValid = false;
-                            errorMessage = 'メッセージは2000文字以内で入力してください';
-                        }
-                        break;
-                    case 'select':
-                        if (field.required && !value) {
-                            isValid = false;
-                            errorMessage = '件名を選択してください';
-                        }
-                        break;
-                }
+<!-- Mobile Nav -->
+<div id="mobile-nav">
+  <a href="../" class="mnav-btn"><span class="ico">&#9750;</span><span>HOME</span></a>
+  <a href="../profile/" class="mnav-btn"><span class="ico">&#9672;</span><span>PROFILE</span></a>
+  <a href="../works/" class="mnav-btn"><span class="ico">&#9673;</span><span>WORKS</span></a>
+  <a href="../podcast/" class="mnav-btn"><span class="ico">&#9834;</span><span>CAST</span></a>
+  <a href="../contact/" class="mnav-btn active"><span class="ico">&#9678;</span><span>CONTACT</span></a>
+</div>
 
-                if (!isValid) {
-                    this.showFieldError(field, errorMessage);
-                } else {
-                    this.clearFieldError(field);
-                }
+<script src="../assets/js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('contactForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const responseMsg = document.getElementById('responseMsg');
+  const charCount = document.getElementById('charCount');
+  const msgArea = document.getElementById('message');
 
-                return isValid;
-            }
+  // Character counter
+  msgArea.addEventListener('input', () => {
+    const len = msgArea.value.length;
+    charCount.textContent = len + ' / 2000';
+    charCount.className = 'char-count' + (len > 1600 ? (len > 1900 ? ' danger' : ' warn') : '');
+  });
 
-            showFieldError(field, message) {
-                this.clearFieldError(field);
-                
-                field.style.borderColor = '#ff6b6b';
-                field.style.boxShadow = '0 0 10px rgba(255, 107, 107, 0.3)';
-                
-                const errorElement = document.createElement('div');
-                errorElement.className = 'field-error';
-                errorElement.style.cssText = `
-                    color: #ff6b6b;
-                    font-size: 0.8rem;
-                    margin-top: 4px;
-                    animation: fadeIn 0.3s ease;
-                `;
-                errorElement.textContent = message;
-                
-                field.parentNode.appendChild(errorElement);
-            }
+  // FAQ toggle
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) item.classList.add('active');
+    });
+  });
 
-            clearFieldError(field) {
-                field.style.borderColor = '';
-                field.style.boxShadow = '';
-                
-                const errorElement = field.parentNode.querySelector('.field-error');
-                if (errorElement) {
-                    errorElement.remove();
-                }
-            }
+  // Form submission
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'SENDING...';
 
-            setupCharacterCounter() {
-                this.messageTextarea.addEventListener('input', () => {
-                    const length = this.messageTextarea.value.length;
-                    const maxLength = 2000;
-                    
-                    this.characterCount.textContent = `${length} / ${maxLength} 文字`;
-                    
-                    // 文字数に応じて色を変更
-                    this.characterCount.className = 'character-count';
-                    if (length > maxLength * 0.8) {
-                        this.characterCount.classList.add('warning');
-                    }
-                    if (length > maxLength * 0.95) {
-                        this.characterCount.classList.remove('warning');
-                        this.characterCount.classList.add('danger');
-                    }
-                });
-            }
+    try {
+      const fd = new FormData(form);
+      const subjectEl = document.getElementById('subject');
+      const subjectText = subjectEl.options[subjectEl.selectedIndex].text;
 
-            setupFormSubmission() {
-                this.form.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    await this.handleFormSubmission();
-                });
-            }
+      const gasData = new FormData();
+      gasData.append('name', fd.get('name'));
+      gasData.append('email', fd.get('email'));
+      gasData.append('subject', subjectText);
+      gasData.append('company', fd.get('company') || '');
+      gasData.append('message', fd.get('message'));
+      gasData.append('timestamp', new Date().toISOString());
 
-            async handleFormSubmission() {
-                // バリデーション
-                const formData = new FormData(this.form);
-                const inputs = this.form.querySelectorAll('input[required], textarea[required], select[required]');
-                let isValid = true;
+      await fetch('https://script.google.com/macros/s/AKfycbxGXuhGPVn24UOzypcKp230opeBfzItlZ9Y9cadCOvZlr89DUz4_iHThlXeb_4uktpZ/exec', {
+        method: 'POST',
+        body: gasData
+      });
 
-                inputs.forEach(input => {
-                    if (!this.validateField(input)) {
-                        isValid = false;
-                    }
-                });
-
-                if (!isValid) {
-                    this.showResponseMessage('入力内容を確認してください', 'error');
-                    return;
-                }
-
-                // 送信開始
-                this.setSubmitButtonState('loading');
-                
-                try {
-                    // 件名の表示テキストを取得
-                    const subjectSelect = document.getElementById('subject');
-                    const selectedOption = subjectSelect.options[subjectSelect.selectedIndex];
-                    const subjectText = selectedOption.text;
-                    
-                    // Google Apps Scriptに送信
-                    await this.sendToGoogleAppsScript(formData, subjectText);
-                    
-                    // デモ用の疑似送信（実際の送信が成功した場合のUI表示）
-                    await this.simulateFormSubmission(formData);
-                    
-                } catch (error) {
-                    console.error('Form submission error:', error);
-                    this.showResponseMessage('送信中にエラーが発生しました。しばらく時間をおいて再度お試しください。', 'error');
-                } finally {
-                    this.setSubmitButtonState('normal');
-                }
-            }
-
-            async sendToGoogleAppsScript(formData, subjectText) {
-                // FormDataを使用してCORSエラーを回避
-                const gasFormData = new FormData();
-                gasFormData.append('name', formData.get("name"));
-                gasFormData.append('email', formData.get("email"));
-                gasFormData.append('subject', subjectText);
-                gasFormData.append('company', formData.get("company") || "");
-                gasFormData.append('message', formData.get("message"));
-                gasFormData.append('timestamp', new Date().toISOString());
-
-                const response = await fetch("https://script.google.com/macros/s/AKfycbxGXuhGPVn24UOzypcKp230opeBfzItlZ9Y9cadCOvZlr89DUz4_iHThlXeb_4uktpZ/exec", {
-                    method: "POST",
-                    body: gasFormData
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Google Apps Script error: ${response.status}`);
-                }
-
-                return response;
-            }
-
-            async simulateFormSubmission(formData) {
-                // デモ用の2秒待機
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                // 件名の表示テキストを取得
-                const subjectSelect = document.getElementById('subject');
-                const selectedOption = subjectSelect.options[subjectSelect.selectedIndex];
-                const subjectText = selectedOption.text;
-                
-                // 成功メッセージ表示
-                this.showResponseMessage(
-                    `✅ メッセージを送信しました！\n\n📋 送信内容:\n• 件名: ${subjectText}\n• お名前: ${formData.get('name')}\n• メールアドレス: ${formData.get('email')}\n\n48時間以内にお返事いたします。`, 
-                    'success'
-                );
-                
-                // フォームリセット
-                this.form.reset();
-                this.characterCount.textContent = '0 / 2000 文字';
-                this.characterCount.className = 'character-count';
-                
-                // 送信完了のエフェクト
-                this.triggerSuccessEffect();
-            }
-
-            setSubmitButtonState(state) {
-                const buttonText = this.submitButton.querySelector('.button-text');
-                
-                this.submitButton.className = `submit-button ${state}`;
-                
-                switch (state) {
-                    case 'loading':
-                        buttonText.textContent = '送信中...';
-                        this.submitButton.disabled = true;
-                        break;
-                    case 'success':
-                        buttonText.textContent = '送信完了！';
-                        setTimeout(() => this.setSubmitButtonState('normal'), 3000);
-                        break;
-                    case 'error':
-                        buttonText.textContent = '送信失敗';
-                        setTimeout(() => this.setSubmitButtonState('normal'), 3000);
-                        break;
-                    default:
-                        buttonText.textContent = 'メッセージを送信';
-                        this.submitButton.disabled = false;
-                        break;
-                }
-            }
-
-            showResponseMessage(message, type) {
-                this.responseMessage.textContent = message;
-                this.responseMessage.className = `response-message ${type} show`;
-                
-                // 5秒後に自動で非表示
-                setTimeout(() => {
-                    this.responseMessage.classList.remove('show');
-                }, 5000);
-            }
-
-            triggerSuccessEffect() {
-                // 成功時のパーティクルエフェクト
-                const particles = [];
-                const container = this.form.parentElement;
-                
-                for (let i = 0; i < 20; i++) {
-                    const particle = document.createElement('div');
-                    particle.style.cssText = `
-                        position: absolute;
-                        width: 6px;
-                        height: 6px;
-                        background: var(--cyber-green);
-                        border-radius: 50%;
-                        pointer-events: none;
-                        z-index: 1000;
-                    `;
-                    
-                    const rect = this.submitButton.getBoundingClientRect();
-                    const containerRect = container.getBoundingClientRect();
-                    
-                    particle.style.left = (rect.left - containerRect.left + rect.width / 2) + 'px';
-                    particle.style.top = (rect.top - containerRect.top + rect.height / 2) + 'px';
-                    
-                    container.appendChild(particle);
-                    particles.push(particle);
-                    
-                    // アニメーション
-                    const angle = (Math.PI * 2 * i) / 20;
-                    const distance = 100 + Math.random() * 50;
-                    const duration = 1000 + Math.random() * 500;
-                    
-                    particle.animate([
-                        {
-                            transform: 'translate(0, 0) scale(1)',
-                            opacity: 1
-                        },
-                        {
-                            transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0)`,
-                            opacity: 0
-                        }
-                    ], {
-                        duration: duration,
-                        easing: 'ease-out'
-                    }).onfinish = () => {
-                        particle.remove();
-                    };
-                }
-            }
-
-            setupFAQ() {
-                const faqItems = document.querySelectorAll('.faq-item');
-                
-                faqItems.forEach(item => {
-                    item.addEventListener('click', () => {
-                        const isActive = item.classList.contains('active');
-                        
-                        // 他のFAQを閉じる
-                        faqItems.forEach(otherItem => {
-                            otherItem.classList.remove('active');
-                        });
-                        
-                        // クリックされたFAQを開く/閉じる
-                        if (!isActive) {
-                            item.classList.add('active');
-                        }
-                    });
-                });
-            }
-
-            setupFloatingButton() {
-                const floatingButton = document.getElementById('floatingContact');
-                
-                floatingButton.addEventListener('click', () => {
-                    // フォームまでスムーススクロール
-                    this.form.scrollIntoView({ behavior: 'smooth' });
-                    
-                    // フォーカスを最初の入力欄に移動
-                    setTimeout(() => {
-                        document.getElementById('name').focus();
-                    }, 800);
-                    
-                    // ボタンのアニメーション
-                    floatingButton.style.transform = 'scale(1.3) rotate(360deg)';
-                    setTimeout(() => {
-                        floatingButton.style.transform = '';
-                    }, 500);
-                });
-                
-                // スクロール時の表示制御
-                window.addEventListener('scroll', () => {
-                    const formRect = this.form.getBoundingClientRect();
-                    const isFormVisible = formRect.top < window.innerHeight && formRect.bottom > 0;
-                    
-                    if (isFormVisible) {
-                        floatingButton.style.opacity = '0.3';
-                    } else {
-                        floatingButton.style.opacity = '1';
-                    }
-                });
-            }
-        }
-
-        // ページ初期化
-        let contactManager;
-
-        document.addEventListener('DOMContentLoaded', () => {
-            contactManager = new ContactManager();
-
-            // ソーシャルリンクのホバーエフェクト
-            const socialLinks = document.querySelectorAll('.social-link');
-            socialLinks.forEach(link => {
-                link.addEventListener('mouseenter', () => {
-                    const icon = link.querySelector('.social-icon');
-                    icon.style.transform = 'scale(1.3) rotate(10deg)';
-                    icon.style.filter = 'drop-shadow(0 0 20px var(--cyber-green))';
-                });
-                
-                link.addEventListener('mouseleave', () => {
-                    const icon = link.querySelector('.social-icon');
-                    icon.style.transform = 'scale(1) rotate(0deg)';
-                    icon.style.filter = '';
-                });
-            });
-
-            // 情報カードのランダムグロー
-            const infoCards = document.querySelectorAll('.info-card');
-            setInterval(() => {
-                const randomCard = infoCards[Math.floor(Math.random() * infoCards.length)];
-                randomCard.style.boxShadow = '0 0 30px rgba(0, 255, 157, 0.4)';
-                setTimeout(() => {
-                    randomCard.style.boxShadow = '';
-                }, 2000);
-            }, 5000);
-
-            // キーボードショートカット
-            document.addEventListener('keydown', (e) => {
-                // Ctrl/Cmd + Enter でフォーム送信
-                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                    const activeElement = document.activeElement;
-                    if (activeElement.closest('#contactForm')) {
-                        e.preventDefault();
-                        contactManager.handleFormSubmission();
-                    }
-                }
-                
-                // Escape でFAQを閉じる
-                if (e.key === 'Escape') {
-                    document.querySelectorAll('.faq-item.active').forEach(item => {
-                        item.classList.remove('active');
-                    });
-                }
-            });
-        });
-
-        // アプリ読み込み完了時の処理
-        document.addEventListener('app:loaded', () => {
-            console.log('📧 コンタクトページが正常に読み込まれました！');
-        });
-    </script>
-    
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "ContactPage",
-        "name": "Contact nemotea",
-        "description": "nemotea へのお問い合わせページ",
-        "url": "https://nemototea.github.io/contact/",
-        "mainEntity": {
-            "@type": "Person",
-            "name": "nemotea",
-            "jobTitle": "Creative Technologist & Music Producer"
-        }
+      showMsg('送信しました。48時間以内にお返事いたします。', 'success');
+      form.reset();
+      charCount.textContent = '0 / 2000';
+      charCount.className = 'char-count';
+    } catch (err) {
+      showMsg('送信中にエラーが発生しました。しばらく時間をおいて再度お試しください。', 'error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'SEND MESSAGE';
     }
-    </script>
+  });
+
+  function showMsg(text, type) {
+    responseMsg.textContent = text;
+    responseMsg.className = 'response-msg ' + type + ' show';
+    setTimeout(() => responseMsg.classList.remove('show'), 5000);
+  }
+
+  // Keyboard shortcut
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && document.activeElement.closest('#contactForm')) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.faq-item.active').forEach(i => i.classList.remove('active'));
+    }
+  });
+});
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "Contact nemotea",
+  "url": "https://nemototea.github.io/contact/",
+  "mainEntity": { "@type": "Person", "name": "nemotea" }
+}
+</script>
 </body>
 </html>

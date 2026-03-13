@@ -1,269 +1,180 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="nemotea ポッドキャスト">
-    <meta name="keywords" content="ポッドキャスト, 日本茶">
-    
-    <title>Podcast - nemotea</title>
-    
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="icon" type="image/x-icon" href="../assets/images/favicon-16x16.png">
-    
-    <style>
-        body {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="nemotea ポッドキャスト - 日本茶冒険ラジオ">
+<meta name="keywords" content="ポッドキャスト, 日本茶">
+<title>Podcast - nemotea</title>
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="icon" type="image/x-icon" href="../assets/images/favicon-16x16.png">
+<style>
+.podcast-hero {
+  padding: var(--space-2xl) 0;
+  text-align: center;
+}
+.podcast-logo {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto var(--space-xl);
+  background: linear-gradient(135deg, var(--matcha), var(--teal));
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(0,201,122,0.2);
+}
+.podcast-logo::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.06), transparent);
+  animation: spin 8s linear infinite;
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
+.podcast-logo span { position: relative; z-index: 2; }
 
-        .podcast-hero {
-            padding: var(--space-2xl) 0;
-            text-align: center;
-            position: relative;
-        }
+.embed-section {
+  margin: var(--space-2xl) 0;
+  text-align: center;
+}
+.spotify-embed {
+  margin: var(--space-xl) auto;
+  max-width: 700px;
+  border-radius: 12px;
+  overflow: hidden;
+}
 
-        .podcast-logo {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto var(--space-xl);
-            background: linear-gradient(135deg, var(--cyber-green), var(--cyber-blue));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 6rem;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 50px rgba(0, 255, 157, 0.3);
-            animation: podcastPulse 3s ease-in-out infinite alternate;
-        }
+.platforms-section { margin: var(--space-2xl) 0; }
+.platforms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 2px;
+  margin-top: var(--space-xl);
+}
+.platform-card {
+  padding: var(--space-lg);
+  text-align: center;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.2s;
+}
+.platform-card:hover {
+  border-color: var(--border-h);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.platform-icon { font-size: 2.5rem; margin-bottom: var(--space-sm); display: block; }
+.platform-name { font-weight: 700; margin-bottom: var(--space-xs); }
+.platform-desc {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--text-mut);
+}
 
-        @keyframes podcastPulse {
-            0% { box-shadow: 0 0 50px rgba(0, 255, 157, 0.3); }
-            100% { box-shadow: 0 0 80px rgba(0, 255, 157, 0.6); }
-        }
-
-        .podcast-logo::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            animation: rotate 6s linear infinite;
-        }
-
-        .podcast-emoji {
-            position: relative;
-            z-index: 2;
-            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
-        }
-
-        .platforms-section {
-            margin: var(--space-2xl) 0;
-        }
-
-        .platforms-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-md);
-            margin-top: var(--space-xl);
-        }
-
-        .platform-card {
-            background: var(--glass-bg);
-            backdrop-filter: var(--blur-medium);
-            border: 1px solid var(--glass-border);
-            transition: all var(--transition-normal);
-            border-radius: 20px;
-            padding: var(--space-lg);
-            box-shadow: var(--shadow-glass);
-            text-align: center;
-            text-decoration: none;
-            color: var(--text-primary);
-        }
-
-        .platform-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
-            border-color: var(--glass-border-hover);
-        }
-
-        .platform-icon {
-            font-size: 3rem;
-            margin-bottom: var(--space-md);
-            display: block;
-        }
-
-        .platform-name {
-            font-weight: 600;
-            margin-bottom: var(--space-xs);
-        }
-
-        .subscribe-section {
-            margin: var(--space-2xl) 0;
-            text-align: center;
-        }
-
-        .spotify-embed {
-            margin: var(--space-xl) 0;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow-glass);
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .podcast-logo {
-                width: 150px;
-                height: 150px;
-                font-size: 4rem;
-            }
-
-            .platforms-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+@media (max-width: 768px) {
+  .podcast-logo { width: 140px; height: 140px; font-size: 3.5rem; }
+  .platforms-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- ヘッダーナビゲーション -->
-        <header class="glass-header mt-md">
-            <nav class="nav">
-                <a href="../" class="nav-logo">nemotea.dev</a>
-                <button class="nav-toggle" id="nav-toggle" aria-label="メニューを開く" aria-expanded="false">
-                    ☰
-                </button>
-                <ul class="nav-items" id="nav-items">
-                    <li><a href="../" class="nav-item">Home</a></li>
-                    <li><a href="../profile/" class="nav-item">Profile</a></li>
-                    <li><a href="../works/" class="nav-item">Works</a></li>
-                    <li><a href="../podcast/" class="nav-item active">Podcast</a></li>
-                    <li><a href="../contact/" class="nav-item">Contact</a></li>
-                </ul>
-            </nav>
-        </header>
+<!-- Navigation -->
+<nav>
+  <a href="../" class="nav-logo">// nemotea</a>
+  <button class="nav-toggle" id="navToggle" aria-label="メニュー">///</button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="../">HOME</a></li>
+    <li><a href="../profile/">PROFILE</a></li>
+    <li><a href="../works/">WORKS</a></li>
+    <li><a href="../podcast/" class="active">CAST</a></li>
+    <li><a href="../contact/">CONTACT</a></li>
+  </ul>
+</nav>
 
-        <!-- ポッドキャストヒーロー -->
-        <section class="podcast-hero">
-            <div class="podcast-logo fade-in">
-                <span class="podcast-emoji">🎙️</span>
-            </div>
-            
-            <h1 class="text-hero fade-in">Podcast</h1>
-            <p class="text-subtitle fade-in mb-lg">
-                ポッドキャスト配信
-            </p>
-        </section>
+<div class="container">
 
-        <!-- Spotify埋め込み -->
-        <section class="subscribe-section fade-in">
-            <h2 class="text-title text-center mb-md">🎧 最新エピソードを聴く</h2>
-            
-            <div class="spotify-embed">
-                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/show/5atW1qbFRRo0KMamPAfZQN?utm_source=generator" width="75%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-            </div>
-        </section>
+  <section class="podcast-hero">
+    <div class="podcast-logo fade-in"><span>&#x1F399;</span></div>
+    <h1 class="text-hero fade-in">Podcast</h1>
+    <p class="text-label text-teal fade-in" style="margin-top:var(--space-sm)">// ねもとの日本茶冒険ラジオ</p>
+  </section>
 
-        <!-- 配信プラットフォーム -->
-        <section class="platforms-section">
-            <h2 class="text-title text-center mb-md fade-in">📱 配信先</h2>
-            <p class="text-body text-center mb-xl fade-in">
-                お好みのプラットフォームでフォロー・購読してください
-            </p>
-            
-            <div class="platforms-grid">
-                <a href="https://open.spotify.com/show/5atW1qbFRRo0KMamPAfZQN?si=feb53909a9f14648" class="platform-card fade-in" target="_blank" rel="noopener">
-                    <span class="platform-icon">🎵</span>
-                    <div class="platform-name">Spotify</div>
-                    <p class="text-small">ポッドキャスト</p>
-                </a>
-                
-                <a href="https://podcasts.apple.com/us/podcast/%E3%81%AD%E3%82%82%E3%81%A8%E3%81%AE%E6%97%A5%E6%9C%AC%E8%8C%B6%E5%86%92%E9%99%BA%E3%83%A9%E3%82%B8%E3%82%AA/id1824109073" class="platform-card fade-in" target="_blank" rel="noopener">
-                    <span class="platform-icon">🍎</span>
-                    <div class="platform-name">Apple Podcast</div>
-                    <p class="text-small">ポッドキャスト</p>
-                </a>
-                
-                <a href="https://music.amazon.co.jp/podcasts/108d4778-b157-435c-ac14-7c8be4f8f902/%E3%81%AD%E3%82%82%E3%81%A8%E3%81%AE%E6%97%A5%E6%9C%AC%E8%8C%B6%E5%86%92%E9%99%BA%E3%83%A9%E3%82%B8%E3%82%AA" class="platform-card fade-in" target="_blank" rel="noopener">
-                    <span class="platform-icon">🎛️</span>
-                    <div class="platform-name">Amazon Music</div>
-                    <p class="text-small">ポッドキャスト</p>
-                </a>
-                
-                <a href="https://stand.fm/channels/67e66bf6ea64634e38e4d386" class="platform-card fade-in" target="_blank" rel="noopener">
-                    <span class="platform-icon">📡</span>
-                    <div class="platform-name">stand.fm</div>
-                    <p class="text-small">独立系音声配信</p>
-                </a>
-
-                <a href="https://listen.style/p/nemotea" class="platform-card fade-in" target="_blank" rel="noopener">
-                    <span class="platform-icon">🎧</span>
-                    <div class="platform-name">LISTEN</div>
-                    <p class="text-small">AIによる文字起こし</p>
-                </a>
-            </div>
-        </section>
-
-        <!-- 購読促進 -->
-        <section class="mt-2xl">
-            <div class="glass-card fade-in" style="padding: var(--space-2xl);">
-                <h2 class="text-title text-center" style="margin-bottom: var(--space-lg);">🚀 一緒に創造しませんか？</h2>
-                <p class="text-body" style="max-width: 600px; margin: 0 auto;">
-                    新しいプロジェクトやコラボレーションを探求しています。
-                    スポット開発の依頼、日本茶関連の依頼など、どの分野でもお気軽にご連絡ください。
-                </p>
-                
-                <div class="flex" style="justify-content: center; gap: var(--space-lg); flex-wrap: wrap; margin-top: var(--space-xl);">
-                    <a href="../contact/" class="cta-primary">お問い合わせ</a>
-                    <a href="https://github.com/nemototea" class="glass-button" target="_blank" rel="noopener">GitHub</a>
-                </div>
-            </div>
-        </section>
+  <section class="embed-section">
+    <h2 class="text-title text-center mb-md fade-in">Latest Episode</h2>
+    <div class="spotify-embed fade-in">
+      <iframe style="border-radius:12px" src="https://open.spotify.com/embed/show/5atW1qbFRRo0KMamPAfZQN?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
     </div>
+  </section>
 
-    <!-- 共通フッター -->
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <a href="../" class="footer-logo">nemotea.dev</a>
-                    <p class="footer-description">
-                        Tea-Driven Development - Technology meets Creativity
-                    </p>
-                </div>
-                
-                <div class="footer-links">
-                    <a href="../" class="footer-link">Home</a>
-                    <a href="../profile/" class="footer-link">Profile</a>
-                    <a href="../works/" class="footer-link">Works</a>
-                    <a href="../contact/" class="footer-link">Contact</a>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p class="footer-copyright">
-                    © 2025 nemotea. Built with passion for technology and creativity.
-                </p>
-            </div>
-        </div>
-    </footer>
+  <section class="platforms-section">
+    <h2 class="text-title text-center mb-md fade-in">Platforms</h2>
+    <p class="text-label text-center text-teal fade-in">// お好みのプラットフォームでフォロー</p>
+    <div class="platforms-grid">
+      <a href="https://open.spotify.com/show/5atW1qbFRRo0KMamPAfZQN?si=feb53909a9f14648" class="platform-card glass fade-in" target="_blank" rel="noopener">
+        <span class="platform-icon">&#x1F3B5;</span>
+        <div class="platform-name">Spotify</div>
+        <div class="platform-desc">PODCAST</div>
+      </a>
+      <a href="https://podcasts.apple.com/us/podcast/%E3%81%AD%E3%82%82%E3%81%A8%E3%81%AE%E6%97%A5%E6%9C%AC%E8%8C%B6%E5%86%92%E9%99%BA%E3%83%A9%E3%82%B8%E3%82%AA/id1824109073" class="platform-card glass fade-in" target="_blank" rel="noopener">
+        <span class="platform-icon">&#x1F34E;</span>
+        <div class="platform-name">Apple Podcast</div>
+        <div class="platform-desc">PODCAST</div>
+      </a>
+      <a href="https://music.amazon.co.jp/podcasts/108d4778-b157-435c-ac14-7c8be4f8f902/" class="platform-card glass fade-in" target="_blank" rel="noopener">
+        <span class="platform-icon">&#x1F39B;</span>
+        <div class="platform-name">Amazon Music</div>
+        <div class="platform-desc">PODCAST</div>
+      </a>
+      <a href="https://stand.fm/channels/67e66bf6ea64634e38e4d386" class="platform-card glass fade-in" target="_blank" rel="noopener">
+        <span class="platform-icon">&#x1F4E1;</span>
+        <div class="platform-name">stand.fm</div>
+        <div class="platform-desc">VOICE</div>
+      </a>
+      <a href="https://listen.style/p/nemotea" class="platform-card glass fade-in" target="_blank" rel="noopener">
+        <span class="platform-icon">&#x1F3A7;</span>
+        <div class="platform-name">LISTEN</div>
+        <div class="platform-desc">AI TRANSCRIPT</div>
+      </a>
+    </div>
+  </section>
 
-    <script src="../assets/js/main.js"></script>
-    
-    <script>
-        // ページ読み込み時の初期化
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('🌟 Podcast ページが読み込まれました');
-            
-            // ページフェードイン
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-            }, 100);
-        });
-    </script>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="../" class="footer-logo">// nemotea</a>
+        <p class="footer-description">Tea-Driven Development</p>
+      </div>
+      <div class="footer-links">
+        <a href="../" class="footer-link">HOME</a>
+        <a href="../profile/" class="footer-link">PROFILE</a>
+        <a href="../works/" class="footer-link">WORKS</a>
+        <a href="../podcast/" class="footer-link">CAST</a>
+        <a href="../contact/" class="footer-link">CONTACT</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2025-2026 nemotea. Built with tea and code.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Mobile Nav -->
+<div id="mobile-nav">
+  <a href="../" class="mnav-btn"><span class="ico">&#9750;</span><span>HOME</span></a>
+  <a href="../profile/" class="mnav-btn"><span class="ico">&#9672;</span><span>PROFILE</span></a>
+  <a href="../works/" class="mnav-btn"><span class="ico">&#9673;</span><span>WORKS</span></a>
+  <a href="../podcast/" class="mnav-btn active"><span class="ico">&#9834;</span><span>CAST</span></a>
+  <a href="../contact/" class="mnav-btn"><span class="ico">&#9678;</span><span>CONTACT</span></a>
+</div>
+
+<script src="../assets/js/main.js"></script>
 </body>
 </html>
