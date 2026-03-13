@@ -290,23 +290,19 @@
     </style>
 </head>
 <body>
+<nav>
+  <a href="../../../" class="nav-logo">// nemotea</a>
+  <button class="nav-toggle" id="navToggle" aria-label="メニュー">///</button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="../../../">HOME</a></li>
+    <li><a href="../../../profile/">PROFILE</a></li>
+    <li><a href="../../../works/" class="active">WORKS</a></li>
+    <li><a href="../../../podcast/">CAST</a></li>
+    <li><a href="../../../contact/">CONTACT</a></li>
+  </ul>
+</nav>
+
     <div class="container">
-        <!-- ヘッダーナビゲーション -->
-        <header class="glass-header mt-md">
-            <nav class="nav">
-                <a href="../../../" class="nav-logo">nemotea.dev</a>
-                <button class="nav-toggle" id="nav-toggle" aria-label="メニューを開く" aria-expanded="false">
-                    ☰
-                </button>
-                <ul class="nav-items" id="nav-items">
-                    <li><a href="../../../" class="nav-item">Home</a></li>
-                    <li><a href="../../../profile/" class="nav-item">Profile</a></li>
-                    <li><a href="../../../works/" class="nav-item active">Works</a></li>
-                    <li><a href="../../../podcast/" class="nav-item">Podcast</a></li>
-                    <li><a href="../../../contact/" class="nav-item">Contact</a></li>
-                </ul>
-            </nav>
-        </header>
 
         <!-- アプリヒーロー -->
         <section class="app-hero">
@@ -404,35 +400,38 @@
         </section>
     </div>
 
-    <!-- 共通フッター -->
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <a href="../../../" class="footer-logo">nemotea.dev</a>
-                    <p class="footer-description">
-                        Tea-Driven Development - Technology meets Creativity
-                    </p>
-                </div>
-                
-                <div class="footer-links">
-                    <a href="../../../" class="footer-link">Home</a>
-                    <a href="../../../profile/" class="footer-link">Profile</a>
-                    <a href="../../../works/" class="footer-link">Works</a>
-                    <a href="../../../podcast/" class="footer-link">Podcast</a>
-                    <a href="../../../contact/" class="footer-link">Contact</a>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p class="footer-copyright">
-                    © 2025 nemotea. Built with passion for technology and creativity.
-                </p>
-            </div>
-        </div>
-    </footer>
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="../../../" class="footer-logo">// nemotea</a>
+        <p class="footer-description">Tea-Driven Development</p>
+      </div>
+      <div class="footer-links">
+        <a href="../../../" class="footer-link">HOME</a>
+        <a href="../../../profile/" class="footer-link">PROFILE</a>
+        <a href="../../../works/" class="footer-link">WORKS</a>
+        <a href="../../../podcast/" class="footer-link">CAST</a>
+        <a href="../../../contact/" class="footer-link">CONTACT</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2025-2026 nemotea. Built with tea and code.</p>
+    </div>
+  </div>
+</footer>
 
-    <script src="../../../assets/js/main.js"></script>
+<!-- Mobile Nav -->
+<div id="mobile-nav">
+  <a href="../../../" class="mnav-btn"><span class="ico">&#9750;</span><span>HOME</span></a>
+  <a href="../../../profile/" class="mnav-btn"><span class="ico">&#9672;</span><span>PROFILE</span></a>
+  <a href="../../../works/" class="mnav-btn active"><span class="ico">&#9673;</span><span>WORKS</span></a>
+  <a href="../../../podcast/" class="mnav-btn"><span class="ico">&#9834;</span><span>CAST</span></a>
+  <a href="../../../contact/" class="mnav-btn"><span class="ico">&#9678;</span><span>CONTACT</span></a>
+</div>
+
+<script src="../../../assets/js/main.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {

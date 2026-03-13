@@ -54,16 +54,6 @@ body {
   line-height: 1.6;
 }
 
-/* ── WebGL Canvas ── */
-#bg-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-  pointer-events: none;
-}
-
 /* ── Scroll Progress ── */
 #scroll-track {
   position: fixed;
@@ -238,18 +228,42 @@ section {
 .hero-sub {
   font-family: var(--mono);
   font-size: clamp(11px, 2vw, 13px);
-  color: var(--text-dim);
-  letter-spacing: 2px;
+  color: var(--matcha);
+  letter-spacing: 1px;
   margin-top: 32px;
   margin-bottom: 48px;
   opacity: 0;
   animation: fadeUp 0.7s 0.6s forwards;
-  max-width: 500px;
+  max-width: 600px;
   cursor: pointer;
-  transition: color 0.3s;
+  transition: color 0.3s, opacity 0.3s, transform 0.3s;
   min-height: 1.6em;
+  background: rgba(0, 201, 122, 0.06);
+  border: 1px solid rgba(0, 201, 122, 0.15);
+  border-radius: 4px;
+  padding: 10px 20px;
+  position: relative;
+  text-align: left;
 }
-.hero-sub:hover { color: var(--matcha); }
+.hero-sub::before {
+  content: '$ ';
+  color: var(--matcha);
+  font-weight: 700;
+}
+.hero-sub::after {
+  content: '▋';
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+  color: var(--matcha);
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.hero-sub:hover {
+  border-color: rgba(0, 201, 122, 0.4);
+  background: rgba(0, 201, 122, 0.1);
+}
 .hero-sub.changing {
   opacity: 0;
   transform: translateY(-10px);
@@ -662,8 +676,8 @@ section {
 </head>
 <body>
 
-<!-- ═══ WebGL Background ═══ -->
-<canvas id="bg-canvas"></canvas>
+<div class="bg-ambient"></div>
+<div class="bg-grid"></div>
 
 <!-- ═══ Scroll Progress ═══ -->
 <div id="scroll-track"><div id="scroll-bar"></div></div>
@@ -751,7 +765,7 @@ section {
     </div>
     <div class="works-grid reveal">
       <a href="works/apps/oneline" class="work-card glass">
-        <div class="work-thumb grad-apps">📒</div>
+        <div class="work-thumb grad-apps"><img src="assets/images/works/oneline.png" alt="OneLine"></div>
         <div class="work-info">
           <div class="work-tag">MOBILE APP</div>
           <div class="work-name">OneLine</div>
@@ -816,184 +830,13 @@ section {
 
 <script>
 // ══════════════════════════════════════════
-//  WebGL BACKGROUND — Flowing Tea × Digital
-// ══════════════════════════════════════════
-const canvas = document.getElementById('bg-canvas');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-const gl = canvas.getContext('webgl');
-
-function mkShader(gl, type, src) {
-  const s = gl.createShader(type);
-  gl.shaderSource(s, src);
-  gl.compileShader(s);
-  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-    console.error(gl.getShaderInfoLog(s));
-  }
-  return s;
-}
-function mkProg(gl, vs, fs) {
-  const p = gl.createProgram();
-  gl.attachShader(p, mkShader(gl, gl.VERTEX_SHADER, vs));
-  gl.attachShader(p, mkShader(gl, gl.FRAGMENT_SHADER, fs));
-  gl.linkProgram(p);
-  return p;
-}
-function quadBuf(gl) {
-  const b = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, b);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
-  return b;
-}
-
-const VS = `attribute vec2 p; void main(){ gl_Position=vec4(p,0,1); }`;
-const FS = `
-precision highp float;
-uniform vec2  res;
-uniform float t;
-uniform float scroll;
-uniform vec2  pointer;
-
-vec3 mod289(vec3 x){ return x - floor(x*(1./289.))*289.; }
-vec2 mod289(vec2 x){ return x - floor(x*(1./289.))*289.; }
-vec3 permute(vec3 x){ return mod289((x*34.+1.)*x); }
-
-float snoise(vec2 v){
-  const vec4 C=vec4(0.211324865,0.366025404,-0.577350269,0.024390244);
-  vec2 i=floor(v+dot(v,C.yy));
-  vec2 x0=v-i+dot(i,C.xx);
-  vec2 i1=x0.x>x0.y?vec2(1,0):vec2(0,1);
-  vec4 x12=x0.xyxy+C.xxzz;
-  x12.xy-=i1;
-  i=mod289(i);
-  vec3 p=permute(permute(i.y+vec3(0,i1.y,1))+i.x+vec3(0,i1.x,1));
-  vec3 m=max(.5-vec3(dot(x0,x0),dot(x12.xy,x12.xy),dot(x12.zw,x12.zw)),0.);
-  m=m*m; m=m*m;
-  vec3 x=2.*fract(p*C.www)-1.;
-  vec3 h=abs(x)-.5;
-  vec3 ox=floor(x+.5);
-  vec3 a0=x-ox;
-  m*=1.79284291-.85373472*(a0*a0+h*h);
-  vec3 g;
-  g.x=a0.x*x0.x+h.x*x0.y;
-  g.yz=a0.yz*x12.xz+h.yz*x12.yw;
-  return 130.*dot(m,g);
-}
-
-float fbm(vec2 p){
-  float v=0., a=.5;
-  mat2 rot=mat2(cos(.5),sin(.5),-sin(.5),cos(.5));
-  for(int i=0;i<4;i++){
-    v+=a*snoise(p);
-    p=rot*p*2.+vec2(100.);
-    a*=.5;
-  }
-  return v;
-}
-
-void main(){
-  vec2 uv=gl_FragCoord.xy/res;
-  vec2 st=uv*2.-1.;
-  st.x*=res.x/res.y;
-  st+=pointer*.06;
-
-  float flow=scroll*3.;
-
-  float n1=fbm(st*1.2+vec2(t*.04,flow*.3));
-  float n2=fbm(st*2.8+vec2(-t*.06,flow*.5+80.));
-  float n3=fbm(st*5.+vec2(t*.025,-flow*.2+160.));
-  float pat=n1*.55+n2*.3+n3*.15;
-
-  vec3 matcha=vec3(0.,.79,.48);
-  vec3 amber=vec3(.83,.58,.38);
-  vec3 dark=vec3(.02,.03,.055);
-  vec3 teal=vec3(.36,.88,.84);
-
-  float warmCool=mix(.65,.3,scroll);
-  vec3 warm=mix(dark,amber,smoothstep(-.3,.6,pat)*.2);
-  vec3 cool=mix(dark,matcha,smoothstep(-.2,.7,pat)*.18);
-  vec3 col=mix(warm,cool,warmCool);
-  col+=teal*pow(max(0.,pat),4.)*.12;
-
-  float gridS=scroll*.035;
-  float gx=smoothstep(.96,1.,fract(uv.x*25.));
-  float gy=smoothstep(.96,1.,fract(uv.y*25.));
-  col+=matcha*max(gx,gy)*gridS;
-
-  float vig=1.-length(st*.4)*.45;
-  col*=max(vig,0.);
-
-  col+=fract(sin(dot(gl_FragCoord.xy+t*100.,vec2(12.9898,78.233)))*43758.5)*.04-.02;
-  col*=.98+.02*sin(gl_FragCoord.y*1.5+t*1.5);
-
-  gl_FragColor=vec4(max(col,0.),1.);
-}`;
-
-const prog = mkProg(gl, VS, FS);
-gl.useProgram(prog);
-const buf = quadBuf(gl);
-const aP = gl.getAttribLocation(prog, 'p');
-gl.enableVertexAttribArray(aP);
-gl.vertexAttribPointer(aP, 2, gl.FLOAT, false, 0, 0);
-
-const uRes    = gl.getUniformLocation(prog, 'res');
-const uT      = gl.getUniformLocation(prog, 't');
-const uScroll = gl.getUniformLocation(prog, 'scroll');
-const uPtr    = gl.getUniformLocation(prog, 'pointer');
-
-gl.viewport(0, 0, canvas.width, canvas.height);
-gl.uniform2f(uRes, canvas.width, canvas.height);
-
-window.addEventListener('resize', () => {
-  canvas.width  = window.innerWidth;
-  canvas.height = window.innerHeight;
-  gl.viewport(0, 0, canvas.width, canvas.height);
-  gl.uniform2f(uRes, canvas.width, canvas.height);
-});
-
-// ══════════════════════════════════════════
 //  SCROLL
 // ══════════════════════════════════════════
-let scrollProgress = 0;
 window.addEventListener('scroll', () => {
   const max = document.body.scrollHeight - window.innerHeight;
-  scrollProgress = max > 0 ? window.scrollY / max : 0;
+  const scrollProgress = max > 0 ? window.scrollY / max : 0;
   document.getElementById('scroll-bar').style.height = (scrollProgress * 100) + '%';
 });
-
-// ══════════════════════════════════════════
-//  MOUSE / GYRO
-// ══════════════════════════════════════════
-let ptrX = 0, ptrY = 0;
-let gyroEnabled = false;
-
-document.addEventListener('mousemove', e => {
-  if (!gyroEnabled) {
-    ptrX = (e.clientX / window.innerWidth  - 0.5) * 0.5;
-    ptrY = (e.clientY / window.innerHeight - 0.5) * 0.3;
-  }
-});
-
-if (/Mobi|Android/i.test(navigator.userAgent)) {
-  const tryGyro = () => {
-    if (typeof DeviceOrientationEvent !== 'undefined' &&
-        typeof DeviceOrientationEvent.requestPermission === 'function') {
-      DeviceOrientationEvent.requestPermission().then(s => {
-        if (s === 'granted') enableGyro();
-      });
-    } else {
-      enableGyro();
-    }
-  };
-  function enableGyro() {
-    gyroEnabled = true;
-    window.addEventListener('deviceorientation', e => {
-      ptrX =  (e.gamma || 0) / 45;
-      ptrY = -(e.beta  || 0) / 45;
-    });
-  }
-  setTimeout(tryGyro, 500);
-}
 
 // Desktop nav toggle (mobile hamburger)
 const navToggle = document.getElementById('navToggle');
@@ -1023,11 +866,14 @@ revealEls.forEach(el => revealObs.observe(el));
 //  HERO SUBTITLE ROTATION
 // ══════════════════════════════════════════
 const subtitles = [
-  'キーボードにお茶こぼすな',
-  '5分休憩が、1時間の休憩を呼ぶ',
-  'console.log("お茶をこぼしました");',
-  'リファクタリングは茶道の心',
-  'sudo brew install motivation',
+  'console.log("お茶こぼした");',
+  'catch (e) { お茶を淹れる(); }',
+  'if (やる気 === null) brew();',
+  'while (true) { sip(matcha); }',
+  'brew install やる気',
+  'git stash save "一旦お茶にする"',
+  'kill -9 眠気',
+  '404: やる気 is not found',
 ];
 const heroSub = document.getElementById('heroSub');
 let currentSubIdx = 0;
@@ -1049,40 +895,6 @@ heroSub.textContent = subtitles[currentSubIdx];
 
 heroSub.addEventListener('click', rotateSubtitle);
 setInterval(rotateSubtitle, 8000);
-
-// ══════════════════════════════════════════
-//  RENDER LOOP
-// ══════════════════════════════════════════
-let smoothScroll = 0;
-let smoothPtrX = 0, smoothPtrY = 0;
-let lastT = 0;
-
-function loop(ts) {
-  requestAnimationFrame(loop);
-  const dt = (ts - lastT) / 1000;
-  lastT = ts;
-
-  const ease = 1 - Math.exp(-dt * 3);
-  smoothScroll += (scrollProgress - smoothScroll) * ease;
-  smoothPtrX += (ptrX - smoothPtrX) * ease;
-  smoothPtrY += (ptrY - smoothPtrY) * ease;
-
-  gl.useProgram(prog);
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.vertexAttribPointer(aP, 2, gl.FLOAT, false, 0, 0);
-  gl.uniform1f(uT, ts * 0.001);
-  gl.uniform1f(uScroll, smoothScroll);
-  gl.uniform2f(uPtr, smoothPtrX, smoothPtrY);
-  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-}
-requestAnimationFrame(loop);
-
-// ══════════════════════════════════════════
-//  WebGL FALLBACK
-// ══════════════════════════════════════════
-if (!gl) {
-  canvas.style.background = 'radial-gradient(ellipse at 30% 50%, rgba(0,201,122,0.08) 0%, transparent 60%), var(--bg)';
-}
 </script>
 
 <!-- Structured Data -->
