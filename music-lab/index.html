@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="音楽理論と音響学のインタラクティブ・ラボラトリー。波形実験、倍音探索、スケール＆コード図鑑">
+<meta name="keywords" content="音楽理論, 音響学, Web Audio, インタラクティブ, スケール, コード, 倍音, 波形">
+<title>Sound &amp; Theory Lab - nemotea</title>
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="icon" type="image/x-icon" href="../assets/images/favicon-16x16.png">
+<style>
+/* ══════════════════════════════════════════
+   SOUND & THEORY LAB — Page Styles
+   ══════════════════════════════════════════ */
+
+/* ── Hero ── */
+.lab-hero {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-2xl) var(--space-md);
+  position: relative;
+  overflow: hidden;
+}
+.lab-hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.15;
+  pointer-events: none;
+}
+.lab-hero h1 {
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: var(--space-sm);
+  position: relative;
+}
+.lab-hero h1 .accent {
+  background: linear-gradient(90deg, var(--matcha), var(--teal), var(--amber));
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradShift 6s ease-in-out infinite;
+}
+@keyframes gradShift {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.lab-hero .sub {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+  max-width: 600px;
+  line-height: 2;
+}
+
+/* ── Table of Contents ── */
+.lab-toc {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  padding: var(--space-md);
+  position: sticky;
+  top: 60px;
+  z-index: 30;
+  background: rgba(6, 8, 14, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.lab-toc a {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+.lab-toc a:hover,
+.lab-toc a.active {
+  color: var(--matcha);
+  border-color: var(--border);
+  background: rgba(0, 201, 122, 0.05);
+}
+
+/* ── Section Layout ── */
+.lab-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-md);
+  border-bottom: 1px solid rgba(0, 201, 122, 0.04);
+}
+.lab-section:last-of-type { border-bottom: none; }
+.section-header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+.section-header .sec-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 5px;
+  margin-bottom: var(--space-xs);
+  display: block;
+}
+.section-header h2 {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 900;
+  letter-spacing: -1px;
+  margin-bottom: var(--space-xs);
+}
+.section-header .sec-desc {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.8;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── Module Panel ── */
+.module-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  border-radius: 2px;
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+/* ── Controls Row ── */
+.controls-row {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-md);
+}
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.control-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-mut);
+}
+.control-value {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--matcha);
+  min-width: 60px;
+}
+
+/* ── Buttons ── */
+.btn-wave {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+.btn-wave:hover {
+  border-color: var(--border-h);
+  color: var(--text);
+}
+.btn-wave.active {
+  background: rgba(0, 201, 122, 0.12);
+  border-color: var(--matcha);
+  color: var(--matcha);
+}
+.btn-play {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  font-weight: 700;
+  padding: 12px 28px;
+  background: var(--matcha);
+  color: #000;
+  border: none;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.25s;
+}
+.btn-play:hover {
+  box-shadow: 0 0 20px rgba(0, 201, 122, 0.4);
+  transform: translateY(-1px);
+}
+.btn-play.playing {
+  background: var(--rose);
+}
+
+/* ── Sliders ── */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 200px;
+  height: 4px;
+  background: rgba(0, 201, 122, 0.15);
+  border-radius: 2px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--matcha);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 201, 122, 0.4);
+}
+
+/* ── Canvas Display ── */
+.canvas-container {
+  position: relative;
+  width: 100%;
+  border: 1px solid rgba(0, 201, 122, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: var(--space-md);
+}
+.canvas-container canvas {
+  display: block;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+}
+.canvas-label {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-mut);
+  pointer-events: none;
+}
+
+/* ── Waveform Type Info ── */
+.wave-info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+.wave-type-card {
+  text-align: center;
+  padding: var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.wave-type-card:hover { border-color: var(--border-h); }
+.wave-type-card.active {
+  border-color: var(--matcha);
+  background: rgba(0, 201, 122, 0.06);
+}
+.wave-type-card canvas {
+  width: 100%;
+  height: 50px;
+  margin-bottom: 8px;
+}
+.wave-type-card .name {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text);
+}
+.wave-type-card .desc {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text-mut);
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+/* ── Harmonics ── */
+.harmonic-sliders {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: var(--space-sm);
+}
+.harmonic-slider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-sm);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+.harmonic-slider.active {
+  border-color: var(--matcha);
+  background: rgba(0, 201, 122, 0.04);
+}
+.harmonic-slider .h-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+}
+.harmonic-slider .h-freq {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--teal);
+}
+.harmonic-slider input[type="range"] {
+  width: 80px;
+  writing-mode: vertical-lr;
+  direction: rtl;
+  height: 80px;
+}
+.harmonic-slider .h-toggle {
+  font-family: var(--mono);
+  font-size: 9px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+.harmonic-slider .h-toggle.on {
+  background: rgba(0, 201, 122, 0.15);
+  border-color: var(--matcha);
+  color: var(--matcha);
+}
+
+/* ── Piano ── */
+.piano-controls {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-lg);
+}
+.piano-controls select {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 2px;
+  cursor: pointer;
+  outline: none;
+}
+.piano-controls select:focus {
+  border-color: var(--matcha);
+}
+.piano-wrapper {
+  overflow-x: auto;
+  padding-bottom: var(--space-sm);
+}
+.piano {
+  display: flex;
+  position: relative;
+  height: 180px;
+  min-width: 700px;
+  user-select: none;
+}
+.piano-key {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.1s;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding-bottom: 10px;
+}
+.piano-key.white {
+  width: 40px;
+  height: 180px;
+  background: linear-gradient(180deg, #e8e8e8, #fff);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0 0 4px 4px;
+  z-index: 1;
+}
+.piano-key.white:hover { background: linear-gradient(180deg, #d0f0e0, #e8ffe8); }
+.piano-key.white:active,
+.piano-key.white.pressed { background: linear-gradient(180deg, #a0e8c0, #c0ffd0); }
+.piano-key.white.in-scale {
+  background: linear-gradient(180deg, #c0e8d8, #d8f5e8);
+}
+.piano-key.white.in-scale.root {
+  background: linear-gradient(180deg, #80d8a8, #a0f0c0);
+}
+.piano-key.black {
+  width: 26px;
+  height: 115px;
+  background: linear-gradient(180deg, #1a1a1a, #333);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 0 0 3px 3px;
+  margin-left: -13px;
+  margin-right: -13px;
+  z-index: 2;
+}
+.piano-key.black:hover { background: linear-gradient(180deg, #2a3a2a, #4a5a4a); }
+.piano-key.black:active,
+.piano-key.black.pressed { background: linear-gradient(180deg, #1a4a2a, #2a6a3a); }
+.piano-key.black.in-scale {
+  background: linear-gradient(180deg, #1a3a2a, #2a5a3a);
+}
+.piano-key.black.in-scale.root {
+  background: linear-gradient(180deg, #0a5a3a, #1a7a4a);
+}
+.piano-key .key-label {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+.piano-key.white .key-label { color: #666; }
+.piano-key.black .key-label { color: #888; }
+.scale-formula {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+}
+.scale-formula .formula-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-mut);
+  margin-bottom: 8px;
+}
+.scale-formula .formula-notes {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.scale-formula .note-badge {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text);
+}
+.scale-formula .note-badge.root {
+  border-color: var(--matcha);
+  color: var(--matcha);
+  background: rgba(0, 201, 122, 0.08);
+}
+.scale-formula .intervals-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.scale-formula .interval-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  padding: 3px 8px;
+  color: var(--teal);
+}
+
+/* ── Encyclopedia Cards ── */
+.encyclopedia-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-sm);
+}
+.enc-card {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: var(--space-md);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.enc-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--matcha);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.enc-card:hover {
+  border-color: var(--border-h);
+  transform: translateY(-2px);
+}
+.enc-card:hover::before,
+.enc-card.playing::before { opacity: 1; }
+.enc-card.playing {
+  border-color: var(--matcha);
+  background: rgba(0, 201, 122, 0.05);
+}
+.enc-card .enc-name {
+  font-size: 14px;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+.enc-card .enc-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+.enc-card .enc-detail {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text-mut);
+  line-height: 1.6;
+}
+.enc-card .enc-ratio {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--teal);
+  margin-top: 6px;
+}
+.enc-card .enc-cents {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--amber);
+}
+.enc-card .enc-sound-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 12px;
+  opacity: 0.3;
+  transition: opacity 0.2s;
+}
+.enc-card:hover .enc-sound-icon { opacity: 0.7; }
+
+/* ── Future Section ── */
+.future-teaser {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-md);
+  max-width: 600px;
+  margin: 0 auto;
+}
+.future-teaser h3 {
+  font-size: 1.4rem;
+  font-weight: 900;
+  margin-bottom: var(--space-sm);
+  color: var(--text-dim);
+}
+.future-teaser p {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-mut);
+  line-height: 1.9;
+}
+
+/* ── Canvas Grid ── */
+.canvas-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+/* ── Responsive ── */
+@media (max-width: 720px) {
+  .lab-section { padding: var(--space-xl) var(--space-sm); }
+  .module-panel { padding: var(--space-md); }
+  .canvas-grid { grid-template-columns: 1fr; }
+  .controls-row {
+    gap: var(--space-sm);
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .controls-row .control-group { width: 100%; }
+  .controls-row .btn-play { width: 100%; text-align: center; }
+  input[type="range"] { width: 100% !important; }
+  .wave-info-grid { grid-template-columns: repeat(2, 1fr); }
+  .harmonic-sliders { grid-template-columns: repeat(4, 1fr); }
+  .piano { min-width: 560px; }
+  .piano-key.white { width: 32px; height: 150px; }
+  .piano-key.black { width: 22px; height: 95px; margin-left: -11px; margin-right: -11px; }
+  .encyclopedia-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .lab-toc { top: 52px; padding: var(--space-sm); }
+  .lab-toc a { padding: 6px 10px; font-size: 9px; }
+  .piano-controls { flex-direction: column; align-items: stretch; }
+  .piano-controls select { width: 100%; }
+  .btn-wave { padding: 8px 12px; font-size: 9px; }
+}
+@media (max-width: 480px) {
+  .wave-info-grid { grid-template-columns: 1fr 1fr; }
+  .harmonic-sliders { grid-template-columns: repeat(4, 1fr); }
+  .harmonic-slider input[type="range"] { height: 60px; }
+  .encyclopedia-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <a href="../" class="nav-logo">// nemotea</a>
+  <button class="nav-toggle" id="navToggle" aria-label="メニュー">///</button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="../">HOME</a></li>
+    <li><a href="../profile/">PROFILE</a></li>
+    <li><a href="../works/">WORKS</a></li>
+    <li><a href="../podcast/">CAST</a></li>
+    <li><a href="../contact/">CONTACT</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+  <!-- ═══ HERO ═══ -->
+  <section class="lab-hero fade-in">
+    <canvas id="heroWaveCanvas" class="lab-hero-canvas"></canvas>
+    <span class="text-label text-matcha" style="letter-spacing:6px; margin-bottom: var(--space-sm)">// INTERACTIVE LABORATORY</span>
+    <h1>Sound <span class="accent">&amp;</span> Theory</h1>
+    <p class="sub" style="margin-top: var(--space-md)">
+      現代音楽を構成する音楽理論と音響学を<br>
+      手を動かし、音を鳴らし、視覚化しながら学ぶ
+    </p>
+  </section>
+
+  <!-- ═══ TABLE OF CONTENTS ═══ -->
+  <div class="lab-toc" id="labToc">
+    <a href="#wave-lab">WAVE LAB</a>
+    <a href="#harmonics">HARMONICS</a>
+    <a href="#keyboard">SCALES</a>
+    <a href="#intervals">INTERVALS</a>
+    <a href="#chords">CHORDS</a>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 1: WAVE LABORATORY
+       ═══════════════════════════════════════ -->
+  <section id="wave-lab" class="lab-section">
+    <div class="section-header fade-in">
+      <span class="sec-num text-matcha">01</span>
+      <h2>Wave Laboratory</h2>
+      <p class="sec-desc">
+        音の正体は空気の振動（疎密波）。周波数が音の高さを、振幅が音量を、
+        波形の形が音色（ティンバー）を決定する。4つの基本波形を聴き比べ、
+        リアルタイムで波形とスペクトラムを観察する。
+      </p>
+    </div>
+
+    <div class="module-panel fade-in">
+      <div class="controls-row">
+        <div class="control-group">
+          <span class="control-label">WAVEFORM</span>
+          <div style="display:flex; gap:4px;">
+            <button class="btn-wave active" data-wave="sine">SINE</button>
+            <button class="btn-wave" data-wave="square">SQUARE</button>
+            <button class="btn-wave" data-wave="sawtooth">SAW</button>
+            <button class="btn-wave" data-wave="triangle">TRI</button>
+          </div>
+        </div>
+        <div class="control-group" style="flex:1;">
+          <span class="control-label">FREQUENCY</span>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <input type="range" id="freqSlider" min="20" max="2000" value="440" style="flex:1;">
+            <span class="control-value" id="freqDisplay">440 Hz</span>
+          </div>
+        </div>
+        <div class="control-group">
+          <span class="control-label">AMPLITUDE</span>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <input type="range" id="ampSlider" min="0" max="100" value="40">
+            <span class="control-value" id="ampDisplay">40%</span>
+          </div>
+        </div>
+        <button class="btn-play" id="wavePlayBtn">PLAY</button>
+      </div>
+
+      <div class="canvas-grid">
+        <div class="canvas-container">
+          <span class="canvas-label">WAVEFORM</span>
+          <canvas id="waveformCanvas" height="180"></canvas>
+        </div>
+        <div class="canvas-container">
+          <span class="canvas-label">SPECTRUM</span>
+          <canvas id="spectrumCanvas" height="180"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="wave-info-grid fade-in" id="waveInfoGrid">
+      <div class="wave-type-card active" data-wave="sine">
+        <canvas class="wave-preview" data-type="sine"></canvas>
+        <div class="name">Sine</div>
+        <div class="desc">純音。倍音を含まない基本波形。最も単純な音</div>
+      </div>
+      <div class="wave-type-card" data-wave="square">
+        <canvas class="wave-preview" data-type="square"></canvas>
+        <div class="name">Square</div>
+        <div class="desc">矩形波。奇数次倍音を豊富に含む。ファミコン的な音</div>
+      </div>
+      <div class="wave-type-card" data-wave="sawtooth">
+        <canvas class="wave-preview" data-type="sawtooth"></canvas>
+        <div class="name">Sawtooth</div>
+        <div class="desc">鋸歯状波。全倍音を含む。ブラス系シンセの基礎</div>
+      </div>
+      <div class="wave-type-card" data-wave="triangle">
+        <canvas class="wave-preview" data-type="triangle"></canvas>
+        <div class="name">Triangle</div>
+        <div class="desc">三角波。奇数次倍音のみ（振幅小）。柔らかい音色</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 2: OVERTONE / HARMONICS
+       ═══════════════════════════════════════ -->
+  <section id="harmonics" class="lab-section">
+    <div class="section-header fade-in">
+      <span class="sec-num text-teal">02</span>
+      <h2>Overtone Series</h2>
+      <p class="sec-desc">
+        すべての楽器音は基音（第1倍音）とその整数倍の周波数を持つ倍音の組み合わせで構成される。
+        各倍音のバランスが楽器固有の「音色」を生む。
+        スライダーで各倍音の音量を調整し、音色の変化を体感する。
+      </p>
+    </div>
+
+    <div class="module-panel fade-in">
+      <div class="controls-row">
+        <div class="control-group" style="flex:1;">
+          <span class="control-label">FUNDAMENTAL</span>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <input type="range" id="fundSlider" min="60" max="520" value="220" style="flex:1;">
+            <span class="control-value" id="fundDisplay">220 Hz (A3)</span>
+          </div>
+        </div>
+        <button class="btn-play" id="harmPlayBtn">PLAY</button>
+      </div>
+
+      <div class="canvas-container">
+        <span class="canvas-label">COMBINED WAVEFORM</span>
+        <canvas id="harmonicsCanvas" height="160"></canvas>
+      </div>
+
+      <div class="harmonic-sliders" id="harmonicSliders"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 3: PIANO / SCALE EXPLORER
+       ═══════════════════════════════════════ -->
+  <section id="keyboard" class="lab-section">
+    <div class="section-header fade-in">
+      <span class="sec-num text-amber">03</span>
+      <h2>Scale Explorer</h2>
+      <p class="sec-desc">
+        スケール（音階）は旋律と和声の基盤。ルート音とスケールを選択し、
+        鍵盤上にハイライトされる構成音を確認しながら弾いてみる。
+        各モードの響きの違いを耳で感じ取る。
+      </p>
+    </div>
+
+    <div class="module-panel fade-in">
+      <div class="piano-controls">
+        <div class="control-group">
+          <span class="control-label">ROOT</span>
+          <select id="rootSelect">
+            <option value="0">C</option><option value="1">C#/Db</option>
+            <option value="2">D</option><option value="3">D#/Eb</option>
+            <option value="4">E</option><option value="5">F</option>
+            <option value="6">F#/Gb</option><option value="7">G</option>
+            <option value="8">G#/Ab</option><option value="9" selected>A</option>
+            <option value="10">A#/Bb</option><option value="11">B</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <span class="control-label">SCALE</span>
+          <select id="scaleSelect">
+            <optgroup label="Basic">
+              <option value="major">Major (Ionian)</option>
+              <option value="natural_minor" selected>Natural Minor (Aeolian)</option>
+              <option value="harmonic_minor">Harmonic Minor</option>
+              <option value="melodic_minor">Melodic Minor</option>
+            </optgroup>
+            <optgroup label="Modes">
+              <option value="dorian">Dorian</option>
+              <option value="phrygian">Phrygian</option>
+              <option value="lydian">Lydian</option>
+              <option value="mixolydian">Mixolydian</option>
+              <option value="locrian">Locrian</option>
+            </optgroup>
+            <optgroup label="Pentatonic / Blues">
+              <option value="penta_major">Pentatonic Major</option>
+              <option value="penta_minor">Pentatonic Minor</option>
+              <option value="blues">Blues</option>
+            </optgroup>
+            <optgroup label="Symmetric">
+              <option value="whole_tone">Whole Tone</option>
+              <option value="diminished">Diminished (HW)</option>
+              <option value="chromatic">Chromatic</option>
+            </optgroup>
+            <optgroup label="World / Modern">
+              <option value="hirajoshi">Hirajoshi (平調子)</option>
+              <option value="in_scale">In Scale (陰音階)</option>
+              <option value="hungarian_minor">Hungarian Minor</option>
+              <option value="arabic">Arabic (Double Harmonic)</option>
+            </optgroup>
+          </select>
+        </div>
+        <button class="btn-play" id="scalePlayBtn" style="font-size:10px; padding:10px 20px;">PLAY SCALE</button>
+      </div>
+
+      <div class="piano-wrapper">
+        <div class="piano" id="piano"></div>
+      </div>
+
+      <div class="scale-formula" id="scaleFormula">
+        <div class="formula-label">SCALE TONES</div>
+        <div class="formula-notes" id="scaleNotes"></div>
+        <div class="intervals-row" id="scaleIntervals"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 4: INTERVAL ENCYCLOPEDIA
+       ═══════════════════════════════════════ -->
+  <section id="intervals" class="lab-section">
+    <div class="section-header fade-in">
+      <span class="sec-num text-rose">04</span>
+      <h2>Interval Encyclopedia</h2>
+      <p class="sec-desc">
+        音程（インターバル）は2音間の距離。半音の数で測定し、
+        各音程は固有の周波数比と感情的な性格を持つ。
+        カードをクリックして各音程の響きを確認する。
+      </p>
+    </div>
+
+    <div class="encyclopedia-grid fade-in" id="intervalGrid"></div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 5: CHORD ENCYCLOPEDIA
+       ═══════════════════════════════════════ -->
+  <section id="chords" class="lab-section">
+    <div class="section-header fade-in">
+      <span class="sec-num" style="color:var(--purple)">05</span>
+      <h2>Chord Encyclopedia</h2>
+      <p class="sec-desc">
+        コード（和音）は3つ以上の音を同時に鳴らしたもの。
+        構成音の音程関係がコードの種類と響きを決定する。
+        カードをクリックしてルートC基準で各コードを聴き比べる。
+      </p>
+    </div>
+
+    <div class="piano-controls fade-in" style="margin-bottom: var(--space-lg);">
+      <div class="control-group">
+        <span class="control-label">CHORD ROOT</span>
+        <select id="chordRootSelect">
+          <option value="0">C</option><option value="1">C#/Db</option>
+          <option value="2">D</option><option value="3">D#/Eb</option>
+          <option value="4">E</option><option value="5">F</option>
+          <option value="6">F#/Gb</option><option value="7">G</option>
+          <option value="8">G#/Ab</option><option value="9">A</option>
+          <option value="10">A#/Bb</option><option value="11">B</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="encyclopedia-grid fade-in" id="chordGrid"></div>
+  </section>
+
+  <!-- ═══ Future: Ambient Installation ═══ -->
+  <div class="future-teaser fade-in">
+    <span class="text-label text-teal" style="letter-spacing:4px;">// COMING SOON</span>
+    <h3 style="margin-top: var(--space-sm);">Ambient Installation</h3>
+    <p>
+      生成音響とビジュアライゼーションによる<br>
+      オンライン・サウンドインスタレーション。<br>
+      ブラウザの中に佇む、音の空間。
+    </p>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="../" class="footer-logo">// nemotea</a>
+        <p class="footer-description">Tea-Driven Development</p>
+      </div>
+      <div class="footer-links">
+        <a href="../" class="footer-link">HOME</a>
+        <a href="../profile/" class="footer-link">PROFILE</a>
+        <a href="../works/" class="footer-link">WORKS</a>
+        <a href="../podcast/" class="footer-link">CAST</a>
+        <a href="../contact/" class="footer-link">CONTACT</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2025-2026 nemotea. Built with tea and code.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Mobile Nav -->
+<div id="mobile-nav">
+  <a href="../" class="mnav-btn"><span class="ico">&#9750;</span><span>HOME</span></a>
+  <a href="../profile/" class="mnav-btn"><span class="ico">&#9672;</span><span>PROFILE</span></a>
+  <a href="../works/" class="mnav-btn"><span class="ico">&#9673;</span><span>WORKS</span></a>
+  <a href="../podcast/" class="mnav-btn"><span class="ico">&#9834;</span><span>CAST</span></a>
+  <a href="../contact/" class="mnav-btn"><span class="ico">&#9678;</span><span>CONTACT</span></a>
+</div>
+
+<script src="../assets/js/main.js"></script>
+<script>
+// ══════════════════════════════════════════
+//  SOUND & THEORY LAB — Core Engine
+// ══════════════════════════════════════════
+
+(() => {
+'use strict';
+
+// ── Constants ──
+const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+// MIDI note to frequency (A4 = 440Hz)
+function midiToFreq(midi) {
+  return 440 * Math.pow(2, (midi - 69) / 12);
+}
+
+// ── Audio Context (lazy init) ──
+let audioCtx = null;
+let masterGain = null;
+
+function getAudioCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.5;
+    masterGain.connect(audioCtx.destination);
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+// Play a note with envelope
+function playNote(freq, duration, type, volume) {
+  duration = duration || 0.6;
+  type = type || 'sine';
+  volume = volume || 0.3;
+  var ctx = getAudioCtx();
+  var osc = ctx.createOscillator();
+  var gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0, ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(volume, ctx.currentTime + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+  osc.connect(gain);
+  gain.connect(masterGain);
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + duration + 0.05);
+}
+
+// Play multiple notes simultaneously
+function playChord(freqs, duration, type) {
+  duration = duration || 1.2;
+  type = type || 'sine';
+  var vol = Math.min(0.25, 0.6 / freqs.length);
+  freqs.forEach(function(f) { playNote(f, duration, type, vol); });
+}
+
+// ── Safe DOM helpers ──
+function el(tag, className, textContent) {
+  var node = document.createElement(tag);
+  if (className) node.className = className;
+  if (textContent != null) node.textContent = textContent;
+  return node;
+}
+
+// ══════════════════════════════════════════
+//  HERO WAVE ANIMATION
+// ══════════════════════════════════════════
+var heroCanvas = document.getElementById('heroWaveCanvas');
+if (heroCanvas) {
+  var hCtx = heroCanvas.getContext('2d');
+  function resizeHero() {
+    var rect = heroCanvas.parentElement.getBoundingClientRect();
+    heroCanvas.width = rect.width * window.devicePixelRatio;
+    heroCanvas.height = rect.height * window.devicePixelRatio;
+    hCtx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+  }
+  resizeHero();
+  window.addEventListener('resize', resizeHero);
+
+  function drawHeroWave(time) {
+    var w = heroCanvas.width / window.devicePixelRatio;
+    var h = heroCanvas.height / window.devicePixelRatio;
+    hCtx.clearRect(0, 0, w, h);
+    var waves = [
+      { freq: 0.005, amp: 30, speed: 0.0008, color: 'rgba(0,201,122,0.3)' },
+      { freq: 0.008, amp: 20, speed: 0.0012, color: 'rgba(92,224,216,0.2)' },
+      { freq: 0.003, amp: 40, speed: 0.0005, color: 'rgba(212,149,106,0.15)' },
+    ];
+    waves.forEach(function(wave) {
+      hCtx.beginPath();
+      hCtx.strokeStyle = wave.color;
+      hCtx.lineWidth = 1.5;
+      for (var x = 0; x <= w; x += 2) {
+        var y = h / 2 + Math.sin(x * wave.freq + time * wave.speed) * wave.amp
+                  + Math.sin(x * wave.freq * 1.5 + time * wave.speed * 0.7) * wave.amp * 0.4;
+        x === 0 ? hCtx.moveTo(x, y) : hCtx.lineTo(x, y);
+      }
+      hCtx.stroke();
+    });
+    requestAnimationFrame(drawHeroWave);
+  }
+  drawHeroWave(0);
+}
+
+// ══════════════════════════════════════════
+//  SECTION 1: WAVE LABORATORY
+// ══════════════════════════════════════════
+var waveLab = (function() {
+  var oscillator = null;
+  var gainNode = null;
+  var analyser = null;
+  var isPlaying = false;
+  var currentWave = 'sine';
+  var animFrame = null;
+
+  var freqSlider = document.getElementById('freqSlider');
+  var ampSlider = document.getElementById('ampSlider');
+  var freqDisplay = document.getElementById('freqDisplay');
+  var ampDisplay = document.getElementById('ampDisplay');
+  var playBtn = document.getElementById('wavePlayBtn');
+  var waveformCanvas = document.getElementById('waveformCanvas');
+  var spectrumCanvas = document.getElementById('spectrumCanvas');
+  var wCtx = waveformCanvas.getContext('2d');
+  var sCtx = spectrumCanvas.getContext('2d');
+
+  function resizeCanvases() {
+    [waveformCanvas, spectrumCanvas].forEach(function(c) {
+      c.width = c.parentElement.clientWidth * window.devicePixelRatio;
+      c.height = 180 * window.devicePixelRatio;
+      c.getContext('2d').setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+    });
+  }
+  resizeCanvases();
+  window.addEventListener('resize', resizeCanvases);
+
+  function start() {
+    var ctx = getAudioCtx();
+    analyser = ctx.createAnalyser();
+    analyser.fftSize = 2048;
+    oscillator = ctx.createOscillator();
+    gainNode = ctx.createGain();
+    oscillator.type = currentWave;
+    oscillator.frequency.value = parseFloat(freqSlider.value);
+    gainNode.gain.value = parseFloat(ampSlider.value) / 100 * 0.5;
+    oscillator.connect(gainNode);
+    gainNode.connect(analyser);
+    analyser.connect(masterGain);
+    oscillator.start();
+    isPlaying = true;
+    playBtn.textContent = 'STOP';
+    playBtn.classList.add('playing');
+    draw();
+  }
+
+  function stop() {
+    if (oscillator) {
+      oscillator.stop();
+      oscillator.disconnect();
+      oscillator = null;
+    }
+    if (gainNode) { gainNode.disconnect(); gainNode = null; }
+    if (analyser) { analyser.disconnect(); analyser = null; }
+    isPlaying = false;
+    playBtn.textContent = 'PLAY';
+    playBtn.classList.remove('playing');
+    if (animFrame) cancelAnimationFrame(animFrame);
+    var w1 = waveformCanvas.width / window.devicePixelRatio;
+    var h1 = waveformCanvas.height / window.devicePixelRatio;
+    wCtx.clearRect(0, 0, w1, h1);
+    var w2 = spectrumCanvas.width / window.devicePixelRatio;
+    var h2 = spectrumCanvas.height / window.devicePixelRatio;
+    sCtx.clearRect(0, 0, w2, h2);
+  }
+
+  function draw() {
+    if (!isPlaying || !analyser) return;
+    animFrame = requestAnimationFrame(draw);
+
+    // Waveform
+    var bufLen = analyser.fftSize;
+    var timeDomain = new Uint8Array(bufLen);
+    analyser.getByteTimeDomainData(timeDomain);
+    var w = waveformCanvas.width / window.devicePixelRatio;
+    var h = waveformCanvas.height / window.devicePixelRatio;
+    wCtx.clearRect(0, 0, w, h);
+
+    // Grid
+    wCtx.strokeStyle = 'rgba(0,201,122,0.06)';
+    wCtx.lineWidth = 0.5;
+    for (var gy = 0; gy < h; gy += h / 4) {
+      wCtx.beginPath(); wCtx.moveTo(0, gy); wCtx.lineTo(w, gy); wCtx.stroke();
+    }
+    wCtx.strokeStyle = 'rgba(0,201,122,0.12)';
+    wCtx.beginPath(); wCtx.moveTo(0, h/2); wCtx.lineTo(w, h/2); wCtx.stroke();
+
+    // Waveform line
+    wCtx.beginPath();
+    wCtx.strokeStyle = '#00c97a';
+    wCtx.lineWidth = 2;
+    wCtx.shadowColor = 'rgba(0,201,122,0.5)';
+    wCtx.shadowBlur = 6;
+    var sliceW = w / bufLen;
+    for (var i = 0; i < bufLen; i++) {
+      var v = timeDomain[i] / 128.0;
+      var y = v * h / 2;
+      i === 0 ? wCtx.moveTo(0, y) : wCtx.lineTo(i * sliceW, y);
+    }
+    wCtx.stroke();
+    wCtx.shadowBlur = 0;
+
+    // Spectrum
+    var freqData = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(freqData);
+    var sw = spectrumCanvas.width / window.devicePixelRatio;
+    var sh = spectrumCanvas.height / window.devicePixelRatio;
+    sCtx.clearRect(0, 0, sw, sh);
+
+    var barCount = 64;
+    var barW = sw / barCount;
+    for (var bi = 0; bi < barCount; bi++) {
+      var idx = Math.floor(bi * freqData.length / barCount);
+      var val = freqData[idx] / 255;
+      var barH = val * sh * 0.9;
+      var hue = 160 - (bi / barCount) * 40;
+      sCtx.fillStyle = 'hsla(' + hue + ', 80%, 55%, ' + (0.5 + val * 0.5) + ')';
+      sCtx.shadowColor = 'hsla(' + hue + ', 80%, 55%, 0.3)';
+      sCtx.shadowBlur = 4;
+      sCtx.fillRect(bi * barW + 1, sh - barH, barW - 2, barH);
+    }
+    sCtx.shadowBlur = 0;
+  }
+
+  // Events
+  playBtn.addEventListener('click', function() { isPlaying ? stop() : start(); });
+
+  document.querySelectorAll('[data-wave]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      currentWave = btn.dataset.wave;
+      document.querySelectorAll('.btn-wave, .wave-type-card').forEach(function(b) { b.classList.remove('active'); });
+      document.querySelectorAll('[data-wave="' + currentWave + '"]').forEach(function(b) { b.classList.add('active'); });
+      if (oscillator) oscillator.type = currentWave;
+    });
+  });
+
+  freqSlider.addEventListener('input', function() {
+    var v = parseFloat(freqSlider.value);
+    freqDisplay.textContent = v + ' Hz';
+    if (oscillator) oscillator.frequency.setValueAtTime(v, audioCtx.currentTime);
+  });
+
+  ampSlider.addEventListener('input', function() {
+    var v = parseFloat(ampSlider.value);
+    ampDisplay.textContent = v + '%';
+    if (gainNode) gainNode.gain.setValueAtTime(v / 100 * 0.5, audioCtx.currentTime);
+  });
+
+  // Draw wave previews
+  document.querySelectorAll('.wave-preview').forEach(function(canvas) {
+    canvas.width = 200;
+    canvas.height = 50;
+    var ctx2 = canvas.getContext('2d');
+    var type = canvas.dataset.type;
+    var pw = 200, ph = 50;
+    ctx2.strokeStyle = '#00c97a';
+    ctx2.lineWidth = 1.5;
+    ctx2.beginPath();
+    for (var x = 0; x < pw; x++) {
+      var t = (x / pw) * Math.PI * 4;
+      var yv;
+      if (type === 'sine') yv = Math.sin(t);
+      else if (type === 'square') yv = Math.sign(Math.sin(t));
+      else if (type === 'sawtooth') yv = 2 * ((t / (2 * Math.PI)) % 1) - 1;
+      else yv = Math.asin(Math.sin(t)) * 2 / Math.PI;
+      var py = (1 - yv) * ph / 2;
+      x === 0 ? ctx2.moveTo(x, py) : ctx2.lineTo(x, py);
+    }
+    ctx2.stroke();
+  });
+
+  return { stop: stop };
+})();
+
+// ══════════════════════════════════════════
+//  SECTION 2: HARMONICS
+// ══════════════════════════════════════════
+var harmonicsLab = (function() {
+  var NUM_HARMONICS = 8;
+  var oscillators = [];
+  var gains = [];
+  var analyser = null;
+  var isPlaying = false;
+  var animFrame = null;
+  var harmonicStates = [];
+
+  var fundSlider = document.getElementById('fundSlider');
+  var fundDisplay = document.getElementById('fundDisplay');
+  var playBtn = document.getElementById('harmPlayBtn');
+  var canvas = document.getElementById('harmonicsCanvas');
+  var ctx = canvas.getContext('2d');
+  var slidersContainer = document.getElementById('harmonicSliders');
+
+  function resizeCanvas() {
+    canvas.width = canvas.parentElement.clientWidth * window.devicePixelRatio;
+    canvas.height = 160 * window.devicePixelRatio;
+    ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  function freqToNote(freq) {
+    var midi = Math.round(12 * Math.log2(freq / 440) + 69);
+    return NOTE_NAMES[((midi % 12) + 12) % 12] + Math.floor(midi / 12 - 1);
+  }
+
+  // Build UI using safe DOM methods
+  var colors = ['#00c97a','#5ce0d8','#d4956a','#e86c8a','#9d7aed','#7aed9d','#ed9d7a','#7a9ded'];
+  for (var hi = 0; hi < NUM_HARMONICS; hi++) {
+    harmonicStates.push({ on: hi === 0, amp: hi === 0 ? 80 : Math.max(10, 80 - hi * 12) });
+    var div = document.createElement('div');
+    div.className = 'harmonic-slider' + (hi === 0 ? ' active' : '');
+
+    var harmNum = hi + 1;
+    var fund = parseFloat(fundSlider.value);
+
+    var labelSpan = el('span', 'h-label', 'H' + harmNum);
+    labelSpan.style.color = colors[hi];
+    div.appendChild(labelSpan);
+
+    var freqSpan = el('span', 'h-freq', Math.round(fund * harmNum) + ' Hz');
+    div.appendChild(freqSpan);
+
+    var slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = '0';
+    slider.max = '100';
+    slider.value = String(harmonicStates[hi].amp);
+    slider.dataset.h = String(hi);
+    div.appendChild(slider);
+
+    var toggleBtn = el('button', 'h-toggle' + (harmonicStates[hi].on ? ' on' : ''), harmonicStates[hi].on ? 'ON' : 'OFF');
+    toggleBtn.dataset.h = String(hi);
+    div.appendChild(toggleBtn);
+
+    slidersContainer.appendChild(div);
+  }
+
+  function updateFreqLabels() {
+    var fundVal = parseFloat(fundSlider.value);
+    fundDisplay.textContent = fundVal + ' Hz (' + freqToNote(fundVal) + ')';
+    var freqEls = slidersContainer.querySelectorAll('.h-freq');
+    freqEls.forEach(function(freqEl, i) {
+      freqEl.textContent = Math.round(fundVal * (i + 1)) + ' Hz';
+    });
+  }
+  updateFreqLabels();
+
+  function start() {
+    var actx = getAudioCtx();
+    analyser = actx.createAnalyser();
+    analyser.fftSize = 2048;
+    var fundVal = parseFloat(fundSlider.value);
+
+    for (var i = 0; i < NUM_HARMONICS; i++) {
+      var osc = actx.createOscillator();
+      var gain = actx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = fundVal * (i + 1);
+      var vol = harmonicStates[i].on ? harmonicStates[i].amp / 100 * 0.3 / (i + 1) : 0;
+      gain.gain.value = vol;
+      osc.connect(gain);
+      gain.connect(analyser);
+      osc.start();
+      oscillators.push(osc);
+      gains.push(gain);
+    }
+    analyser.connect(masterGain);
+    isPlaying = true;
+    playBtn.textContent = 'STOP';
+    playBtn.classList.add('playing');
+    draw();
+  }
+
+  function stop() {
+    oscillators.forEach(function(o) { o.stop(); o.disconnect(); });
+    gains.forEach(function(g) { g.disconnect(); });
+    if (analyser) analyser.disconnect();
+    oscillators = [];
+    gains = [];
+    analyser = null;
+    isPlaying = false;
+    playBtn.textContent = 'PLAY';
+    playBtn.classList.remove('playing');
+    if (animFrame) cancelAnimationFrame(animFrame);
+    var w = canvas.width / window.devicePixelRatio;
+    var h = canvas.height / window.devicePixelRatio;
+    ctx.clearRect(0, 0, w, h);
+  }
+
+  function draw() {
+    if (!isPlaying || !analyser) return;
+    animFrame = requestAnimationFrame(draw);
+    var bufLen = analyser.fftSize;
+    var data = new Uint8Array(bufLen);
+    analyser.getByteTimeDomainData(data);
+    var w = canvas.width / window.devicePixelRatio;
+    var h = canvas.height / window.devicePixelRatio;
+    ctx.clearRect(0, 0, w, h);
+
+    ctx.strokeStyle = 'rgba(92,224,216,0.1)';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath(); ctx.moveTo(0, h/2); ctx.lineTo(w, h/2); ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#5ce0d8';
+    ctx.lineWidth = 2;
+    ctx.shadowColor = 'rgba(92,224,216,0.4)';
+    ctx.shadowBlur = 6;
+    var sliceW = w / bufLen;
+    for (var i = 0; i < bufLen; i++) {
+      var v = data[i] / 128.0;
+      var y = v * h / 2;
+      i === 0 ? ctx.moveTo(0, y) : ctx.lineTo(i * sliceW, y);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+
+  playBtn.addEventListener('click', function() { isPlaying ? stop() : start(); });
+
+  fundSlider.addEventListener('input', function() {
+    updateFreqLabels();
+    var fundVal = parseFloat(fundSlider.value);
+    oscillators.forEach(function(osc, i) {
+      osc.frequency.setValueAtTime(fundVal * (i + 1), audioCtx.currentTime);
+    });
+  });
+
+  slidersContainer.addEventListener('input', function(e) {
+    if (e.target.type !== 'range') return;
+    var idx = parseInt(e.target.dataset.h);
+    harmonicStates[idx].amp = parseFloat(e.target.value);
+    if (gains[idx] && harmonicStates[idx].on) {
+      gains[idx].gain.setValueAtTime(harmonicStates[idx].amp / 100 * 0.3 / (idx + 1), audioCtx.currentTime);
+    }
+  });
+
+  slidersContainer.addEventListener('click', function(e) {
+    var btn = e.target.closest('.h-toggle');
+    if (!btn) return;
+    var idx = parseInt(btn.dataset.h);
+    harmonicStates[idx].on = !harmonicStates[idx].on;
+    btn.classList.toggle('on');
+    btn.textContent = harmonicStates[idx].on ? 'ON' : 'OFF';
+    btn.closest('.harmonic-slider').classList.toggle('active', harmonicStates[idx].on);
+    if (gains[idx]) {
+      var vol = harmonicStates[idx].on ? harmonicStates[idx].amp / 100 * 0.3 / (idx + 1) : 0;
+      gains[idx].gain.setValueAtTime(vol, audioCtx.currentTime);
+    }
+  });
+
+  return { stop: stop };
+})();
+
+// ══════════════════════════════════════════
+//  SECTION 3: PIANO / SCALE EXPLORER
+// ══════════════════════════════════════════
+var pianoLab = (function() {
+  var SCALES = {
+    major:          { intervals: [0,2,4,5,7,9,11], name: 'Major', formula: 'W-W-H-W-W-W-H' },
+    natural_minor:  { intervals: [0,2,3,5,7,8,10], name: 'Natural Minor', formula: 'W-H-W-W-H-W-W' },
+    harmonic_minor: { intervals: [0,2,3,5,7,8,11], name: 'Harmonic Minor', formula: 'W-H-W-W-H-3H-H' },
+    melodic_minor:  { intervals: [0,2,3,5,7,9,11], name: 'Melodic Minor', formula: 'W-H-W-W-W-W-H' },
+    dorian:         { intervals: [0,2,3,5,7,9,10], name: 'Dorian', formula: 'W-H-W-W-W-H-W' },
+    phrygian:       { intervals: [0,1,3,5,7,8,10], name: 'Phrygian', formula: 'H-W-W-W-H-W-W' },
+    lydian:         { intervals: [0,2,4,6,7,9,11], name: 'Lydian', formula: 'W-W-W-H-W-W-H' },
+    mixolydian:     { intervals: [0,2,4,5,7,9,10], name: 'Mixolydian', formula: 'W-W-H-W-W-H-W' },
+    locrian:        { intervals: [0,1,3,5,6,8,10], name: 'Locrian', formula: 'H-W-W-H-W-W-W' },
+    penta_major:    { intervals: [0,2,4,7,9],      name: 'Pentatonic Major', formula: 'W-W-3H-W-3H' },
+    penta_minor:    { intervals: [0,3,5,7,10],     name: 'Pentatonic Minor', formula: '3H-W-W-3H-W' },
+    blues:          { intervals: [0,3,5,6,7,10],   name: 'Blues', formula: '3H-W-H-H-3H-W' },
+    whole_tone:     { intervals: [0,2,4,6,8,10],   name: 'Whole Tone', formula: 'W-W-W-W-W-W' },
+    diminished:     { intervals: [0,1,3,4,6,7,9,10], name: 'Diminished (HW)', formula: 'H-W-H-W-H-W-H-W' },
+    chromatic:      { intervals: [0,1,2,3,4,5,6,7,8,9,10,11], name: 'Chromatic', formula: 'all half steps' },
+    hirajoshi:      { intervals: [0,2,3,7,8],       name: 'Hirajoshi', formula: 'W-H-4H-H-4H' },
+    in_scale:       { intervals: [0,1,5,7,8],       name: 'In Scale', formula: 'H-4H-W-H-4H' },
+    hungarian_minor:{ intervals: [0,2,3,6,7,8,11], name: 'Hungarian Minor', formula: 'W-H-3H-H-H-3H-H' },
+    arabic:         { intervals: [0,1,4,5,7,8,11], name: 'Arabic', formula: 'H-3H-H-W-H-3H-H' },
+  };
+
+  var INTERVAL_NAMES_SHORT = ['R','m2','M2','m3','M3','P4','TT','P5','m6','M6','m7','M7'];
+
+  var pianoEl = document.getElementById('piano');
+  var rootSelect = document.getElementById('rootSelect');
+  var scaleSelect = document.getElementById('scaleSelect');
+  var scalePlayBtn = document.getElementById('scalePlayBtn');
+  var scaleNotesEl = document.getElementById('scaleNotes');
+  var scaleIntervalsEl = document.getElementById('scaleIntervals');
+
+  // Build piano (C3=48 to C5=72)
+  var START_MIDI = 48;
+  var END_MIDI = 72;
+  var keys = [];
+  function isBlack(n) { return [1,3,6,8,10].indexOf(n % 12) !== -1; }
+
+  for (var midi = START_MIDI; midi <= END_MIDI; midi++) {
+    if (isBlack(midi % 12)) continue;
+    var key = document.createElement('div');
+    key.className = 'piano-key white';
+    key.dataset.midi = String(midi);
+    var lbl = el('span', 'key-label', NOTE_NAMES[midi % 12] + String(Math.floor(midi / 12 - 1)));
+    key.appendChild(lbl);
+    keys.push({ el: key, midi: midi });
+    pianoEl.appendChild(key);
+
+    var next = midi + 1;
+    if (next <= END_MIDI && isBlack(next % 12)) {
+      var bk = document.createElement('div');
+      bk.className = 'piano-key black';
+      bk.dataset.midi = String(next);
+      var bkLbl = el('span', 'key-label', NOTE_NAMES[next % 12]);
+      bk.appendChild(bkLbl);
+      keys.push({ el: bk, midi: next });
+      pianoEl.appendChild(bk);
+    }
+  }
+
+  function updateScale() {
+    var root = parseInt(rootSelect.value);
+    var scaleKey = scaleSelect.value;
+    var scale = SCALES[scaleKey];
+    var scaleNotes = {};
+    scale.intervals.forEach(function(iv) { scaleNotes[(root + iv) % 12] = true; });
+
+    keys.forEach(function(k) {
+      var note = k.midi % 12;
+      k.el.classList.remove('in-scale', 'root');
+      if (scaleNotes[note]) {
+        k.el.classList.add('in-scale');
+        if (note === root) k.el.classList.add('root');
+      }
+    });
+
+    // Update scale formula display (safe DOM)
+    scaleNotesEl.textContent = '';
+    scaleIntervalsEl.textContent = '';
+    scale.intervals.forEach(function(interval, idx) {
+      var noteMidi = (root + interval) % 12;
+      var badge = el('span', 'note-badge' + (idx === 0 ? ' root' : ''), NOTE_NAMES[noteMidi]);
+      scaleNotesEl.appendChild(badge);
+
+      var iBadge = el('span', 'interval-badge', INTERVAL_NAMES_SHORT[interval] || String(interval));
+      scaleIntervalsEl.appendChild(iBadge);
+    });
+  }
+
+  // Piano click
+  pianoEl.addEventListener('mousedown', function(e) {
+    var keyEl = e.target.closest('.piano-key');
+    if (!keyEl) return;
+    var midiVal = parseInt(keyEl.dataset.midi);
+    playNote(midiToFreq(midiVal), 0.8, 'triangle', 0.3);
+    keyEl.classList.add('pressed');
+    function up() { keyEl.classList.remove('pressed'); document.removeEventListener('mouseup', up); }
+    document.addEventListener('mouseup', up);
+  });
+
+  // Touch support
+  pianoEl.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    var touch = e.touches[0];
+    var keyEl = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (!keyEl || !keyEl.classList.contains('piano-key')) return;
+    var midiVal = parseInt(keyEl.dataset.midi);
+    playNote(midiToFreq(midiVal), 0.8, 'triangle', 0.3);
+    keyEl.classList.add('pressed');
+    function up() { keyEl.classList.remove('pressed'); pianoEl.removeEventListener('touchend', up); }
+    pianoEl.addEventListener('touchend', up);
+  }, { passive: false });
+
+  // Play scale ascending
+  scalePlayBtn.addEventListener('click', function() {
+    var root = parseInt(rootSelect.value);
+    var scale = SCALES[scaleSelect.value];
+    var baseMidi = 60 + root;
+    scale.intervals.forEach(function(interval, idx) {
+      setTimeout(function() {
+        var midiVal = baseMidi + interval;
+        playNote(midiToFreq(midiVal), 0.5, 'triangle', 0.25);
+        var keyTarget = pianoEl.querySelector('[data-midi="' + midiVal + '"]');
+        if (keyTarget) {
+          keyTarget.classList.add('pressed');
+          setTimeout(function() { keyTarget.classList.remove('pressed'); }, 350);
+        }
+      }, idx * 300);
+    });
+    // Octave
+    setTimeout(function() {
+      var midiVal = baseMidi + 12;
+      playNote(midiToFreq(midiVal), 0.8, 'triangle', 0.25);
+      var keyTarget = pianoEl.querySelector('[data-midi="' + midiVal + '"]');
+      if (keyTarget) {
+        keyTarget.classList.add('pressed');
+        setTimeout(function() { keyTarget.classList.remove('pressed'); }, 500);
+      }
+    }, scale.intervals.length * 300);
+  });
+
+  rootSelect.addEventListener('change', updateScale);
+  scaleSelect.addEventListener('change', updateScale);
+  updateScale();
+})();
+
+// ══════════════════════════════════════════
+//  SECTION 4: INTERVAL ENCYCLOPEDIA
+// ══════════════════════════════════════════
+(function() {
+  var intervals = [
+    { name: '\u5b8c\u51681\u5ea6', en: 'P1 (Unison)', semi: 0, ratio: '1:1', cents: 0, desc: '\u540c\u3058\u97f3\u3002\u5b8c\u5168\u306a\u5354\u548c' },
+    { name: '\u77ed2\u5ea6', en: 'm2', semi: 1, ratio: '16:15', cents: 100, desc: '\u7dca\u5f35\u611f\u306e\u3042\u308b\u4e0d\u5354\u548c\u3002\u534a\u97f3\u306e\u8ddd\u96e2' },
+    { name: '\u95772\u5ea6', en: 'M2', semi: 2, ratio: '9:8', cents: 200, desc: '\u7a4f\u3084\u304b\u306a\u4e0d\u5354\u548c\u3002\u5168\u97f3\u306e\u8ddd\u96e2' },
+    { name: '\u77ed3\u5ea6', en: 'm3', semi: 3, ratio: '6:5', cents: 300, desc: '\u60b2\u54c0\u30fb\u5185\u7701\u7684\u3002\u30de\u30a4\u30ca\u30fc\u30b3\u30fc\u30c9\u306e\u6838' },
+    { name: '\u95773\u5ea6', en: 'M3', semi: 4, ratio: '5:4', cents: 400, desc: '\u660e\u6717\u30fb\u6e29\u6696\u3002\u30e1\u30b8\u30e3\u30fc\u30b3\u30fc\u30c9\u306e\u6838' },
+    { name: '\u5b8c\u51684\u5ea6', en: 'P4', semi: 5, ratio: '4:3', cents: 500, desc: '\u5b89\u5b9a\u3057\u305f\u5354\u548c\u3002\u30d1\u30ef\u30fc\u30b3\u30fc\u30c9\u306e\u69cb\u6210\u97f3' },
+    { name: '\u4e09\u5168\u97f3', en: 'TT (Tritone)', semi: 6, ratio: '45:32', cents: 600, desc: '\u6700\u5927\u306e\u4e0d\u5354\u548c\u3002\u60aa\u9b54\u306e\u97f3\u7a0b' },
+    { name: '\u5b8c\u51685\u5ea6', en: 'P5', semi: 7, ratio: '3:2', cents: 700, desc: '\u6700\u3082\u5b89\u5b9a\u3057\u305f\u5354\u548c\u3002\u548c\u58f0\u306e\u57fa\u790e' },
+    { name: '\u77ed6\u5ea6', en: 'm6', semi: 8, ratio: '8:5', cents: 800, desc: '\u7518\u7f8e\u3067\u30e1\u30e9\u30f3\u30b3\u30ea\u30c3\u30af' },
+    { name: '\u95776\u5ea6', en: 'M6', semi: 9, ratio: '5:3', cents: 900, desc: '\u6e29\u304b\u304f\u7267\u6b4c\u7684' },
+    { name: '\u77ed7\u5ea6', en: 'm7', semi: 10, ratio: '16:9', cents: 1000, desc: '\u30d6\u30eb\u30fc\u30b8\u30fc\u3002\u30c9\u30df\u30ca\u30f3\u30c87th\u306e\u6838' },
+    { name: '\u95777\u5ea6', en: 'M7', semi: 11, ratio: '15:8', cents: 1100, desc: '\u92ed\u3044\u7dca\u5f35\u3002\u30b8\u30e3\u30ba\u7684\u306a\u97ff\u304d' },
+    { name: '\u30aa\u30af\u30bf\u30fc\u30f4', en: 'P8 (Octave)', semi: 12, ratio: '2:1', cents: 1200, desc: '\u5b8c\u5168\u306a\u4e00\u81f4\u3002\u5468\u6ce2\u6570\u304c2\u500d' },
+  ];
+
+  var grid = document.getElementById('intervalGrid');
+  var playingCard = null;
+
+  intervals.forEach(function(iv) {
+    var card = document.createElement('div');
+    card.className = 'enc-card';
+
+    var icon = el('span', 'enc-sound-icon', '\u266B');
+    card.appendChild(icon);
+
+    card.appendChild(el('div', 'enc-name', iv.name));
+    card.appendChild(el('div', 'enc-sub', iv.en));
+    card.appendChild(el('div', 'enc-detail', iv.desc));
+    card.appendChild(el('div', 'enc-ratio', iv.ratio));
+    card.appendChild(el('div', 'enc-cents', iv.semi + ' semitones / ' + iv.cents + ' cents'));
+
+    card.addEventListener('click', function() {
+      if (playingCard) playingCard.classList.remove('playing');
+      card.classList.add('playing');
+      playingCard = card;
+      var rootFreq = midiToFreq(60);
+      var intFreq = midiToFreq(60 + iv.semi);
+      playNote(rootFreq, 1.2, 'triangle', 0.2);
+      setTimeout(function() { playNote(intFreq, 1.2, 'triangle', 0.2); }, 200);
+      setTimeout(function() { card.classList.remove('playing'); }, 1400);
+    });
+    grid.appendChild(card);
+  });
+})();
+
+// ══════════════════════════════════════════
+//  SECTION 5: CHORD ENCYCLOPEDIA
+// ══════════════════════════════════════════
+(function() {
+  var chords = [
+    { name: 'Major', symbol: '', intervals: [0,4,7], desc: '\u660e\u308b\u304f\u5b89\u5b9a\u3057\u305f\u97ff\u304d' },
+    { name: 'Minor', symbol: 'm', intervals: [0,3,7], desc: '\u6697\u304f\u5185\u7701\u7684\u306a\u97ff\u304d' },
+    { name: 'Diminished', symbol: 'dim', intervals: [0,3,6], desc: '\u4e0d\u5b89\u5b9a\u3067\u7dca\u5f35\u611f\u306e\u3042\u308b\u97ff\u304d' },
+    { name: 'Augmented', symbol: 'aug', intervals: [0,4,8], desc: '\u6d6e\u904a\u611f\u306e\u3042\u308b\u4e0d\u601d\u8b70\u306a\u97ff\u304d' },
+    { name: 'Sus2', symbol: 'sus2', intervals: [0,2,7], desc: '\u958b\u653e\u611f\u306e\u3042\u308b\u97ff\u304d' },
+    { name: 'Sus4', symbol: 'sus4', intervals: [0,5,7], desc: '\u89e3\u6c7a\u3092\u6c42\u3081\u308b\u6d6e\u904a\u611f' },
+    { name: 'Dominant 7th', symbol: '7', intervals: [0,4,7,10], desc: '\u30d6\u30eb\u30fc\u30b8\u30fc\u3067\u89e3\u6c7a\u611f\u3092\u6c42\u3081\u308b' },
+    { name: 'Major 7th', symbol: 'M7', intervals: [0,4,7,11], desc: '\u6d17\u7df4\u3055\u308c\u305f\u30b8\u30e3\u30ba\u306e\u97ff\u304d' },
+    { name: 'Minor 7th', symbol: 'm7', intervals: [0,3,7,10], desc: '\u67d4\u3089\u304b\u304f\u30e1\u30ed\u30a6\u306a\u97ff\u304d' },
+    { name: 'Minor Maj7', symbol: 'mM7', intervals: [0,3,7,11], desc: '\u6697\u3055\u306e\u4e2d\u306e\u92ed\u3055\u3002\u6620\u753b\u7684' },
+    { name: 'Dim 7th', symbol: 'dim7', intervals: [0,3,6,9], desc: '\u5bfe\u79f0\u7684\u306a\u69cb\u9020\u3002\u8ee2\u8abf\u306e\u67b6\u3051\u6a4b' },
+    { name: 'Half-Dim 7th', symbol: 'm7b5', intervals: [0,3,6,10], desc: '\u30de\u30a4\u30ca\u30fcII-V\u9032\u884c\u306e\u8d77\u70b9' },
+    { name: 'Add 9', symbol: 'add9', intervals: [0,4,7,14], desc: '\u714c\u3073\u3084\u304b\u3067\u5e83\u304c\u308a\u306e\u3042\u308b\u97ff\u304d' },
+    { name: 'Dominant 9th', symbol: '9', intervals: [0,4,7,10,14], desc: '\u30d5\u30a1\u30f3\u30ad\u30fc\u3067\u30ea\u30c3\u30c1\u306a\u97ff\u304d' },
+    { name: 'Major 9th', symbol: 'M9', intervals: [0,4,7,11,14], desc: '\u5922\u898b\u308b\u3088\u3046\u306a\u7f8e\u3057\u3055' },
+    { name: 'Minor 9th', symbol: 'm9', intervals: [0,3,7,10,14], desc: '\u30cd\u30aa\u30bd\u30a6\u30eb\u7684\u306a\u67d4\u3089\u304b\u3055' },
+  ];
+
+  var INTERVAL_LABELS = ['R','m2','M2','m3','M3','P4','TT','P5','m6','M6','m7','M7','P8','m9','M9','#9'];
+
+  var grid = document.getElementById('chordGrid');
+  var chordRootSelect = document.getElementById('chordRootSelect');
+  var playingCard = null;
+
+  function buildChordGrid() {
+    grid.textContent = '';
+    var root = parseInt(chordRootSelect.value);
+    var rootName = NOTE_NAMES[root];
+
+    chords.forEach(function(chord) {
+      var card = document.createElement('div');
+      card.className = 'enc-card';
+
+      var icon = el('span', 'enc-sound-icon', '\u266B');
+      card.appendChild(icon);
+
+      card.appendChild(el('div', 'enc-name', rootName + chord.symbol));
+      card.appendChild(el('div', 'enc-sub', chord.name));
+      card.appendChild(el('div', 'enc-detail', chord.desc));
+
+      var notes = chord.intervals.map(function(i) { return NOTE_NAMES[(root + i) % 12]; }).join(' - ');
+      card.appendChild(el('div', 'enc-ratio', notes));
+
+      var intervalLabels = chord.intervals.map(function(i) { return INTERVAL_LABELS[i] || String(i); }).join(' ');
+      card.appendChild(el('div', 'enc-cents', intervalLabels));
+
+      card.addEventListener('click', function() {
+        if (playingCard) playingCard.classList.remove('playing');
+        card.classList.add('playing');
+        playingCard = card;
+        var baseMidi = 60 + root;
+        var freqs = chord.intervals.map(function(i) { return midiToFreq(baseMidi + i); });
+        playChord(freqs, 1.5, 'triangle');
+        setTimeout(function() { card.classList.remove('playing'); }, 1600);
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  chordRootSelect.addEventListener('change', buildChordGrid);
+  buildChordGrid();
+})();
+
+// ══════════════════════════════════════════
+//  TOC ACTIVE STATE
+// ══════════════════════════════════════════
+var tocLinks = document.querySelectorAll('.lab-toc a');
+var labSections = document.querySelectorAll('.lab-section');
+
+var tocObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      tocLinks.forEach(function(a) { a.classList.remove('active'); });
+      var id = entry.target.id;
+      var link = document.querySelector('.lab-toc a[href="#' + id + '"]');
+      if (link) link.classList.add('active');
+    }
+  });
+}, { threshold: 0.2, rootMargin: '-80px 0px -60% 0px' });
+
+labSections.forEach(function(s) { tocObserver.observe(s); });
+
+})();
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Sound & Theory Lab",
+  "description": "\u97f3\u697d\u7406\u8ad6\u3068\u97f3\u97ff\u5b66\u306e\u30a4\u30f3\u30bf\u30e9\u30af\u30c6\u30a3\u30d6\u30fb\u30e9\u30dc\u30e9\u30c8\u30ea\u30fc",
+  "creator": { "@type": "Person", "name": "nemotea" },
+  "url": "https://nemototea.github.io/music-lab/",
+  "applicationCategory": "EducationalApplication"
+}
+</script>
+</body>
+</html>
