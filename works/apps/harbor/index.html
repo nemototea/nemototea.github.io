@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Harbor - ブックマークバーを「錨」として空間管理するChromeサイドパネル拡張。Manifest V3・外部通信なし・全ローカル。">
+    <meta name="keywords" content="Chrome拡張機能, サイドパネル, ブックマーク, タブ管理, Manifest V3, Harbor">
+
+    <title>Harbor - ブックマークを錨にするChrome拡張 | nemotea</title>
+
+    <link rel="stylesheet" href="../../../assets/css/main.css">
+    <link rel="icon" type="image/x-icon" href="../../../assets/images/favicon-16x16.png">
+
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .app-hero {
+            padding: var(--space-2xl) 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2xl);
+            margin: var(--space-2xl) 0;
+        }
+
+        .app-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-2xl);
+            align-items: start;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .app-screenshot {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            margin: 0 auto;
+            display: block;
+            border: 2px solid rgba(0, 255, 157, 0.2);
+            transition: all var(--transition-normal);
+        }
+
+        .app-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+
+        .app-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: rgba(0, 255, 157, 0.1);
+            color: var(--cyber-green);
+            padding: var(--space-xs) var(--space-md);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            width: fit-content;
+        }
+
+        .app-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: var(--space-sm);
+            background: linear-gradient(135deg, var(--cyber-green), var(--cyber-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .app-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+            line-height: 1.5;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all var(--transition-normal);
+        }
+
+        .feature-item:hover {
+            background: rgba(0, 255, 157, 0.05);
+            border-color: rgba(0, 255, 157, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            min-width: 24px;
+            margin-top: 2px;
+        }
+
+        .feature-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .feature-content p {
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .download-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: var(--space-2xl);
+            text-align: center;
+            margin: var(--space-2xl) 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyber-green), var(--cyber-blue), var(--cyber-purple));
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            margin-top: var(--space-lg);
+            flex-wrap: wrap;
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, var(--cyber-green), var(--cyber-blue));
+            border: none;
+            border-radius: 16px;
+            padding: var(--space-md) var(--space-xl);
+            color: #000;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 255, 157, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 157, 0.5);
+        }
+
+        .download-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 1024px) {
+            .app-content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .app-screenshot {
+                max-width: 600px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                gap: var(--space-lg);
+            }
+
+            .app-title {
+                font-size: 2rem;
+            }
+
+            .app-screenshot {
+                max-width: 400px;
+            }
+
+            .download-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav>
+  <a href="../../../" class="nav-logo">// nemotea</a>
+  <button class="nav-toggle" id="navToggle" aria-label="メニュー">///</button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="../../../">HOME</a></li>
+    <li><a href="../../../profile/">PROFILE</a></li>
+    <li><a href="../../../works/" class="active">WORKS</a></li>
+    <li><a href="../../../podcast/">CAST</a></li>
+    <li><a href="../../../contact/">CONTACT</a></li>
+  </ul>
+</nav>
+
+    <div class="container">
+
+        <!-- アプリヒーロー -->
+        <section class="app-hero">
+            <div class="app-badge fade-in">
+                🧩 Chrome Extension
+            </div>
+            <h1 class="app-title fade-in">Harbor</h1>
+            <p class="app-subtitle fade-in">
+                ブックマークバーを「錨」として空間管理する、<br>
+                Chrome サイドパネル拡張。タブを散らかさず、戻る場所を持つ。
+            </p>
+        </section>
+
+        <!-- メインコンテンツ -->
+        <section class="app-container">
+            <!-- アプリプレビュー -->
+            <div class="app-preview slide-in-left">
+                <img src="../../../assets/images/works/harbor.png" alt="Harbor 拡張機能のスクリーンショット" class="app-screenshot">
+            </div>
+
+            <!-- アプリ情報 -->
+            <div class="app-info slide-in-right">
+                <div class="feature-list">
+                    <div class="feature-item fade-in">
+                        <span class="feature-icon">⚓</span>
+                        <div class="feature-content">
+                            <h4>Anchor と Live の分離</h4>
+                            <p>恒久的な戻り先（Anchor）と、流動的な作業タブ（Live）を分離。タブを「保存場所」として溜め込まず、本来の作業に集中できます。</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item fade-in">
+                        <span class="feature-icon">🗂️</span>
+                        <div class="feature-content">
+                            <h4>サイドパネルで空間管理</h4>
+                            <p>Chrome のサイドパネルに常駐し、ブックマークバーを「錨（Anchor）」として整理。いつでも決まった場所に戻ってこられます。</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item fade-in">
+                        <span class="feature-icon">🔒</span>
+                        <div class="feature-content">
+                            <h4>外部通信なし・全ローカル</h4>
+                            <p>データはすべてローカルで完結し、外部サーバーへの通信は一切ありません。プライバシーを気にせず日常使いできます。</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item fade-in">
+                        <span class="feature-icon">💎</span>
+                        <div class="feature-content">
+                            <h4>Liquid-glass な UI</h4>
+                            <p>Manifest V3 で構築した軽量な拡張。ブラウザに自然に溶け込む Liquid-glass デザインで、操作の邪魔をしません。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 開発背景 -->
+        <section class="glass-card fade-in" style="margin: var(--space-2xl) 0; padding: var(--space-2xl);">
+            <h2 class="text-subtitle mb-lg">💡 開発背景</h2>
+            <p class="text-body" style="line-height: 1.8;">
+                ブラウザを使っていると、いつの間にかタブが「あとで読む」「閉じたくない」もので溢れ、
+                どれが作業中でどれが置きっぱなしなのか分からなくなります。
+                タブを保存場所として使い続けてしまうことが、その混乱の原因だと考えました。
+            </p>
+            <br>
+            <p class="text-body" style="line-height: 1.8;">
+                Harbor は、恒久的な戻り先を「錨（Anchor）」としてブックマークバーに固定し、
+                今まさに作業しているタブ（Live）と明確に分離します。
+                船が港（Harbor）に錨を下ろすように、ブラウジングにも「戻ってくる場所」を持たせる——
+                そんな発想から生まれた Chrome 拡張機能です。
+                Manifest V3・外部通信なし・全ローカルで、安心して日常使いできます。
+            </p>
+        </section>
+
+        <!-- ダウンロードセクション -->
+        <section class="download-section">
+            <h2 class="text-title fade-in">🚀 今すぐ使ってみる</h2>
+            <p class="text-body fade-in" style="margin-top: var(--space-md);">
+                Chrome ウェブストアで公開中。インストールしてサイドパネルから起動できます。
+            </p>
+
+            <div class="download-buttons">
+                <a href="https://chromewebstore.google.com/detail/ohclbdoijlllchljimicpopfnbijbpbo" target="_blank" rel="noopener noreferrer" class="download-btn fade-in">
+                    🧩 Chrome ウェブストアで入手
+                </a>
+                <a href="https://github.com/nemototea/harbor" target="_blank" rel="noopener noreferrer" class="download-btn secondary fade-in">
+                    📂 GitHub
+                </a>
+            </div>
+        </section>
+    </div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="../../../" class="footer-logo">// nemotea</a>
+        <p class="footer-description">Tea-Driven Development</p>
+      </div>
+      <div class="footer-links">
+        <a href="../../../" class="footer-link">HOME</a>
+        <a href="../../../profile/" class="footer-link">PROFILE</a>
+        <a href="../../../works/" class="footer-link">WORKS</a>
+        <a href="../../../podcast/" class="footer-link">CAST</a>
+        <a href="../../../contact/" class="footer-link">CONTACT</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">&copy; 2025-2026 nemotea. Built with tea and code.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Mobile Nav -->
+<div id="mobile-nav">
+  <a href="../../../" class="mnav-btn"><span class="ico">&#9750;</span><span>HOME</span></a>
+  <a href="../../../profile/" class="mnav-btn"><span class="ico">&#9672;</span><span>PROFILE</span></a>
+  <a href="../../../works/" class="mnav-btn active"><span class="ico">&#9673;</span><span>WORKS</span></a>
+  <a href="../../../podcast/" class="mnav-btn"><span class="ico">&#9834;</span><span>CAST</span></a>
+  <a href="../../../contact/" class="mnav-btn"><span class="ico">&#9678;</span><span>CONTACT</span></a>
+</div>
+
+<script src="../../../assets/js/main.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // アプリスクリーンショットのホバーエフェクト
+            const screenshot = document.querySelector('.app-screenshot');
+            if (screenshot) {
+                screenshot.addEventListener('mouseenter', () => {
+                    screenshot.style.transform = 'scale(1.08) rotate(1deg)';
+                    screenshot.style.boxShadow = '0 40px 100px rgba(0, 255, 157, 0.4)';
+                    screenshot.style.borderColor = 'rgba(0, 255, 157, 0.6)';
+                });
+
+                screenshot.addEventListener('mouseleave', () => {
+                    screenshot.style.transform = 'scale(1) rotate(0deg)';
+                    screenshot.style.boxShadow = '0 30px 80px rgba(0, 0, 0, 0.4)';
+                    screenshot.style.borderColor = 'rgba(0, 255, 157, 0.2)';
+                });
+            }
+
+            // 機能アイテムのランダムグロー
+            const featureItems = document.querySelectorAll('.feature-item');
+            setInterval(() => {
+                if (featureItems.length > 0) {
+                    const randomItem = featureItems[Math.floor(Math.random() * featureItems.length)];
+                    randomItem.style.boxShadow = '0 0 20px rgba(0, 255, 157, 0.4)';
+
+                    setTimeout(() => {
+                        randomItem.style.boxShadow = '';
+                    }, 2000);
+                }
+            }, 5000);
+        });
+
+        // アプリ読み込み完了時の処理
+        document.addEventListener('app:loaded', () => {
+            console.log('🧩 Harborページが正常に読み込まれました！');
+        });
+    </script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Harbor",
+        "description": "ブックマークバーを「錨」として空間管理するChromeサイドパネル拡張。Manifest V3・外部通信なし・全ローカル。",
+        "url": "https://nemototea.github.io/works/apps/harbor/",
+        "applicationCategory": "BrowserApplication",
+        "operatingSystem": "Chrome",
+        "creator": {
+            "@type": "Person",
+            "name": "nemotea"
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "JPY"
+        }
+    }
+    </script>
+</body>
+</html>
