@@ -22,7 +22,22 @@ body.archive-page { background: var(--bg); }
   letter-spacing: -.04em;
   margin-bottom: 14px;
 }
+.nbc-heading .nbc-eyebrow {
+  color: var(--amber);
+  font: 10px var(--mono);
+  letter-spacing: .17em;
+  margin-bottom: 16px;
+}
 .nbc-heading p { color: var(--text-dim); line-height: 1.8; }
+.nbc-heading .nbc-about {
+  max-width: 62ch;
+  margin-bottom: 16px;
+  padding-left: 16px;
+  border-left: 1px solid var(--border-h);
+  color: rgba(216, 228, 238, .72);
+  font-size: 14px;
+  line-height: 1.95;
+}
 
 .nbc-slide-card {
   position: relative;
