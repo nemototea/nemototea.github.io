@@ -169,6 +169,17 @@
   line-height: 1.8;
   color: var(--text-dim);
 }
+.tl-link {
+  display: inline-block;
+  margin-top: var(--space-sm);
+  color: var(--matcha);
+  font: 700 10px var(--mono);
+  letter-spacing: 1px;
+  text-decoration: none;
+  border-bottom: 1px solid var(--border-h);
+  padding-bottom: 3px;
+}
+.tl-link:hover { color: var(--teal); }
 
 @media (max-width: 768px) {
   .timeline::before { left: 16px; }
@@ -299,6 +310,14 @@
       </div>
       <div class="tl-item left slide-in-left">
         <div class="tl-content glass"><div class="tl-year">2025</div><h3 class="tl-title">第二子誕生</h3><p class="tl-desc">家族が増えた。</p></div>
+      </div>
+      <div class="tl-item right slide-in-right">
+        <div class="tl-content glass">
+          <div class="tl-year">2026.09.12</div>
+          <h3 class="tl-title">NBC2026に出場</h3>
+          <p class="tl-desc">北海道ブロック代表として本戦に出場。</p>
+          <a class="tl-link" href="nbc-2026/">スライドと準備の記録 →</a>
+        </div>
       </div>
     </div>
   </section>
