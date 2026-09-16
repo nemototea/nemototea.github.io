@@ -37,6 +37,12 @@ body{ font-family:var(--sans); color:var(--ink); -webkit-font-smoothing:antialia
 body.idle{ cursor:none; }
 
 /* ---------- ステージ ---------- */
+/* 画面に固定したクリップ層。#stage はこの中に入れる。
+   これが無いと、scale 後の #stage の矩形（1920px 基準）が文書の
+   スクロール領域を押し広げ、モバイルではレイアウトビューポート自体が
+   実画面より大きく膨張する。その状態で window.innerWidth を基準に
+   スケールすると、実画面の外までスライドが描かれて左右が切れる。 */
+#viewport{ position:fixed; inset:0; overflow:hidden; z-index:0; }
 #stage{
   position:absolute; left:50%; top:50%;
   width:1920px; height:1080px;
@@ -459,6 +465,7 @@ html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
 </style>
 </head>
 <body>
+<div id="viewport">
 <div id="stage">
 
 <!-- ============ 01 表紙 ============ -->
@@ -1115,6 +1122,7 @@ html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
 <div id="pg"></div>
 <div id="tm">00:00</div>
 </div><!-- /stage -->
+</div><!-- /viewport -->
 
 <div id="start"><div>
   <b>一杯の設計図</b>　NBC 2026<br>
@@ -1153,8 +1161,25 @@ html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
   var i = 0, step = 0;
 
   /* --- 1920x1080 を画面いっぱいにスケール --- */
+  /* 縦長画面（スマホ縦持ち等）では横幅に合わせて縮小し、
+     16:9 の比率はそのまま保つ（上下に余白が出るのは許容）。 */
+  function viewSize(){
+    var de = document.documentElement;
+    var w = de.clientWidth || window.innerWidth;
+    var h = de.clientHeight || window.innerHeight;
+    var v = window.visualViewport;
+    /* iOS Safari のツールバー出し入れは visualViewport にしか出ないので
+       等倍のときだけ併用する。ピンチ拡大中（scale>1）は visualViewport が
+       縮むため参照しない（参照すると拡大を打ち消してしまう）。 */
+    if (v && v.scale <= 1.01){
+      w = Math.min(w, v.width);
+      h = Math.min(h, v.height);
+    }
+    return [w, h];
+  }
   function fit(){
-    var s = Math.min(window.innerWidth/1920, window.innerHeight/1080);
+    var v = viewSize();
+    var s = Math.min(v[0]/1920, v[1]/1080);
     stage.style.transform = 'translate(-50%,-50%) scale('+s+')';
   }
   window.addEventListener('resize', fit);
