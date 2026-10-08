@@ -9,17 +9,17 @@
 <meta property="og:site_name" content="nemotea">
 <meta property="og:locale" content="ja_JP">
 <meta property="og:url" content="https://nemototea.github.io/works/apps/podsnow/">
-<meta property="og:title" content="PodsNow - ポッドキャストをスマホひとつで">
-<meta property="og:description" content="録って、切って、書き出す。ポッドキャストの収録・編集・書き出しをスマホで完結させる収録アプリを開発中。">
+<meta property="og:title" content="PodsNow - ポッドキャスト収録アプリ（開発中）">
+<meta property="og:description" content="ポッドキャストの収録・編集・書き出しをスマホで完結させる収録アプリを開発中。">
 <meta property="og:image" content="https://nemototea.github.io/assets/images/og-podsnow.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="PodsNow. - 録って、切って、書き出す。ポッドキャストをスマホひとつで。">
+<meta property="og:image:alt" content="PodsNow のアプリ画面">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="PodsNow - ポッドキャストをスマホひとつで">
-<meta name="twitter:description" content="録って、切って、書き出す。ポッドキャストの収録・編集・書き出しをスマホで完結させる収録アプリを開発中。">
+<meta name="twitter:title" content="PodsNow - ポッドキャスト収録アプリ（開発中）">
+<meta name="twitter:description" content="ポッドキャストの収録・編集・書き出しをスマホで完結させる収録アプリを開発中。">
 <meta name="twitter:image" content="https://nemototea.github.io/assets/images/og-podsnow.png">
-<title>PodsNow - ポッドキャストをスマホひとつで | nemotea</title>
+<title>PodsNow - ポッドキャスト収録アプリ（開発中） | nemotea</title>
 <link rel="stylesheet" href="../../../assets/css/main.css">
 <link rel="icon" type="image/x-icon" href="../../../assets/images/favicon-16x16.png">
 <style>
@@ -28,7 +28,6 @@
   --pn-yellow: #ffe34d;
   --pn-ink:    #121212;
 }
-
 .pn-hero {
   padding: var(--space-2xl) 0 var(--space-xl);
   text-align: center;
@@ -83,16 +82,10 @@
   color: var(--text-mut);
   margin-top: var(--space-xs);
 }
-.pn-tagline {
-  font-size: clamp(1.1rem, 2.6vw, 1.5rem);
-  font-weight: 900;
-  margin-top: var(--space-md);
-}
 .pn-lead {
   max-width: 620px;
-  margin: var(--space-sm) auto 0;
+  margin: var(--space-md) auto 0;
 }
-
 .pn-shot {
   margin: var(--space-lg) 0 var(--space-2xl);
 }
@@ -111,258 +104,29 @@
   text-align: center;
   margin-top: var(--space-xs);
 }
-
 .pn-section {
   margin: var(--space-2xl) 0;
-}
-.pn-section-head {
   text-align: center;
-  margin-bottom: var(--space-xl);
 }
-.pn-section-head .text-label { margin-bottom: var(--space-xs); }
-
-/* 解決したいこと */
-.pn-problems {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2px;
-}
-.pn-problem {
-  padding: var(--space-lg);
-}
-.pn-problem .before {
-  font-family: var(--mono);
-  font-size: 11px;
-  line-height: 1.8;
-  color: var(--text-dim);
-  text-decoration: line-through;
-  text-decoration-color: rgba(232, 108, 138, 0.6);
-  margin-bottom: var(--space-sm);
-}
-.pn-problem .after {
-  font-size: 0.95rem;
-  line-height: 1.8;
-  color: var(--text);
-}
-
-/* できること */
-.pn-features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2px;
-}
-.pn-feature {
-  padding: var(--space-lg);
-  position: relative;
-}
-.pn-feature-num {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 3px;
-  color: var(--amber);
-  margin-bottom: var(--space-xs);
-}
-.pn-feature h3 {
-  font-size: 1.15rem;
-  font-weight: 900;
-  margin-bottom: var(--space-xs);
-}
-.pn-feature p {
-  font-family: var(--mono);
-  font-size: 11px;
-  line-height: 1.9;
-  color: var(--text-dim);
-}
-
-/* 設計の考え方 */
-.pn-principles {
-  list-style: none;
-  counter-reset: pn;
-  max-width: 760px;
-  margin: 0 auto;
-}
-.pn-principles li {
-  counter-increment: pn;
-  display: grid;
-  grid-template-columns: 48px 1fr;
-  gap: var(--space-sm);
-  padding: var(--space-md) 0;
-  border-bottom: 1px solid var(--border);
-}
-.pn-principles li:last-child { border-bottom: none; }
-.pn-principles li::before {
-  content: counter(pn, decimal-leading-zero);
-  font-family: var(--mono);
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--matcha);
-  line-height: 1.3;
-}
-.pn-principles strong {
-  display: block;
-  font-size: 1.05rem;
-  font-weight: 900;
-  margin-bottom: 4px;
-}
-.pn-principles span {
-  font-family: var(--mono);
-  font-size: 11px;
-  line-height: 1.8;
-  color: var(--text-dim);
-}
-
-/* ロードマップ */
-.pn-roadmap {
-  position: relative;
-  max-width: 820px;
-  margin: 0 auto;
-  padding-left: 36px;
-}
-.pn-roadmap::before {
-  content: '';
-  position: absolute;
-  top: 8px;
-  bottom: 8px;
-  left: 11px;
-  width: 2px;
-  background: linear-gradient(180deg, var(--matcha) 0%, var(--matcha) 38%, var(--pn-yellow) 52%, var(--border) 70%, var(--border) 100%);
-}
-.pn-stage {
-  position: relative;
-  margin-bottom: var(--space-md);
-}
-.pn-stage:last-child { margin-bottom: 0; }
-.pn-stage::before {
-  content: '';
-  position: absolute;
-  left: -32px;
-  top: 26px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--bg);
-  border: 2px solid var(--border-h);
-}
-.pn-stage.done::before {
-  background: var(--matcha);
-  border-color: var(--matcha);
-}
-.pn-stage.now::before {
-  background: var(--pn-yellow);
-  border-color: var(--pn-yellow);
-  box-shadow: 0 0 0 5px rgba(255, 227, 77, 0.15), 0 0 16px rgba(255, 227, 77, 0.5);
-}
-.pn-stage-card {
-  padding: var(--space-md) var(--space-lg);
-}
-.pn-stage.now .pn-stage-card {
-  border-color: rgba(255, 227, 77, 0.45);
-}
-.pn-stage-head {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: var(--space-xs) var(--space-sm);
-  margin-bottom: var(--space-xs);
-}
-.pn-status {
-  font-family: var(--mono);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  padding: 3px 8px;
-  border-radius: 2px;
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-}
-.pn-stage.done .pn-status { color: var(--matcha); border-color: var(--border-h); }
-.pn-stage.now  .pn-status { color: var(--pn-ink); background: var(--pn-yellow); border-color: var(--pn-yellow); }
-.pn-stage.next .pn-status { color: var(--teal); border-color: rgba(92, 224, 216, 0.35); }
-.pn-stage-ver {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--amber);
-}
-.pn-stage h3 {
-  width: 100%;
-  font-size: 1.2rem;
-  font-weight: 900;
-}
-.pn-stage-desc {
-  font-size: 0.92rem;
-  line-height: 1.8;
-  color: var(--text-dim);
-  margin-bottom: var(--space-sm);
-}
-.pn-checklist {
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 6px var(--space-md);
-}
-.pn-checklist li {
-  font-family: var(--mono);
-  font-size: 11px;
-  line-height: 1.7;
-  color: var(--text-dim);
-  padding-left: 20px;
-  position: relative;
-}
-.pn-checklist li::before {
-  content: '○';
-  position: absolute;
-  left: 0;
-  color: var(--text-mut);
-}
-.pn-checklist li.ok::before { content: '✓'; color: var(--matcha); }
-.pn-checklist li.wip::before { content: '◐'; color: var(--pn-yellow); }
-.pn-note {
-  font-family: var(--mono);
-  font-size: 10px;
-  line-height: 1.8;
-  color: var(--text-mut);
-  max-width: 820px;
-  margin: var(--space-md) auto 0;
-  padding-left: 36px;
-}
-
-/* 技術 */
+.pn-section .text-label { margin-bottom: var(--space-xs); }
 .pn-tech {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--space-xs);
   max-width: 760px;
-  margin: 0 auto;
+  margin: var(--space-lg) auto 0;
 }
 .pn-tech-note {
   max-width: 680px;
   margin: var(--space-md) auto 0;
-  text-align: center;
 }
-
-/* 締め */
-.pn-outro {
-  text-align: center;
-  padding: var(--space-2xl) var(--space-lg);
-  margin: var(--space-2xl) 0;
-  position: relative;
-  overflow: hidden;
-}
-.pn-outro::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--matcha), var(--pn-yellow), var(--amber));
-}
-.pn-outro-actions {
+.pn-actions {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: var(--space-sm);
-  margin-top: var(--space-lg);
+  margin: var(--space-2xl) 0;
 }
 .pn-btn {
   font-family: var(--mono);
@@ -390,15 +154,6 @@
   color: var(--matcha);
   border-color: var(--border-h);
 }
-
-@media (max-width: 720px) {
-  .pn-problems, .pn-features { grid-template-columns: 1fr; }
-  .pn-roadmap, .pn-note { padding-left: 28px; }
-  .pn-roadmap::before { left: 7px; }
-  .pn-stage::before { left: -28px; width: 14px; height: 14px; }
-  .pn-stage-card { padding: var(--space-md); }
-  .pn-principles li { grid-template-columns: 40px 1fr; }
-}
 @media (prefers-reduced-motion: reduce) {
   .pn-badge.live::before { animation: none; }
 }
@@ -422,7 +177,6 @@
 
 <div class="container">
 
-  <!-- Hero -->
   <section class="pn-hero">
     <div class="pn-badges fade-in">
       <span class="pn-badge live">IN DEVELOPMENT</span>
@@ -431,199 +185,21 @@
     </div>
     <h1 class="pn-title fade-in">PodsNow<span class="dot">.</span></h1>
     <p class="pn-kana fade-in">ポッズナウ</p>
-    <p class="pn-tagline fade-in">録って、切って、書き出す。ポッドキャストをスマホひとつで。</p>
     <p class="text-body pn-lead fade-in">
-      ポッドキャストの「収録 → 編集 → 音の仕上げ → 書き出し → 配信準備」を、スマートフォンだけで終わらせる収録アプリを作っています。
-      アカウント登録なしで、録音も編集データも端末の中に置くローカルファースト設計です。
+      ポッドキャストの収録から編集、音の仕上げ、書き出しまでをスマートフォンだけで終わらせる収録アプリを開発しています。
+      アカウント登録はいらず、録音と編集データは端末の中に保存します。
+      いまは自分の番組で使いながら 0.1.0 を仕上げているところで、その後 App Store と Google Play で公開する予定です。
     </p>
   </section>
 
   <figure class="pn-shot fade-in">
-    <img src="../../../assets/images/works/podsnow-hero.jpg" alt="PodsNow のホーム・番組・収録・編集・書き出しの 5 画面" width="2000" height="1204">
+    <img src="../../../assets/images/works/podsnow-hero.jpg" alt="PodsNow のホーム・番組・収録・編集・書き出しの 5 画面" width="2000" height="949">
     <figcaption>※ デザインの見本から描いた画像です。実機の画面写真ではありません。</figcaption>
   </figure>
 
-  <!-- Why -->
   <section class="pn-section">
-    <div class="pn-section-head fade-in">
-      <p class="text-label text-amber">// WHY</p>
-      <h2 class="text-title">なぜ作っているか</h2>
-      <p class="text-body mt-md" style="max-width:600px; margin-left:auto; margin-right:auto">
-        自分でもポッドキャストを配信していて、毎回の収録で同じところにつまずいていました。
-        最初のユーザーは自分自身。自分の番組で毎日使えるものを目指しています。
-      </p>
-    </div>
-    <div class="pn-problems">
-      <div class="pn-problem glass fade-in">
-        <p class="before">Opening / Ending / BGM / ジングルを毎回手作業で並べる</p>
-        <p class="after">番組に素材とトークテーマのひな形を登録しておけば、新しい回を作るだけで並ぶ。ジングルは収録中にワンタップ。</p>
-      </div>
-      <div class="pn-problem glass fade-in">
-        <p class="before">言い間違いや無音のカットが面倒</p>
-        <p class="after">噛んだら止めて、無音で区切られた塊をタップして削除し、そこからそのまま録り直す。録音と編集は同じ画面。</p>
-      </div>
-      <div class="pn-problem glass fade-in">
-        <p class="before">配信サービスにタイトルや概要を毎回手で入力する</p>
-        <p class="after">概要欄のテンプレートを毎回当てはめ、書き出し画面からタイトル・概要などを 1 項目ずつコピーするだけ。</p>
-      </div>
-      <div class="pn-problem glass fade-in">
-        <p class="before">他社サービスの API に頼ると、有料化や仕様変更に振り回される</p>
-        <p class="after">他社 API は前提にしない。将来は PodsNow 自身の配信基盤から公開できるようにする。</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Features -->
-  <section class="pn-section">
-    <div class="pn-section-head fade-in">
-      <p class="text-label text-amber">// FEATURES</p>
-      <h2 class="text-title">できること</h2>
-    </div>
-    <div class="pn-features">
-      <div class="pn-feature glass fade-in">
-        <div class="pn-feature-num">01 / RECORD</div>
-        <h3>止まらない収録</h3>
-        <p>画面ロック中も、他のアプリを使っていても録り続ける。電話や強制終了があっても、それまでの録音は失わない。</p>
-      </div>
-      <div class="pn-feature glass fade-in">
-        <div class="pn-feature-num">02 / EDIT</div>
-        <h3>録る画面で、そのまま切る</h3>
-        <p>塊の削除と録り直し、無音の一括カット、チャプター、取り消し / やり直しをひとつの画面で。</p>
-      </div>
-      <div class="pn-feature glass fade-in">
-        <div class="pn-feature-num">03 / TEMPLATE</div>
-        <h3>定型作業はひな形に</h3>
-        <p>Opening / Ending / BGM / ジングルとトークテーマを番組に登録。収録中はトークテーマを見ながら話し、送った位置がチャプターになる。</p>
-      </div>
-      <div class="pn-feature glass fade-in">
-        <div class="pn-feature-num">04 / MASTER</div>
-        <h3>音の仕上げ</h3>
-        <p>ラウドネスを -16 LUFS にそろえ、話している間は BGM を自動で下げる。試聴にもすぐ反映。</p>
-      </div>
-      <div class="pn-feature glass fade-in">
-        <div class="pn-feature-num">05 / EXPORT</div>
-        <h3>書き出しと配信準備</h3>
-        <p>M4A / WAV で書き出し、アートワークとタイトルを埋め込む。タイトル・概要などは 1 項目ずつコピーして配信サービスに貼るだけ。</p>
-      </div>
-      <div class="pn-feature glass fade-in">
-        <div class="pn-feature-num">06 / LOCAL-FIRST</div>
-        <h3>端末の中で完結</h3>
-        <p>収録・編集・書き出しはオフラインで動く。ユーザー登録もいらない。日本語と英語に対応。</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Principles -->
-  <section class="pn-section">
-    <div class="pn-section-head fade-in">
-      <p class="text-label text-amber">// PRINCIPLES</p>
-      <h2 class="text-title">設計の考え方</h2>
-    </div>
-    <ol class="pn-principles fade-in">
-      <li><div><strong>録音データを失わない（最優先）</strong><span>非圧縮 PCM で保存し、ヘッダを定期的に更新。復旧用の記録を残し、編集は元の録音を壊さない非破壊編集。</span></div></li>
-      <li><div><strong>工程はひとつのエピソードの中に</strong><span>覚えるのは「番組 → エピソード → 収録 / 書き出し」の 3 段だけ。ホームから 2 タップで録音を始められる。</span></div></li>
-      <li><div><strong>独自の言葉を作らない</strong><span>画面に出すのは、録音・編集・書き出し・素材・チャプターなどの一般的な言葉だけ。</span></div></li>
-      <li><div><strong>色は番組から</strong><span>アプリの地は黒とグレー。色は番組のアートワークから取り、PodsNow の色は主操作の黄色 1 色とロゴだけ。</span></div></li>
-    </ol>
-  </section>
-
-  <!-- Roadmap -->
-  <section class="pn-section" id="roadmap">
-    <div class="pn-section-head fade-in">
-      <p class="text-label text-amber">// ROADMAP</p>
-      <h2 class="text-title">ロードマップ</h2>
-      <p class="text-body mt-md" style="max-width:600px; margin-left:auto; margin-right:auto">
-        まずは自分の番組で使い倒す 0.1.0 を仕上げ、そのあと「録る → 公開する」までを誰でも使える 1.0.0 としてストアに出す予定です。
-      </p>
-    </div>
-
-    <div class="pn-roadmap">
-      <div class="pn-stage done fade-in">
-        <div class="pn-stage-card glass">
-          <div class="pn-stage-head">
-            <span class="pn-status">DONE</span>
-            <span class="pn-stage-ver">STEP 1</span>
-            <h3>土台と、収録・編集・書き出し</h3>
-          </div>
-          <p class="pn-stage-desc">アプリの骨組みと録音エンジンを作り、録る・切る・書き出す一連の流れをひと通り実装しました。</p>
-          <ul class="pn-checklist">
-            <li class="ok">バックグラウンド録音と、強制終了からの復元</li>
-            <li class="ok">波形・塊の削除・録り直し・無音カット</li>
-            <li class="ok">素材の挿入、取り消し / やり直し</li>
-            <li class="ok">ラウドネス正規化と BGM ダッキング</li>
-            <li class="ok">M4A / WAV 書き出しと配信用の項目コピー</li>
-            <li class="ok">番組の素材・ひな形・概要欄テンプレート</li>
-            <li class="ok">配信中の番組の情報の取り込み</li>
-            <li class="ok">デザインの全面リニューアル</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="pn-stage now fade-in">
-        <div class="pn-stage-card glass">
-          <div class="pn-stage-head">
-            <span class="pn-status">NOW</span>
-            <span class="pn-stage-ver">v0.1.0 — MVP</span>
-            <h3>自分の番組で使えるところまで仕上げる</h3>
-          </div>
-          <p class="pn-stage-desc">開発者自身が毎回の収録で使う、クローズドなドッグフーディング版。ストアには出さず、TestFlight / Google Play の内部テストで配ります。</p>
-          <ul class="pn-checklist">
-            <li class="ok">試聴に音の仕上げを即座に反映</li>
-            <li class="ok">書き出したファイルへのメタデータ埋め込み</li>
-            <li class="ok">書き出しの削除とファイルの片付け</li>
-            <li class="wip">実機での検証（着信・画面ロック・強制終了など）</li>
-            <li class="wip">TestFlight / 内部テストでの配布</li>
-            <li>自分の番組の 1 本を PodsNow だけで収録して配信</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="pn-stage next fade-in">
-        <div class="pn-stage-card glass">
-          <div class="pn-stage-head">
-            <span class="pn-status">NEXT</span>
-            <span class="pn-stage-ver">v1.0.0 — STORE RELEASE</span>
-            <h3>「録る → 公開する」まで、誰でも</h3>
-          </div>
-          <p class="pn-stage-desc">App Store / Google Play での一般公開版。書き出したファイルを他社サービスへ手で上げるだけでなく、PodsNow から直接配信できるようにします。録音だけ使う人には、アカウントも配信の話も見せません。</p>
-          <ul class="pn-checklist">
-            <li>PodsNow の配信基盤からの配信（RSS を自動生成）</li>
-            <li>アカウント（配信を使う人だけ）</li>
-            <li>料金プランと運営の仕組み</li>
-            <li>複数の番組の管理</li>
-            <li>端末の容量の整理</li>
-            <li>ストアへの公開</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="pn-stage later fade-in">
-        <div class="pn-stage-card glass">
-          <div class="pn-stage-head">
-            <span class="pn-status">LATER</span>
-            <span class="pn-stage-ver">IDEAS</span>
-            <h3>その先にやりたいこと</h3>
-          </div>
-          <p class="pn-stage-desc">まだ予定には入れていない候補です。土台の設計だけ、あとから足せる形にしてあります。</p>
-          <ul class="pn-checklist">
-            <li>MP3 / FLAC 書き出し</li>
-            <li>ノイズ除去・EQ などの音作り</li>
-            <li>文字起こしと、端末内 AI での概要欄づくり</li>
-            <li>エピソードのひな形を複数持つ</li>
-            <li>番組データの端末移行と同期</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <p class="pn-note fade-in">※ 個人開発のため、順番や内容は変わることがあります。公開時期は未定です。</p>
-  </section>
-
-  <!-- Tech -->
-  <section class="pn-section">
-    <div class="pn-section-head fade-in">
-      <p class="text-label text-amber">// TECH</p>
-      <h2 class="text-title">技術</h2>
-    </div>
+    <p class="text-label text-amber fade-in">// TECH</p>
+    <h2 class="text-title fade-in">技術</h2>
     <div class="pn-tech fade-in">
       <span class="tech-tag">React Native</span>
       <span class="tech-tag">Expo</span>
@@ -636,24 +212,14 @@
       <span class="tech-tag">i18n (JA / EN)</span>
     </div>
     <p class="text-body pn-tech-note fade-in">
-      画面と編集のロジックは TypeScript、録音と音声処理は自作のネイティブモジュール。
-      時間はすべて 48 kHz のサンプル数で持ち、表示するときだけミリ秒に直しています。
-      開発は Claude Code などのコーディングエージェントと一緒に進めています。
+      画面と編集のロジックは TypeScript で書き、録音と音声処理は自作のネイティブモジュールで動かしています。
     </p>
   </section>
 
-  <!-- Outro -->
-  <section class="pn-outro glass fade-in">
-    <h2 class="text-title">公開まで、もう少し。</h2>
-    <p class="text-body mt-md" style="max-width:520px; margin-left:auto; margin-right:auto">
-      まずは自分の番組で鍛えてから、ストアに出します。
-      進み具合はこのページで更新していきます。
-    </p>
-    <div class="pn-outro-actions">
-      <a href="../../../podcast/" class="pn-btn primary">番組を聴く</a>
-      <a href="../../../contact/" class="pn-btn ghost">CONTACT</a>
-    </div>
-  </section>
+  <div class="pn-actions fade-in">
+    <a href="../../../podcast/" class="pn-btn primary">番組を聴く</a>
+    <a href="../../../contact/" class="pn-btn ghost">CONTACT</a>
+  </div>
 </div>
 
 <footer class="site-footer">
