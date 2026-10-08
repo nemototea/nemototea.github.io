@@ -506,6 +506,56 @@ section {
 .work-card:hover::after {
   border-color: var(--border-h);
 }
+.now-building {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  max-width: 920px;
+  width: 100%;
+  margin-bottom: 24px;
+  padding: 18px 24px;
+  text-decoration: none;
+  color: inherit;
+  text-align: left;
+  border-color: rgba(255,227,77,0.3);
+}
+.now-building:hover { border-color: rgba(255,227,77,0.6); }
+.nb-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #ffe34d;
+  white-space: nowrap;
+}
+.nb-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #ffe34d;
+  box-shadow: 0 0 8px #ffe34d;
+  animation: nbPulse 1.6s ease-in-out infinite;
+}
+@keyframes nbPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.nb-body { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.nb-name { font-size: 17px; font-weight: 900; letter-spacing: -0.3px; }
+.nb-period { color: #ffe34d; }
+.nb-text { font-family: var(--mono); font-size: 11px; line-height: 1.7; color: var(--text-dim); }
+.nb-cta {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--matcha);
+  white-space: nowrap;
+}
+@media(max-width:720px){
+  .now-building { flex-direction: column; align-items: flex-start; gap: 10px; padding: 18px 20px; }
+}
+.dev-pill {
+  color: #ffe34d;
+}
 .works-more {
   margin-top: 40px;
   text-align: center;
@@ -765,7 +815,23 @@ section {
       <div class="sec-label" style="color:var(--amber)">// WORKS</div>
       <h2 class="sec-title">制作物</h2>
     </div>
+    <a href="works/apps/podsnow/#roadmap" class="now-building glass reveal">
+      <span class="nb-label"><span class="nb-dot"></span>NOW BUILDING</span>
+      <span class="nb-body">
+        <span class="nb-name">PodsNow<span class="nb-period">.</span></span>
+        <span class="nb-text">ポッドキャスト収録アプリを開発中。いまは 0.1.0（MVP）の仕上げ段階</span>
+      </span>
+      <span class="nb-cta">ROADMAP →</span>
+    </a>
     <div class="works-grid reveal">
+      <a href="works/apps/podsnow/" class="work-card glass">
+        <div class="work-thumb grad-podcast"><img src="assets/images/works/podsnow.jpg" alt="PodsNow"></div>
+        <div class="work-info">
+          <div class="work-tag">MOBILE APP · <span class="dev-pill">開発中</span></div>
+          <div class="work-name">PodsNow</div>
+          <div class="work-desc">ポッドキャストを録って、切って、書き出すまでスマホひとつで。ロードマップ公開中</div>
+        </div>
+      </a>
       <a href="works/apps/harbor" class="work-card glass">
         <div class="work-thumb grad-apps"><img src="assets/images/works/harbor.png" alt="Harbor"></div>
         <div class="work-info">
