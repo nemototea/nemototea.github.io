@@ -154,8 +154,38 @@
   color: var(--matcha);
   border-color: var(--border-h);
 }
+/* ヒーローの背面に紹介動画を薄く流す */
+.pn-hero-bg {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding: 120px var(--space-md) 100px;
+}
+.pn-bgvideo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.pn-bgvideo video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.16;
+  filter: grayscale(0.3) blur(1px);
+}
+.pn-bgvideo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, rgba(6, 8, 14, 0.2) 0%, rgba(6, 8, 14, 0.85) 75%),
+    linear-gradient(180deg, transparent 60%, var(--bg) 100%);
+}
 @media (prefers-reduced-motion: reduce) {
   .pn-badge.live::before { animation: none; }
+  .pn-bgvideo video { display: none; }
 }
 </style>
 </head>
@@ -177,7 +207,13 @@
 
 <div class="container">
 
-  <section class="pn-hero">
+  <section class="pn-hero pn-hero-bg">
+    <div class="pn-bgvideo" aria-hidden="true">
+      <video autoplay muted loop playsinline preload="metadata" poster="../../../assets/images/works/podsnow-promo-poster.jpg">
+        <source src="../../../assets/images/works/podsnow-promo.webm" type="video/webm">
+        <source src="../../../assets/images/works/podsnow-promo.mp4" type="video/mp4">
+      </video>
+    </div>
     <div class="pn-badges fade-in">
       <span class="pn-badge live">IN DEVELOPMENT</span>
       <span class="pn-badge">MOBILE APP</span>
